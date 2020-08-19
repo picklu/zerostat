@@ -1,0 +1,38 @@
+{
+  "name": "zerostat",
+  "version": "1.0.0",
+  "description": "An GUI app for arduino-based potentiiostat",
+  "main": "./app/main.js",
+  "scripts": {
+    "build": "electron-rebuild",
+    "dev": "nodemon --inspect --exec electron .",
+    "start": "electron .",
+    "build:windows": "electron-builder --win --dir",
+    "dist:windows": "electron-builder --win",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/picklu/zerostat.git"
+  },
+  "keywords": [
+    "arduino",
+    "potentiostat",
+    "electron",
+    "GUI"
+  ],
+  "author": "Subrata Sarker <subrata_sarker@yahoo.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/picklu/zerostat/issues"
+  },
+  "homepage": "https://github.com/picklu/zerostat#readme",
+  "devDependencies": {
+    "electron": "^9.2.0",
+    "electron-builder": "^22.8.0",
+    "nodemon": "^2.0.4"
+  },
+  "dependencies": {
+    "serialport": "^9.0.1"
+  }
+}
