@@ -44,6 +44,8 @@ const createWindow = exports.createWindow = () => {
         newWindow.show()
     })
 
+    newWindow.on("page-title-updated", event => event.preventDefault());
+
     newWindow.on("closed", () => {
         windows.delete(newWindow)
         newWindow = null
