@@ -9,15 +9,26 @@
 </head>
 <body>
 
-    <form id="selected-port" action="#">
-        <input type="submit" value="Connect">
-        <select name="ports" id="ports">
-            <option>COMX</option><!-- dummy port -->
-        </select>
-    </form>
-
-
-
+    <main class="main">
+        <div class="serial-connection">
+            <div class="connection">
+                <form id="selected-port" action="#">
+                    <input type="submit" value="Connect" id="connect">
+                    <select name="ports" id="ports">
+                        <option>COMX</option><!-- dummy port -->
+                    </select>
+                </form>
+                
+            </div>
+            <div class="serial-write-read">
+                <button class="say-hello" id="say-hello" disabled>Say Hello</button>
+            </div>
+        </div>
+        
+        <div class="view" id="view">
+        </div>
+    </main>
+    
     <script src="./renderer.js"></script>
 </body>
 </html>

@@ -1,5 +1,10 @@
 const domSelectedPort = document.getElementById("selected-port")
 const domSerialPorts = document.getElementById("ports")
+const domConnect = document.getElementById("connect")
+const domSayHello = document.getElementById("say-hello")
+const domView = document.getElementById("view")
+
+let isPortOpen = false
 
 window.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {
@@ -7,6 +12,11 @@ window.addEventListener("DOMContentLoaded", () => {
     }, 1000)
 });
 
+domSelectedPort.addEventListener("submit", (event) => {
+    event.preventDefault()
+    const port = domSerialPorts.value
+    window.api.send("connect-serial", port)
+})
 
 window.api.receive("send-port", (ports) => {
     const items = []
@@ -16,8 +26,10 @@ window.api.receive("send-port", (ports) => {
     domSerialPorts.innerHTML = items.join("")
 })
 
-domSelectedPort.addEventListener("submit", (event) => {
-    event.preventDefault()
-    const port = domSerialPorts.value
-    window.api.send("connect-serial", port)
+window.api.receive("connection-open", (isOpen) => {
+    if (isOpen) {
+        domConnect.disabled = isOpen
+        domSayHello.disabled = !isOpen
+        isPortOpen = isOpen
+    }
 })
