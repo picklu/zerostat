@@ -1,8 +1,11 @@
 const { app, BrowserWindow } = require("electron")
+const SerialPort = require("serialport")
 
 const pkgJson = require("../package.json")
 
 const windows = new Set()
+
+console.log(SerialPort.list().then(result => console.log(result)))
 
 app.on("ready", () => {
     createWindow()
@@ -45,6 +48,7 @@ const createWindow = exports.createWindow = () => {
         windows.delete(newWindow)
         newWindow = null
     })
+
 
     windows.add(newWindow)
     return newWindow
