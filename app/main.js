@@ -4,6 +4,8 @@ const SerialPort = require("serialport")
 
 const windows = new Set()
 
+let serialPort = null
+
 
 app.on("ready", () => {
     createWindow()
@@ -68,16 +70,24 @@ ipcMain.on("get-port", (event) => {
 
 ipcMain.on("connect-serial", (event, port) => {
     const window = BrowserWindow.getFocusedWindow()
-    const serialPort = new SerialPort(port, { autoOpen: false })
-    serialPort.open((error) => {
-        if (error) {
-            console.log(`Error opening port => ${error.message}`)
-            window.send("connection-open", false)
-        }
-        else {
-            console.log("Connected to serial")
-            window.send("connection-open", true)
-        }
-    })
+    if (!serialPort) {
+        serialPort = new SerialPort(port, { autoOpen: false })
+    }
+    if (serialPort.isOpen) {
+        console.log("Already Connected to serial")
+        window.send("connection-open", true)
+    }
+    else {
+        serialPort.open((error) => {
+            if (error) {
+                console.log(`Error opening port => ${error.message}`)
+                window.send("connection-open", false)
+            }
+            else {
+                console.log("Connected to serial")
+                window.send("connection-open", true)
+            }
+        })
+    }
 
 });
