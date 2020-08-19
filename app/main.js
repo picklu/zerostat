@@ -58,11 +58,26 @@ const createWindow = exports.createWindow = () => {
 app.allowRendererProcessReuse = false
 
 ipcMain.on("get-port", (event) => {
+    const window = BrowserWindow.getFocusedWindow()
     SerialPort.list()
         .then(ports => {
-            BrowserWindow
-                .getFocusedWindow()
-                .send("send-port", ports.map(port => port.path));
+            window.send("send-port", ports.map(port => port.path));
         })
         .catch(error => console.log(error))
+})
+
+ipcMain.on("connect-serial", (event, port) => {
+    const window = BrowserWindow.getFocusedWindow()
+    const serialPort = new SerialPort(port, { autoOpen: false })
+    serialPort.open((error) => {
+        if (error) {
+            console.log(`Error opening port => ${error.message}`)
+            window.send("connection-open", false)
+        }
+        else {
+            console.log("Connected to serial")
+            window.send("connection-open", true)
+        }
+    })
+
 });
