@@ -59,8 +59,10 @@ app.allowRendererProcessReuse = false
 
 ipcMain.on("toMain", (event) => {
     SerialPort.list()
-        .then(result => {
-            BrowserWindow.getFocusedWindow().send("fromMain", result);
+        .then(ports => {
+            BrowserWindow
+                .getFocusedWindow()
+                .send("fromMain", ports.map(port => port.path));
         })
         .catch(error => console.log(error))
 });
