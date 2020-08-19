@@ -1,14 +1,17 @@
 const getSerialPortsButton = document.getElementById("get-ports")
-const showSerialPortsContainer = document.getElementById("show-ports")
+const showSerialPortsOptions = document.getElementById("show-ports")
 
-getSerialPortsButton.addEventListener("click", (event) => {
-    window.api.send("toMain");
-})
+window.addEventListener("DOMContentLoaded", () => {
+    setTimeout(() => {
+        window.api.send("toMain")
+    }, 1000)
+});
+
 
 window.api.receive("fromMain", (ports) => {
-    const listItems = []
+    const items = []
     ports.forEach(port => {
-        listItems.push(`<li>${port}</li>`)
+        items.push(`<option value="${port}">${port}</option>`)
     });
-    showSerialPortsContainer.innerHTML = listItems.join("")
+    showSerialPortsOptions.innerHTML = items.join("")
 })

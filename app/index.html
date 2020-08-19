@@ -8,11 +8,14 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1 id="hello">serial port</h1>
 
-    <button id="get-ports">Get Ports</button>
-
-    <ul id="show-ports"></ul>
+    <form id="selected-port" action="#">
+        <input type="submit" value="Connect">
+        <select name="ports" id="show-ports">
+            <option>COMX</option><!-- dummy port -->
+        </select>
+        <br><br>
+    </form>
 
     <script src="./renderer.js"></script>
 </body>
