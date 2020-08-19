@@ -6,5 +6,9 @@ getSerialPortsButton.addEventListener("click", (event) => {
 })
 
 window.api.receive("fromMain", (ports) => {
-    showSerialPortsContainer.innerHTML = ports.join(";")
+    const listItems = []
+    ports.forEach(port => {
+        listItems.push(`<li>${port}</li>`)
+    });
+    showSerialPortsContainer.innerHTML = listItems.join("")
 })
