@@ -1,14 +1,14 @@
-const getSerialPortsButton = document.getElementById("get-ports")
+const selectedPort = document.getElementById("selected-port")
 const showSerialPortsOptions = document.getElementById("show-ports")
 
 window.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {
-        window.api.send("toMain")
+        window.api.send("get-port")
     }, 1000)
 });
 
 
-window.api.receive("fromMain", (ports) => {
+window.api.receive("send-port", (ports) => {
     const items = []
     ports.forEach(port => {
         items.push(`<option value="${port}">${port}</option>`)

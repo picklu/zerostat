@@ -57,12 +57,12 @@ const createWindow = exports.createWindow = () => {
 
 app.allowRendererProcessReuse = false
 
-ipcMain.on("toMain", (event) => {
+ipcMain.on("get-port", (event) => {
     SerialPort.list()
         .then(ports => {
             BrowserWindow
                 .getFocusedWindow()
-                .send("fromMain", ports.map(port => port.path));
+                .send("send-port", ports.map(port => port.path));
         })
         .catch(error => console.log(error))
 });
