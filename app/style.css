@@ -16,6 +16,7 @@ body {
 }
 
 .view   {
+    margin: 100px;
     padding-top: 20px;
     text-align: center;
     overflow: hidden;

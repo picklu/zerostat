@@ -18,6 +18,10 @@ domSelectedPort.addEventListener("submit", (event) => {
     window.api.send("connect-serial", port)
 })
 
+domSayHello.addEventListener("click", () => {
+    window.api.send("say-hello")
+})
+
 window.api.receive("send-port", (ports) => {
     const items = []
     ports.forEach(port => {
@@ -32,4 +36,8 @@ window.api.receive("connection-open", (isOpen) => {
         domSayHello.disabled = !isOpen
         isPortOpen = isOpen
     }
+})
+
+window.api.receive("response-hello", (data) => {
+    domView.innerText = data
 })

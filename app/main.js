@@ -91,4 +91,12 @@ ipcMain.on("connect-serial", (event, port) => {
         })
     }
 
-});
+})
+
+ipcMain.on("say-hello", (event) => {
+    const window = BrowserWindow.getFocusedWindow()
+    portConnection.on('data', (data) => {
+        console.log('Data:', data)
+        window.send("response-hello", data)
+    })
+})
