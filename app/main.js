@@ -1,9 +1,8 @@
-const { app, BrowserWindow } = require("electron")
+const { app, BrowserWindow, ipcMain } = require("electron")
+const path = require("path")
 const SerialPort = require("serialport")
 
 const windows = new Set()
-
-console.log(SerialPort.list().then(result => console.log(result)))
 
 
 app.on("ready", () => {
@@ -33,7 +32,9 @@ const createWindow = exports.createWindow = () => {
         title: windowTitle,
         webPreferences: {
             enableRemoteModule: false,
-            nodeIntegration: false
+            nodeIntegration: false,
+            contextIsolation: true,
+            preload: path.join(__dirname, "preload.js")
         }
     })
 
@@ -54,6 +55,12 @@ const createWindow = exports.createWindow = () => {
     return newWindow
 }
 
-
-
 app.allowRendererProcessReuse = false
+
+ipcMain.on("toMain", (event) => {
+    SerialPort.list()
+        .then(result => {
+            BrowserWindow.getFocusedWindow().send("fromMain", result);
+        })
+        .catch(error => console.log(error))
+});
