@@ -41,3 +41,11 @@ window.api.receive("connection-open", (isOpen) => {
 window.api.receive("response-hello", (data) => {
     domView.innerText = data
 })
+
+/**
+ *
+ *  [sr,halt,mode,pcom,pstart,pend]
+ *
+ */
+
+
