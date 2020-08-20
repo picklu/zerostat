@@ -1,11 +1,12 @@
 const { app, BrowserWindow, ipcMain } = require("electron")
 const path = require("path")
 const SerialPort = require("serialport")
+const Readline = require('@serialport/parser-readline')
 
 const windows = new Set()
 
-let portConnection = null
-
+let port = null
+let parser = null
 
 app.on("ready", () => {
     createWindow()
@@ -69,17 +70,18 @@ ipcMain.on("get-port", (event) => {
         .catch(error => console.log(error))
 })
 
-ipcMain.on("connect-serial", (event, port) => {
+ipcMain.on("connect-serial", (event, portPath) => {
     const window = BrowserWindow.getFocusedWindow()
-    if (!portConnection) {
-        portConnection = new SerialPort(port, { autoOpen: false })
+    if (!port) {
+        port = new SerialPort(portPath, { autoOpen: false })
+        parser = port.pipe(new Readline())
     }
-    if (portConnection.isOpen) {
+    if (port.isOpen) {
         console.log("Already Connected to serial")
         window.send("connection-open", true)
     }
     else {
-        portConnection.open((error) => {
+        port.open((error) => {
             if (error) {
                 console.log(`Error opening port => ${error.message}`)
                 window.send("connection-open", false)
@@ -95,8 +97,10 @@ ipcMain.on("connect-serial", (event, port) => {
 
 ipcMain.on("say-hello", (event) => {
     const window = BrowserWindow.getFocusedWindow()
-    portConnection.on('data', (data) => {
-        console.log('Data:', data)
-        window.send("response-hello", data)
+    port.write("5,0,1,127,0,255")
+    parser.on('data', (data) => {
+        // console.log('Data:', data)
+        window.send("respond-hello", data)
+
     })
 })

@@ -38,7 +38,7 @@ window.api.receive("connection-open", (isOpen) => {
     }
 })
 
-window.api.receive("response-hello", (data) => {
+window.api.receive("respond-hello", (data) => {
     domView.innerText = data
 })
 
