@@ -1,10 +1,11 @@
 const domSelectedPort = document.getElementById("selected-port")
 const domSerialPorts = document.getElementById("ports")
 const domConnect = document.getElementById("connect")
-const domSayHello = document.getElementById("say-hello")
+const domStartSweep = document.getElementById("start-sweep")
 const domView = document.getElementById("view")
 
 let isPortOpen = false
+let running = false
 
 window.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {
@@ -18,8 +19,10 @@ domSelectedPort.addEventListener("submit", (event) => {
     window.api.send("connect-serial", port)
 })
 
-domSayHello.addEventListener("click", () => {
-    window.api.send("say-hello")
+domStartSweep.addEventListener("click", () => {
+    running = !running
+    domStartSweep.innerText = running ? "Stop" : "Start"
+    window.api.send("start-sweep", running)
 })
 
 window.api.receive("send-port", (ports) => {
@@ -33,13 +36,20 @@ window.api.receive("send-port", (ports) => {
 window.api.receive("connection-open", (isOpen) => {
     if (isOpen) {
         domConnect.disabled = isOpen
-        domSayHello.disabled = !isOpen
+        domStartSweep.disabled = !isOpen
         isPortOpen = isOpen
     }
 })
 
-window.api.receive("respond-hello", (data) => {
-    domView.innerText = data
+window.api.receive("respond-hello", (raw_data) => {
+    const data = raw_data.split(",")
+    if (Number(data[0]) >= 0) {
+        const [CH1, CH2, ...rest] = data
+        domView.innerText = `CH1: ${CH1}, CH2: ${CH2}`
+    }
+    else {
+        domView.innerText = data
+    }
 })
 
 /**

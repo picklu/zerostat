@@ -88,6 +88,9 @@ ipcMain.on("connect-serial", (event, portPath) => {
             }
             else {
                 console.log("Connected to serial")
+                parser.on('data', (data) => {
+                    window.send("respond-hello", data)
+                })
                 window.send("connection-open", true)
             }
         })
@@ -95,12 +98,12 @@ ipcMain.on("connect-serial", (event, portPath) => {
 
 })
 
-ipcMain.on("say-hello", (event) => {
-    const window = BrowserWindow.getFocusedWindow()
-    port.write("5,0,1,127,0,255")
-    parser.on('data', (data) => {
-        // console.log('Data:', data)
-        window.send("respond-hello", data)
+ipcMain.on("start-sweep", (event, running) => {
+    if (running) {
+        port.write("5,0,1,127,0,255")
+    }
+    else {
+        port.write("5,1,1,127,0,255")
+    }
 
-    })
 })

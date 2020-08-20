@@ -22,14 +22,14 @@ body {
     overflow: hidden;
 }
 
-.say-hello {
+.start-sweep {
     background-color: rgb(70, 144, 187);
 }
 
-.say-hello:active {
+.start-sweep:active {
     background-color: rgb(48, 135, 185);
 }
 
-.say-hello:disabled {
+.start-sweep:disabled {
     background-color: rgb(196, 204, 202);
 }
