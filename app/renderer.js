@@ -53,10 +53,14 @@ window.api.receive("send-ports", (ports) => {
 window.api.receive("connection-open", (isOpen) => {
     if (isOpen) {
         domConnect.value = "Disconnect"
+        domConnect.classList.add("disconnect")
+        domConnect.classList.remove("connect")
         isPortOpen = true
     }
     else {
         domConnect.value = "Connect"
+        domConnect.classList.add("connect")
+        domConnect.classList.remove("disconnect")
         domStartSweep.disabled = true
         isPortOpen = false
     }

@@ -22,8 +22,16 @@ body {
     overflow: hidden;
 }
 
+.connect {
+    background-color: #088b85;
+}
+
+.disconnect {
+    background-color: #bb0c0c;
+}
+
 .start-sweep {
-    background-color: rgb(70, 144, 187);
+    background-color: #4690bb;
 }
 
 .start-sweep:active {
