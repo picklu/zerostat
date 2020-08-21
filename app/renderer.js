@@ -8,9 +8,9 @@ let isPortOpen = false
 let running = false
 
 window.addEventListener("DOMContentLoaded", () => {
-    setTimeout(() => {
-        window.api.send("get-port")
-    }, 1000)
+    setInterval(() => {
+        window.api.send("get-ports")
+    }, 5 * 1000)
 });
 
 domSelectedPort.addEventListener("submit", (event) => {
@@ -22,10 +22,10 @@ domSelectedPort.addEventListener("submit", (event) => {
 domStartSweep.addEventListener("click", () => {
     running = !running
     domStartSweep.innerText = running ? "Stop" : "Start"
-    window.api.send("start-sweep", running)
+    window.api.send("control-sweep", running)
 })
 
-window.api.receive("send-port", (ports) => {
+window.api.receive("send-ports", (ports) => {
     const items = []
     ports.forEach(port => {
         items.push(`<option value="${port}">${port}</option>`)
@@ -41,7 +41,7 @@ window.api.receive("connection-open", (isOpen) => {
     }
 })
 
-window.api.receive("respond-hello", (raw_data) => {
+window.api.receive("send-data", (raw_data) => {
     const data = raw_data.split(",")
     if (Number(data[0]) >= 0) {
         const [CH1, CH2, ...rest] = data
