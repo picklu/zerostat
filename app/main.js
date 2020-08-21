@@ -37,6 +37,7 @@ const createWindow = exports.createWindow = () => {
             enableRemoteModule: false,
             nodeIntegration: false,
             contextIsolation: true,
+            worldSafeExecuteJavaScript: true,
             preload: path.join(__dirname, "preload.js")
         }
     })
