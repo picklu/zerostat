@@ -64,37 +64,43 @@ app.allowRendererProcessReuse = false
 
 ipcMain.on("get-ports", (event) => {
     const window = BrowserWindow.getFocusedWindow()
-    SerialPort.list()
-        .then(ports => {
-            window.send("send-ports", ports.map(port => port.path));
-        })
-        .catch(error => console.log(error))
+
+    if (window) {
+        SerialPort.list()
+            .then(ports => {
+                window.send("send-ports", ports.map(port => port.path));
+            })
+            .catch(error => console.log(error))
+    }
 })
 
 ipcMain.on("connect-serial", (event, portPath) => {
     const window = BrowserWindow.getFocusedWindow()
-    if (!port) {
-        port = new SerialPort(portPath, { autoOpen: false })
-        parser = port.pipe(new Readline())
-    }
-    if (port.isOpen) {
-        console.log("Already Connected to serial")
-        window.send("connection-open", true)
-    }
-    else {
-        port.open((error) => {
-            if (error) {
-                console.log(`Error opening port => ${error.message}`)
-                window.send("connection-open", false)
-            }
-            else {
-                console.log("Connected to serial")
-                parser.on('data', (data) => {
-                    window.send("send-data", data)
-                })
-                window.send("connection-open", true)
-            }
-        })
+
+    if (window) {
+        if (!port) {
+            port = new SerialPort(portPath, { autoOpen: false })
+            parser = port.pipe(new Readline())
+        }
+        if (port.isOpen) {
+            console.log("Already Connected to serial")
+            window.send("connection-open", true)
+        }
+        else {
+            port.open((error) => {
+                if (error) {
+                    console.log(`Error opening port => ${error.message}`)
+                    window.send("connection-open", false)
+                }
+                else {
+                    console.log("Connected to serial")
+                    parser.on('data', (data) => {
+                        window.send("send-data", data)
+                    })
+                    window.send("connection-open", true)
+                }
+            })
+        }
     }
 
 })
