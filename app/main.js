@@ -74,6 +74,14 @@ ipcMain.on("get-ports", (event) => {
     }
 })
 
+
+ipcMain.on("disconnect-serial", (event) => {
+    if (port && port.isOpen) {
+        port.close()
+        console.log("==> disconnecting ...")
+    }
+})
+
 ipcMain.on("connect-serial", (event, portPath) => {
     const window = BrowserWindow.getFocusedWindow()
 
@@ -82,21 +90,23 @@ ipcMain.on("connect-serial", (event, portPath) => {
             port = new SerialPort(portPath, { autoOpen: false })
             parser = port.pipe(new Readline())
         }
-        if (port.isOpen) {
-            console.log("Already Connected to serial")
-            window.send("connection-open", true)
-        }
-        else {
+        else if (!port.isOpen) {
             port.open((error) => {
                 if (error) {
                     console.log(`Error opening port => ${error.message}`)
                     window.send("connection-open", false)
                 }
                 else {
-                    console.log("Connected to serial")
+                    console.log("==> connected")
+                    port.on("close", () => {
+                        window.send("connection-open", false)
+                        console.log("==> disconnected")
+                    })
+
                     parser.on('data', (data) => {
                         window.send("send-data", data)
                     })
+
                     window.send("connection-open", true)
                 }
             })

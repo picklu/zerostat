@@ -3,7 +3,7 @@ const { contextBridge, ipcRenderer } = require("electron")
 contextBridge.exposeInMainWorld(
     "api", {
     send: (channel, data) => {
-        let validChannels = ["get-ports", "connect-serial", "control-sweep"]
+        let validChannels = ["get-ports", "connect-serial", "disconnect-serial", "control-sweep"]
         if (validChannels.includes(channel)) {
             ipcRenderer.send(channel, data)
         }

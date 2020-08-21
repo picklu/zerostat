@@ -10,15 +10,30 @@ let running = false
 window.addEventListener("DOMContentLoaded", () => {
     setInterval(() => {
         if (!isPortOpen) {
-            window.api.send("get-ports")
+            if (!domSerialPorts.classList.contains("active")) {
+                window.api.send("get-ports")
+            }
         }
     }, 5 * 1000)
 });
 
+domSerialPorts.addEventListener("mouseenter", (event) => {
+    event.target.classList.add("active")
+})
+
+domSerialPorts.addEventListener("mouseout", (event) => {
+    event.target.classList.remove("active")
+})
+
 domSelectedPort.addEventListener("submit", (event) => {
     event.preventDefault()
     const port = domSerialPorts.value
-    window.api.send("connect-serial", port)
+    if (isPortOpen) {
+        window.api.send("disconnect-serial", port)
+    }
+    else {
+        window.api.send("connect-serial", port)
+    }
 })
 
 domStartSweep.addEventListener("click", () => {
@@ -37,8 +52,13 @@ window.api.receive("send-ports", (ports) => {
 
 window.api.receive("connection-open", (isOpen) => {
     if (isOpen) {
-        domConnect.disabled = isOpen
-        isPortOpen = isOpen
+        domConnect.value = "Disconnect"
+        isPortOpen = true
+    }
+    else {
+        domConnect.value = "Connect"
+        domStartSweep.disabled = true
+        isPortOpen = false
     }
 })
 
