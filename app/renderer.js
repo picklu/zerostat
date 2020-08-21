@@ -38,19 +38,26 @@ window.api.receive("send-ports", (ports) => {
 window.api.receive("connection-open", (isOpen) => {
     if (isOpen) {
         domConnect.disabled = isOpen
-        domStartSweep.disabled = !isOpen
         isPortOpen = isOpen
     }
 })
 
 window.api.receive("send-data", (raw_data) => {
-    const data = raw_data.split(",")
-    if (Number(data[0]) >= 0) {
-        const [CH1, CH2, ...rest] = data
-        domView.innerText = `CH1: ${CH1}, CH2: ${CH2}`
+    const text_data = raw_data.split(",")
+    if (text_data[0] == "ready") {
+        domStartSweep.disabled = !isPortOpen
     }
     else {
-        domView.innerText = data
+        const data = text_data.map(d => Number(d))
+        const [ch1, ch2, ch3, ch4, ch5, ch6, ...rest] = data
+        running = !!ch1 ? true : false
+        if (running) {
+            domStartSweep.innerText = "Stop"
+            domView.innerText = `ch1: ${ch1}, ch2: ${ch2}, ch3: ${ch3}, ch4: ${ch4}, ch5: ${ch5}, ch6: ${ch6}`
+        }
+        else {
+            domStartSweep.innerText = "Start"
+        }
     }
 })
 
