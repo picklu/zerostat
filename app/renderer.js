@@ -9,7 +9,9 @@ let running = false
 
 window.addEventListener("DOMContentLoaded", () => {
     setInterval(() => {
-        window.api.send("get-ports")
+        if (!isPortOpen) {
+            window.api.send("get-ports")
+        }
     }, 5 * 1000)
 });
 
