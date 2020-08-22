@@ -8,6 +8,8 @@ let isPortOpen = false
 let running = false
 var all_data = []
 var globalX = 0
+var maxX = 127
+var maxY = 1023
 
 window.addEventListener("DOMContentLoaded", () => {
     setInterval(() => {
@@ -105,23 +107,16 @@ var step = 10;
 var chart = d3.select('#chart')
     .attr('width', width + 50)
     .attr('height', height + 50);
-var x = d3.scaleLinear().domain([0, 500]).range([0, 500]);
-var y = d3.scaleLinear().domain([0, 500]).range([500, 0]);
+var xScale = d3.scaleLinear().domain([0, maxX - 1]).range([0, width]);
+var yScale = d3.scaleLinear().domain([maxY, 0]).range([height, 0]);
 // -----------------------------------
 var line = d3.line()
-    .x(function (d) { return x(d.x); })
-    .y(function (d) { return y(d.y); });
-var smoothLine = d3.line().curve(d3.curveCardinal)
-    .x(function (d) { return x(d.x); })
-    .y(function (d) { return y(d.y); });
-var lineArea = d3.area()
-    .x(function (d) { return x(d.x); })
-    .y0(y(0))
-    .y1(function (d) { return y(d.y); })
-    .curve(d3.curveCardinal);
+    .x(function (d) { return xScale(d.x); })
+    .y(function (d) { return yScale(d.y); })
+    .curve(d3.curveMonotoneX);
 // -----------------------------------
 // Draw the axis
-var xAxis = d3.axisBottom().scale(x);
+var xAxis = d3.axisBottom().scale(xScale);
 var axisX = chart.append('g').attr('class', 'x axis')
     .attr('transform', 'translate(0, 500)')
     .call(xAxis);
@@ -152,13 +147,9 @@ function tick() {
     // Draw new line
     path.datum(all_data)
         .attr('class', 'smoothline')
-        .attr('d', smoothLine);
-    // Draw new fill area
-    areaPath.datum(all_data)
-        .attr('class', 'area')
-        .attr('d', lineArea);
+        .attr('d', line);
     // Shift the chart left
-    x.domain([globalX - (max - step), globalX]);
+    xScale.domain([globalX - (max - step), globalX]);
     axisX.transition()
         .duration(duration)
         .ease(d3.easeLinear, 2)
@@ -167,12 +158,12 @@ function tick() {
         .transition()
         .duration(duration)
         .ease(d3.easeLinear, 2)
-        .attr('transform', 'translate(' + x(globalX - max) + ')')
+        .attr('transform', 'translate(' + xScale(globalX - max) + ')')
     areaPath.attr('transform', null)
         .transition()
         .duration(duration)
         .ease(d3.easeLinear, 2)
-        .attr('transform', 'translate(' + x(globalX - max) + ')')
+        .attr('transform', 'translate(' + xScale(globalX - max) + ')')
         .on('end', tick)
 }
 tick();
