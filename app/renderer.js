@@ -8,7 +8,7 @@ let isPortOpen = false
 let running = false
 var all_data = []
 var globalX = 0
-var maxX = 127
+var maxX = 256
 var maxY = 1023
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -101,7 +101,7 @@ window.api.receive("send-data", (raw_data) => {
  */
 var width = 500;
 var height = 200;
-var duration = 100;
+var duration = 50;
 var max = maxX;
 var step = 1;
 var chart = d3.select('#chart')
