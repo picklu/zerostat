@@ -99,6 +99,8 @@ ipcMain.on("connect-serial", (event, portPath) => {
                 else {
                     console.log("==> connected")
                     port.on("close", () => {
+                        port = null
+                        parser = null
                         window.send("connection-open", false)
                         console.log("==> disconnected")
                     })
