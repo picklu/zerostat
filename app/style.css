@@ -3,7 +3,7 @@ body {
 }
 
 .main {
-    padding-top: 100px;
+    padding-top: 10px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -16,11 +16,18 @@ body {
 }
 
 .view   {
-    margin: 100px;
-    padding-top: 20px;
-    text-align: center;
     overflow: hidden;
+    text-align: center;
+
 }
+
+.chart {
+    background-color: #fafafa;
+    border: 1px solid #808080;
+    margin-top: 50px;
+    margin: 50px auto;
+}
+
 
 .connect {
     background-color: #088b85;
@@ -40,4 +47,30 @@ body {
 
 .start-sweep:disabled {
     background-color: rgb(196, 204, 202);
+}
+
+.axis {
+    font-family: sans-serif;
+    fill: #d35400;
+    font-size: 12px;
+}
+.line {
+    fill: none;
+    stroke: #f1c40f;
+    stroke-width: 3px;
+}
+.smoothline {
+    fill: none;
+    stroke: #e74c3c;
+    stroke-width: 3px;
+}
+.circle {
+    stroke: #e74c3c;
+    stroke-width: 3px;
+    fill: #FFF;
+}
+.grid {
+    stroke: #DDD;
+    stroke-width: 1px;
+    fill: none;
 }
