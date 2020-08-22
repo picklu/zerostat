@@ -56,18 +56,8 @@ body {
 }
 .line {
     fill: none;
-    stroke: #f1c40f;
+    stroke: #242320;
     stroke-width: 3px;
-}
-.smoothline {
-    fill: none;
-    stroke: #e74c3c;
-    stroke-width: 3px;
-}
-.circle {
-    stroke: #e74c3c;
-    stroke-width: 3px;
-    fill: #FFF;
 }
 .grid {
     stroke: #DDD;

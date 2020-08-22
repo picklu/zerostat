@@ -118,7 +118,7 @@ var line = d3.line()
 // Draw the axis
 var xAxis = d3.axisBottom().scale(xScale);
 var axisX = chart.append('g').attr('class', 'x axis')
-    .attr('transform', 'translate(0, 500)')
+    .attr('transform', `translate(0, ${width})`)
     .call(xAxis);
 // Append the holder for line chart
 var path = chart.append('path');
@@ -126,10 +126,8 @@ var path = chart.append('path');
 function tick() {
     // Draw new line
     path.datum(all_data)
-        .attr('class', 'smoothline')
+        .attr('class', 'line')
         .attr('d', line);
-    // Shift the chart left
-    // xScale.domain([globalX - (max - step), globalX]);
     axisX.transition()
         .duration(duration)
         .ease(d3.easeLinear, 2)
@@ -138,9 +136,7 @@ function tick() {
         .transition()
         .duration(duration)
         .ease(d3.easeLinear, 2)
-        .attr('transform', 'translate(' + xScale(globalX - max) + ')')
+        // .attr('transform', 'translate(' + xScale(globalX - max) + ')')
         .on('end', tick)
 }
 tick();
-
-
