@@ -40,6 +40,7 @@ domSelectedPort.addEventListener("submit", (event) => {
 
 domStartSweep.addEventListener("click", () => {
     running = !running
+    if (running) { all_data = [] }
     domStartSweep.innerText = running ? "Stop" : "Start"
     window.api.send("control-sweep", running)
 })
@@ -84,7 +85,6 @@ window.api.receive("send-data", (raw_data) => {
             domView.innerText = `running ${ch2}`
         }
         else {
-            all_data = []
             domStartSweep.innerText = "Start"
         }
     }
