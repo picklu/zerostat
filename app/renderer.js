@@ -102,8 +102,8 @@ window.api.receive("send-data", (raw_data) => {
 var width = 500;
 var height = 200;
 var duration = 100;
-var max = 500;
-var step = 10;
+var max = maxX;
+var step = 1;
 var chart = d3.select('#chart')
     .attr('width', width + 50)
     .attr('height', height + 50);
@@ -120,28 +120,8 @@ var xAxis = d3.axisBottom().scale(xScale);
 var axisX = chart.append('g').attr('class', 'x axis')
     .attr('transform', 'translate(0, 500)')
     .call(xAxis);
-// Draw the grid
-chart.append('path').datum([{ x: 0, y: 150 }, { x: 500, y: 150 }])
-    .attr('class', 'grid')
-    .attr('d', line);
-chart.append('path').datum([{ x: 0, y: 300 }, { x: 500, y: 300 }])
-    .attr('class', 'grid')
-    .attr('d', line);
-chart.append('path').datum([{ x: 0, y: 450 }, { x: 500, y: 450 }])
-    .attr('class', 'grid')
-    .attr('d', line);
-chart.append('path').datum([{ x: 50, y: 0 }, { x: 50, y: 500 }])
-    .attr('class', 'grid')
-    .attr('d', line);
-chart.append('path').datum([{ x: 250, y: 0 }, { x: 250, y: 500 }])
-    .attr('class', 'grid')
-    .attr('d', line);
-chart.append('path').datum([{ x: 450, y: 0 }, { x: 450, y: 500 }])
-    .attr('class', 'grid')
-    .attr('d', line);
-// Append the holder for line chart and fill area
+// Append the holder for line chart
 var path = chart.append('path');
-var areaPath = chart.append('path');
 // Main loop
 function tick() {
     // Draw new line
@@ -149,17 +129,12 @@ function tick() {
         .attr('class', 'smoothline')
         .attr('d', line);
     // Shift the chart left
-    xScale.domain([globalX - (max - step), globalX]);
+    // xScale.domain([globalX - (max - step), globalX]);
     axisX.transition()
         .duration(duration)
         .ease(d3.easeLinear, 2)
         .call(xAxis);
     path.attr('transform', null)
-        .transition()
-        .duration(duration)
-        .ease(d3.easeLinear, 2)
-        .attr('transform', 'translate(' + xScale(globalX - max) + ')')
-    areaPath.attr('transform', null)
         .transition()
         .duration(duration)
         .ease(d3.easeLinear, 2)
