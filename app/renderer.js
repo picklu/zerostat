@@ -99,29 +99,29 @@ window.api.receive("send-data", (raw_data) => {
  * d3js chart
  *
  */
-var width = 500;
-var height = 200;
-var duration = 50;
-var max = maxX;
-var step = 1;
-var chart = d3.select('#chart')
+const width = 500;
+const height = 200;
+const duration = 50;
+const max = maxX;
+const step = 1;
+const chart = d3.select('#chart')
     .attr('width', width + 50)
     .attr('height', height + 50);
-var xScale = d3.scaleLinear().domain([0, maxX - 1]).range([0, width]);
-var yScale = d3.scaleLinear().domain([maxY, 0]).range([height, 0]);
+const xScale = d3.scaleLinear().domain([0, maxX - 1]).range([0, width]);
+const yScale = d3.scaleLinear().domain([maxY, 0]).range([height, 0]);
 // -----------------------------------
-var line = d3.line()
-    .x(function (d) { return xScale(d.x); })
-    .y(function (d) { return yScale(d.y); })
+const line = d3.line()
+    .x(d => xScale(d.x))
+    .y(d => yScale(d.y))
     .curve(d3.curveMonotoneX);
 // -----------------------------------
 // Draw the axis
-var xAxis = d3.axisBottom().scale(xScale);
-var axisX = chart.append('g').attr('class', 'x axis')
+const xAxis = d3.axisBottom().scale(xScale);
+const axisX = chart.append('g').attr('class', 'x axis')
     .attr('transform', `translate(0, ${width})`)
     .call(xAxis);
 // Append the holder for line chart
-var path = chart.append('path');
+const path = chart.append('path');
 // Main loop
 function tick() {
     // Draw new line
@@ -136,7 +136,6 @@ function tick() {
         .transition()
         .duration(duration)
         .ease(d3.easeLinear, 2)
-        // .attr('transform', 'translate(' + xScale(globalX - max) + ')')
         .on('end', tick)
 }
 tick();
