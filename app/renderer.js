@@ -4,20 +4,24 @@ const domConnect = document.getElementById("connect")
 const domStartSweep = document.getElementById("start-sweep")
 const domView = document.getElementById("view")
 
+// globa vars
+const maxX = 256
+const maxY = 1023
+
 let isPortOpen = false
 let running = false
-var all_data = []
-var maxX = 256
-var maxY = 1023
+let all_data = []
 let status = "STOPPED"
 let voltage, current
 
+// helper function to display the status
 const showStatusMessage = () => {
     voltage = voltage ? voltage : ".."
     current = current ? current : ".."
     domView.innerHTML = `<b>${status}:</b> voltage: ${voltage} V & current: ${current} mA`
 }
 
+// get porst once the dom content is loaded
 window.addEventListener("DOMContentLoaded", () => {
     showStatusMessage()
     setInterval(() => {
@@ -29,6 +33,7 @@ window.addEventListener("DOMContentLoaded", () => {
     }, 5 * 1000)
 });
 
+// add/remove class 'active' to/from the selection element
 domSerialPorts.addEventListener("mouseenter", (event) => {
     event.target.classList.add("active")
 })
@@ -37,6 +42,7 @@ domSerialPorts.addEventListener("mouseout", (event) => {
     event.target.classList.remove("active")
 })
 
+// call main process to open/close serial
 domSelectedPort.addEventListener("submit", (event) => {
     event.preventDefault()
     const port = domSerialPorts.value
@@ -48,6 +54,7 @@ domSelectedPort.addEventListener("submit", (event) => {
     }
 })
 
+// call main process to start/stop potential sweep
 domStartSweep.addEventListener("click", () => {
     running = !running
     if (running) {
@@ -58,6 +65,7 @@ domStartSweep.addEventListener("click", () => {
     window.api.send("control-sweep", running)
 })
 
+// populate options with ports
 window.api.receive("send-ports", (ports) => {
     const items = []
     ports.forEach(port => {
@@ -66,6 +74,7 @@ window.api.receive("send-ports", (ports) => {
     domSerialPorts.innerHTML = items.join("")
 })
 
+// update ui on receiving connection status
 window.api.receive("connection-open", (isOpen) => {
     if (isOpen) {
         domConnect.value = "Disconnect"
@@ -82,6 +91,7 @@ window.api.receive("connection-open", (isOpen) => {
     }
 })
 
+// handle received data
 window.api.receive("send-data", (raw_data) => {
     const text_data = raw_data.split(",")
     if (text_data[0] == "ready") {
