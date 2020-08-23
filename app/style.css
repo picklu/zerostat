@@ -2,6 +2,7 @@ body {
     background-color: #f0ecec;
 }
 
+
 .main {
     padding-top: 10px;
     display: flex;
@@ -18,7 +19,7 @@ body {
 .view-container   {
     overflow: hidden;
     text-align: center;
-
+    
 }
 
 .chart {
@@ -28,6 +29,9 @@ body {
     margin: 50px auto;
 }
 
+.btn {
+    color: white;
+}
 
 .connect {
     background-color: #088b85;

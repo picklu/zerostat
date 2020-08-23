@@ -10,8 +10,8 @@ const duration = 50
 
 function setupPlot(ps) {
     const chart = d3.select('#chart')
-        .attr('width', width + 50)
-        .attr('height', height + 50)
+        .attr('width', width)
+        .attr('height', height)
     const xScale = d3.scaleLinear().domain([ps.voltMin, ps.voltMax]).range([0, width])
     const yScale = d3.scaleLinear().domain([ps.currMin, ps.currMax]).range([height, 0])
 
