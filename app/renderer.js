@@ -5,8 +5,6 @@ const domStartSweep = document.getElementById("start-sweep")
 const domView = document.getElementById("view")
 
 // globa vars
-const maxX = 256
-const maxY = 1023
 
 let isPortOpen = false
 let running = false
@@ -14,7 +12,11 @@ let all_data = []
 let status = "STOPPED"
 let voltage, current
 
-// helper function to display the status
+const voltageLimit = 256
+const currentLimit = 1024
+const { axisX, xAxis, path, line } = setupPlot(voltageLimit, currentLimit)
+
+// helper functions
 const showStatusMessage = () => {
     voltage = voltage ? voltage : ".."
     current = current ? current : ".."
@@ -59,7 +61,6 @@ domStartSweep.addEventListener("click", () => {
     running = !running
     if (running) {
         all_data = []
-        tick()
     }
     domStartSweep.innerText = running ? "Stop" : "Start"
     window.api.send("control-sweep", running)
@@ -108,6 +109,7 @@ window.api.receive("send-data", (raw_data) => {
             status = "RUNNING"
             domStartSweep.innerText = "Stop"
             all_data.push({ x: voltage, y: current })
+            drawPlot(all_data, axisX, xAxis, path, line)
         }
         else {
             status = "STOPPED"
@@ -116,52 +118,3 @@ window.api.receive("send-data", (raw_data) => {
         showStatusMessage()
     }
 })
-
-/**
- *
- *  
- * 
- * d3js chart
- *
- */
-const width = 500;
-const height = 200;
-const duration = 50;
-const max = maxX;
-const step = 1;
-
-const chart = d3.select('#chart')
-    .attr('width', width + 50)
-    .attr('height', height + 50);
-const xScale = d3.scaleLinear().domain([0, maxX - 1]).range([0, width]);
-const yScale = d3.scaleLinear().domain([maxY, 0]).range([height, 0]);
-
-const line = d3.line()
-    .x(d => xScale(d.x))
-    .y(d => yScale(d.y))
-    .curve(d3.curveMonotoneX);
-
-const xAxis = d3.axisBottom().scale(xScale);
-const axisX = chart.append('g').attr('class', 'x axis')
-    .attr('transform', `translate(0, ${width})`)
-    .call(xAxis);
-
-const path = chart.append('path');
-
-function tick() {
-    if (running) {
-        // Draw new line
-        path.datum(all_data)
-            .attr('class', 'line')
-            .attr('d', line);
-        axisX.transition()
-            .duration(duration)
-            .ease(d3.easeLinear, 2)
-            .call(xAxis);
-        path.attr('transform', null)
-            .transition()
-            .duration(duration)
-            .ease(d3.easeLinear, 2)
-            .on('end', tick)
-    }
-}
