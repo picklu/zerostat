@@ -42,7 +42,10 @@ domSelectedPort.addEventListener("submit", (event) => {
 
 domStartSweep.addEventListener("click", () => {
     running = !running
-    if (running) { all_data = [] }
+    if (running) {
+        all_data = []
+        tick()
+    }
     domStartSweep.innerText = running ? "Stop" : "Start"
     window.api.send("control-sweep", running)
 })
@@ -78,6 +81,7 @@ window.api.receive("send-data", (raw_data) => {
     }
     else {
         const data = text_data.map(d => Number(d))
+        // data format [ss,sr,halt,mode,pcom,pstart,pend]
         const [ch1, ch2, ch3, ch4, ch5, ch6, ...rest] = data
         running = !!ch1 ? true : false
         if (running) {
@@ -94,7 +98,7 @@ window.api.receive("send-data", (raw_data) => {
 
 /**
  *
- *  [sr,halt,mode,pcom,pstart,pend]
+ *  
  * 
  * d3js chart
  *
@@ -104,38 +108,39 @@ const height = 200;
 const duration = 50;
 const max = maxX;
 const step = 1;
+
 const chart = d3.select('#chart')
     .attr('width', width + 50)
     .attr('height', height + 50);
 const xScale = d3.scaleLinear().domain([0, maxX - 1]).range([0, width]);
 const yScale = d3.scaleLinear().domain([maxY, 0]).range([height, 0]);
-// -----------------------------------
+
 const line = d3.line()
     .x(d => xScale(d.x))
     .y(d => yScale(d.y))
     .curve(d3.curveMonotoneX);
-// -----------------------------------
-// Draw the axis
+
 const xAxis = d3.axisBottom().scale(xScale);
 const axisX = chart.append('g').attr('class', 'x axis')
     .attr('transform', `translate(0, ${width})`)
     .call(xAxis);
-// Append the holder for line chart
+
 const path = chart.append('path');
-// Main loop
+
 function tick() {
-    // Draw new line
-    path.datum(all_data)
-        .attr('class', 'line')
-        .attr('d', line);
-    axisX.transition()
-        .duration(duration)
-        .ease(d3.easeLinear, 2)
-        .call(xAxis);
-    path.attr('transform', null)
-        .transition()
-        .duration(duration)
-        .ease(d3.easeLinear, 2)
-        .on('end', tick)
+    if (running) {
+        // Draw new line
+        path.datum(all_data)
+            .attr('class', 'line')
+            .attr('d', line);
+        axisX.transition()
+            .duration(duration)
+            .ease(d3.easeLinear, 2)
+            .call(xAxis);
+        path.attr('transform', null)
+            .transition()
+            .duration(duration)
+            .ease(d3.easeLinear, 2)
+            .on('end', tick)
+    }
 }
-tick();
