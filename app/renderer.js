@@ -33,11 +33,6 @@ const showStatusMessage = () => {
     domView.innerHTML = `<b>${status}:</b> voltage: ${voltage} V & current: ${current} uA`
 }
 
-// get maximum and minimum voltage
-const getVoltsRange = () => {
-    voltage = (OPVOLTS / maxDAC) * (maxDAC / 2 - ch2)
-}
-
 // get ports once the dom content is loaded
 window.addEventListener("DOMContentLoaded", () => {
     showStatusMessage()
