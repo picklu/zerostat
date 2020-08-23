@@ -82,15 +82,18 @@ window.api.receive("send-data", (raw_data) => {
         const data = text_data.map(d => Number(d))
         // data format [ss,sr,halt,mode,pcom,pstart,pend]
         const [ch1, ch2, ch3, ch4, ch5, ch6, ...rest] = data
+        let status = ""
         running = !!ch1 ? true : false
         if (running) {
             domStartSweep.innerText = "Stop"
             all_data.push({ x: ch2, y: ch3 })
-            domView.innerText = `running: voltage: ${ch2} V & current: ${ch3} mA`
+            status = "RUNNING"
         }
         else {
+            status = "STOPPED"
             domStartSweep.innerText = "Start"
         }
+        domView.innerText = `${status}: voltage: ${ch2} V & current: ${ch3} mA`
     }
 })
 
