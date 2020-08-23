@@ -5,25 +5,40 @@ const domStartSweep = document.getElementById("start-sweep")
 const domView = document.getElementById("view")
 
 // globa vars
-
 let isPortOpen = false
 let running = false
 let all_data = []
 let status = "STOPPED"
 let voltage, current
 
-const voltageLimit = 256
-const currentLimit = 1024
-const { axisX, xAxis, path, line } = setupPlot(voltageLimit, currentLimit)
+const DAC_BIT = 8
+const ADC_BIT = 10
+const OPVOLTS = 5 // operating voltage (V) of teh microcontroller
+const FR = 12120  // feedback resistor in Ohm in the trans-impedance amplifier
+const maxDAC = Math.pow(2, DAC_BIT)
+const maxADC = Math.pow(2, ADC_BIT)
+const plotScale = {
+    voltMin: -2.5, // in V
+    voltMax: 2.5,  // in V
+    currMin: -250, // in uA
+    currMax: 250   // in uA
+}
+const vToFR = OPVOLTS / FR // voltage to current conversion factor
+const { axisX, xAxis, path, line } = setupPlot(plotScale)
 
 // helper functions
 const showStatusMessage = () => {
     voltage = voltage ? voltage : ".."
     current = current ? current : ".."
-    domView.innerHTML = `<b>${status}:</b> voltage: ${voltage} V & current: ${current} mA`
+    domView.innerHTML = `<b>${status}:</b> voltage: ${voltage} V & current: ${current} uA`
 }
 
-// get porst once the dom content is loaded
+// get maximum and minimum voltage
+const getVoltsRange = () => {
+    voltage = (OPVOLTS / maxDAC) * (maxDAC / 2 - ch2)
+}
+
+// get ports once the dom content is loaded
 window.addEventListener("DOMContentLoaded", () => {
     showStatusMessage()
     setInterval(() => {
@@ -102,8 +117,8 @@ window.api.receive("send-data", (raw_data) => {
         const data = text_data.map(d => Number(d))
         // data format [ss,sr,halt,mode,pcom,pstart,pend]
         const [ch1, ch2, ch3, ...rest] = data
-        voltage = ch2
-        current = ch3
+        voltage = (OPVOLTS / maxDAC) * (maxDAC / 2 - ch2)
+        current = ((ch3 - (maxDAC / 2) * maxADC / maxDAC) * vToFR / maxADC) * 1e6
         running = !!ch1 ? true : false
         if (running) {
             status = "RUNNING"
