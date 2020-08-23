@@ -7,7 +7,6 @@ const domView = document.getElementById("view")
 let isPortOpen = false
 let running = false
 var all_data = []
-var globalX = 0
 var maxX = 256
 var maxY = 1023
 
@@ -86,9 +85,8 @@ window.api.receive("send-data", (raw_data) => {
         running = !!ch1 ? true : false
         if (running) {
             domStartSweep.innerText = "Stop"
-            globalX = ch2
             all_data.push({ x: ch2, y: ch3 })
-            domView.innerText = `running ${ch2}`
+            domView.innerText = `running: voltage: ${ch2} V & current: ${ch3} mA`
         }
         else {
             domStartSweep.innerText = "Start"
