@@ -29,6 +29,11 @@ body {
     margin: 50px auto;
 }
 
+.btn, .ports {
+    padding: 5px;
+    width: 150px;
+}
+
 .btn {
     color: white;
 }
