@@ -43,7 +43,7 @@ body {
 }
 
 .disconnect {
-    background-color: #bb0c0c;
+    background-color: #eb510a;
 }
 
 .start-sweep {
@@ -65,8 +65,8 @@ body {
 }
 .line {
     fill: none;
-    stroke: #242320;
-    stroke-width: 3px;
+    stroke: #c92734;
+    stroke-width: 2px;
 }
 .grid {
     stroke: #DDD;
