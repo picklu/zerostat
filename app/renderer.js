@@ -9,8 +9,17 @@ let running = false
 var all_data = []
 var maxX = 256
 var maxY = 1023
+let status = "STOPPED"
+let voltage, current
+
+const showStatusMessage = () => {
+    voltage = voltage ? voltage : ".."
+    current = current ? current : ".."
+    domView.innerHTML = `<b>${status}:</b> voltage: ${voltage} V & current: ${current} mA`
+}
 
 window.addEventListener("DOMContentLoaded", () => {
+    showStatusMessage()
     setInterval(() => {
         if (!isPortOpen) {
             if (!domSerialPorts.classList.contains("active")) {
@@ -81,19 +90,20 @@ window.api.receive("send-data", (raw_data) => {
     else {
         const data = text_data.map(d => Number(d))
         // data format [ss,sr,halt,mode,pcom,pstart,pend]
-        const [ch1, ch2, ch3, ch4, ch5, ch6, ...rest] = data
-        let status = ""
+        const [ch1, ch2, ch3, ...rest] = data
+        voltage = ch2
+        current = ch3
         running = !!ch1 ? true : false
         if (running) {
-            domStartSweep.innerText = "Stop"
-            all_data.push({ x: ch2, y: ch3 })
             status = "RUNNING"
+            domStartSweep.innerText = "Stop"
+            all_data.push({ x: voltage, y: current })
         }
         else {
             status = "STOPPED"
             domStartSweep.innerText = "Start"
         }
-        domView.innerText = `${status}: voltage: ${ch2} V & current: ${ch3} mA`
+        showStatusMessage()
     }
 })
 

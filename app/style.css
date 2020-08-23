@@ -15,7 +15,7 @@ body {
     justify-content: space-around;
 }
 
-.view   {
+.view-container   {
     overflow: hidden;
     text-align: center;
 
