@@ -10,6 +10,7 @@ let running = false
 let all_data = []
 let status = "STOPPED"
 let voltage, current
+let portList = []
 
 const DAC_BIT = 8
 const ADC_BIT = 10
@@ -35,16 +36,22 @@ const showStatusMessage = () => {
     domView.innerHTML = `<b>${status}:</b> voltage: ${voltage} V & current: ${current} uA`
 }
 
+const isEqual = (a, b) => {
+    if (a.length !== b.length) { return false }
+    for (let i of a) {
+        if (!b.includes(i)) { return false }
+    }
+    return true
+}
+
 // get ports once the dom content is loaded
 window.addEventListener("DOMContentLoaded", () => {
     showStatusMessage()
     setInterval(() => {
         if (!isPortOpen) {
-            if (!domSerialPorts.classList.contains("active")) {
-                window.api.send("get-ports")
-            }
+            window.api.send("get-ports")
         }
-    }, 5 * 1000)
+    }, 2 * 1000)
 });
 
 // add/remove class 'active' to/from the selection element
@@ -81,10 +88,13 @@ domStartSweep.addEventListener("click", () => {
 // populate options with ports
 window.api.receive("send-ports", (ports) => {
     const items = []
-    ports.forEach(port => {
-        items.push(`<option value="${port}">${port}</option>`)
-    });
-    domSerialPorts.innerHTML = items.join("")
+    if (!isEqual(portList, ports)) {
+        portList = [...ports]
+        ports.forEach(port => {
+            items.push(`<option value="${port}">${port}</option>`)
+        });
+        domSerialPorts.innerHTML = items.join("")
+    }
 })
 
 // update ui on receiving connection status
