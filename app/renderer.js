@@ -6,10 +6,10 @@ const domView = document.getElementById("view")
 // globa vars
 let isPortOpen = false
 let running = false
-let all_data = []
 let status = "STOPPED"
 let voltage, current
 let portList = []
+let all_data = []
 
 const DAC_BIT = 8
 const ADC_BIT = 10

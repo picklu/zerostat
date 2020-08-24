@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain } = require("electron")
 const path = require("path")
 const SerialPort = require("serialport")
 const Readline = require('@serialport/parser-readline')
+const { send } = require("process")
 
 const windows = new Set()
 
@@ -83,33 +84,33 @@ ipcMain.on("disconnect-serial", (event) => {
 })
 
 ipcMain.on("connect-serial", (event, portPath) => {
-    const window = BrowserWindow.getFocusedWindow()
-
-    if (window) {
+    const senderWindow = event.sender
+    if (senderWindow) {
         if (!port) {
             port = new SerialPort(portPath, { autoOpen: false })
             parser = port.pipe(new Readline())
         }
-        else if (!port.isOpen) {
+
+        if (!port.isOpen) {
             port.open((error) => {
                 if (error) {
                     console.log(`Error opening port => ${error.message}`)
-                    window.send("connection-open", false)
+                    senderWindow.send("connection-open", false)
                 }
                 else {
                     console.log("==> connected")
                     port.on("close", () => {
                         port = null
                         parser = null
-                        window.send("connection-open", false)
+                        senderWindow.send("connection-open", false)
                         console.log("==> disconnected")
                     })
 
                     parser.on('data', (data) => {
-                        window.send("send-data", data)
+                        senderWindow.send("send-data", data)
                     })
 
-                    window.send("connection-open", true)
+                    senderWindow.send("connection-open", true)
                 }
             })
         }
