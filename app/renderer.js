@@ -1,4 +1,3 @@
-const domSelectedPort = document.getElementById("selected-port")
 const domSerialPorts = document.getElementById("ports")
 const domConnect = document.getElementById("connect")
 const domStartSweep = document.getElementById("start-sweep")
@@ -64,8 +63,7 @@ domSerialPorts.addEventListener("mouseout", (event) => {
 })
 
 // call main process to open/close serial
-domSelectedPort.addEventListener("submit", (event) => {
-    event.preventDefault()
+domConnect.addEventListener("click", (event) => {
     const port = domSerialPorts.value
     if (isPortOpen) {
         window.api.send("disconnect-serial", port)
@@ -102,14 +100,14 @@ window.api.receive("send-ports", (ports) => {
 // update ui on receiving connection status
 window.api.receive("connection-open", (isOpen) => {
     if (isOpen) {
-        domConnect.value = "Disconnect"
+        domConnect.innerText = "Disconnect"
         domConnect.classList.add("disconnect")
         domConnect.classList.remove("connect")
         domStartSweep.disabled = false
         isPortOpen = true
     }
     else {
-        domConnect.value = "Connect"
+        domConnect.innerText = "Connect"
         domConnect.classList.add("connect")
         domConnect.classList.remove("disconnect")
         domStartSweep.innerText = "Start"
