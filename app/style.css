@@ -136,7 +136,12 @@ body {
     stroke-width: 2px;
 }
 .grid {
-    stroke: #DDD;
+    stroke: #c7c3c3;
     stroke-width: 1px;
+    fill: none;
+}
+.rootXY {
+    stroke: rgb(150, 149, 149);
+    stroke-width: 2px;
     fill: none;
 }

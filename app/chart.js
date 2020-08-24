@@ -20,16 +20,27 @@ function setupPlot(ps) {
         .y(d => yScale(d.y))
         .curve(d3.curveMonotoneX)
 
+    let data = []
+
     // draw grids along x-axis
     for (let x = ps.voltMin; x <= ps.voltMax; x = x + ps.tickX) {
-        const data = [{ x, y: ps.currMin }, { x, y: ps.currMax }]
-        drawGridXY(chart, line, data)
+        data = [{ x, y: ps.currMin }, { x, y: ps.currMax }]
+        drawGridXY(chart, line, "grid", data)
     }
+
     // draw grids along y-axis
     for (let y = ps.currMin; y <= ps.currMax; y = y + ps.tickY) {
-        const data = [{ x: ps.voltMin, y }, { x: ps.voltMax, y }]
-        drawGridXY(chart, line, data)
+        data = [{ x: ps.voltMin, y }, { x: ps.voltMax, y }]
+        drawGridXY(chart, line, "grid", data)
     }
+
+    // x = 0 line
+    data = [{ x: 0, y: ps.currMin }, { x: 0, y: ps.currMax }]
+    drawGridXY(chart, line, "rootXY", data)
+
+    // y = 0 line
+    data = [{ x: ps.voltMin, y: 0 }, { x: ps.voltMax, y: 0 }]
+    drawGridXY(chart, line, "rootXY", data)
 
 
     // return axis, line, and path
@@ -43,10 +54,10 @@ function setupPlot(ps) {
     return { axisX, xAxis, path, line }
 }
 
-function drawGridXY(chart, line, data) {
+function drawGridXY(chart, line, styleClass, data) {
     chart.append('path')
         .datum(data)
-        .attr("class", "grid")
+        .attr("class", styleClass)
         .attr("d", line)
 }
 
