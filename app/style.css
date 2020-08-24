@@ -83,7 +83,6 @@ body {
 .view-container   {
     text-align: center;
     max-height: fit-content;
-    overflow: scroll;
 }
 
 .chart {
