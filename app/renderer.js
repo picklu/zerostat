@@ -22,8 +22,8 @@ const plotScale = {
     voltMax: 2.5,  // in V
     currMin: -250, // in uA
     currMax: 250,   // in uA
-    majorTickX: 0.5,
-    majorTickY: 50
+    tickX: 0.5,
+    tickY: 50
 }
 const vToFR = OPVOLTS / FR // voltage to current conversion factor
 const { axisX, xAxis, path, line } = setupPlot(plotScale) // initial setup of the chart
