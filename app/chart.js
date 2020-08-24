@@ -5,18 +5,16 @@
  *
  **********************************************/
 const width = 900
-const height = 500
-const duration = 50
+const height = 450
+const duration = 100
 
 function setupPlot(ps) {
     const chart = d3.select('#chart')
         .attr('width', width)
         .attr('height', height)
+
     const xScale = d3.scaleLinear().domain([ps.voltMin, ps.voltMax]).range([0, width])
     const yScale = d3.scaleLinear().domain([ps.currMin, ps.currMax]).range([height, 0])
-
-    window.xScale = xScale
-    window.yScale = yScale
 
     const line = d3.line()
         .x(d => xScale(d.x))
@@ -29,6 +27,13 @@ function setupPlot(ps) {
         .call(xAxis)
     const path = chart.append('path')
     return { axisX, xAxis, path, line }
+}
+
+function drawGridXY(chart, data) {
+    chart.append('path')
+        .datum(data)
+        .attr("class", "grid")
+        .attr("d", "line")
 }
 
 function drawPlot(data, axisX, xAxis, path, line) {

@@ -29,6 +29,7 @@ footer, header, hgroup, menu, nav, section {
 	display: block;
 }
 body {
+    box-sizing: border-box;
 	line-height: 1;
 }
 ol, ul {
@@ -51,15 +52,27 @@ table {
 
 body {
     background-color: #f0ecec;
+    position: relative;
 }
 
 
 .main {
+    max-height: 80vh;
     padding-top: 50px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-content: center;
+}
+
+.footer {
+    background-color: #9b9494;
+    padding: 20px;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
 .serial-connection {
@@ -68,9 +81,9 @@ body {
 }
 
 .view-container   {
-    overflow: hidden;
     text-align: center;
-    
+    max-height: fit-content;
+    overflow: scroll;
 }
 
 .chart {
@@ -78,6 +91,10 @@ body {
     border: 1px solid #808080;
     margin-top: 50px;
     margin: 50px auto;
+}
+
+.view {
+    padding-bottom: 5px;
 }
 
 .btn, .ports {
