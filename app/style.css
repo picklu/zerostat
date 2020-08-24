@@ -122,11 +122,12 @@ body {
 }
 
 .start-sweep:active {
-    background-color: rgb(48, 135, 185);
+    background-color: #3087b9;
 }
 
 .start-sweep:disabled {
-    background-color: rgb(55, 80, 74);
+    background-color: #5a8178;
+    color: #88a0ad;
 }
 
 .axis {
