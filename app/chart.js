@@ -6,7 +6,7 @@
  **********************************************/
 const width = 900
 const height = 450
-const duration = 100
+const duration = 50
 
 function setupPlot(ps) {
     const chart = d3.select('#chart')
@@ -44,8 +44,6 @@ function setupPlot(ps) {
 
 
     // return axis, line, and path
-
-
     const xAxis = d3.axisBottom().scale(xScale);
     const axisX = chart.append('g').attr('class', 'x axis')
         .attr('transform', `translate(0, ${width})`)
