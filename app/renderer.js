@@ -53,15 +53,6 @@ window.addEventListener("DOMContentLoaded", () => {
     }, 2 * 1000)
 });
 
-// add/remove class 'active' to/from the selection element
-domSerialPorts.addEventListener("mouseenter", (event) => {
-    event.target.classList.add("active")
-})
-
-domSerialPorts.addEventListener("mouseout", (event) => {
-    event.target.classList.remove("active")
-})
-
 // call main process to open/close serial
 domConnect.addEventListener("click", (event) => {
     const port = domSerialPorts.value
