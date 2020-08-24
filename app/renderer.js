@@ -93,6 +93,7 @@ window.api.receive("connection-open", (isOpen) => {
         domConnect.value = "Disconnect"
         domConnect.classList.add("disconnect")
         domConnect.classList.remove("connect")
+        domStartSweep.disabled = false
         isPortOpen = true
     }
     else {
