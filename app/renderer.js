@@ -94,7 +94,6 @@ window.api.receive("connection-open", (isOpen) => {
         domConnect.innerText = "Disconnect"
         domConnect.classList.add("disconnect")
         domConnect.classList.remove("connect")
-        domStartSweep.disabled = false
         isPortOpen = true
     }
     else {
@@ -113,7 +112,7 @@ window.api.receive("connection-open", (isOpen) => {
 window.api.receive("send-data", (raw_data) => {
     const text_data = raw_data.split(",")
     if (text_data[0] == "ready") {
-        domStartSweep.disabled = !isPortOpen
+        domStartSweep.disabled = false
     }
     else {
         const data = text_data.map(d => Number(d))
