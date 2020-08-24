@@ -112,6 +112,9 @@ window.api.receive("connection-open", (isOpen) => {
         domConnect.value = "Connect"
         domConnect.classList.add("connect")
         domConnect.classList.remove("disconnect")
+        domStartSweep.innerText = "Start"
+        domStartSweep.classList.remove("stop-sweep")
+        domStartSweep.classList.add("start-sweep")
         domStartSweep.disabled = true
         isPortOpen = false
     }

@@ -126,7 +126,7 @@ body {
 }
 
 .start-sweep:disabled {
-    background-color: rgb(196, 204, 202);
+    background-color: rgb(55, 80, 74);
 }
 
 .axis {
