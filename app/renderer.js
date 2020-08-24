@@ -82,6 +82,8 @@ domStartSweep.addEventListener("click", () => {
         all_data = []
     }
     domStartSweep.innerText = running ? "Stop" : "Start"
+    domStartSweep.classList.add(running ? "stop-sweep" : "start-sweep")
+    domStartSweep.classList.remove(running ? "start-sweep" : "stop-sweep")
     window.api.send("control-sweep", running)
 })
 
@@ -139,5 +141,7 @@ window.api.receive("send-data", (raw_data) => {
             domStartSweep.innerText = "Start"
         }
         showStatusMessage()
+        domStartSweep.classList.add(running ? "stop-sweep" : "start-sweep")
+        domStartSweep.classList.remove(running ? "start-sweep" : "stop-sweep")
     }
 })

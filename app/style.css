@@ -105,16 +105,20 @@ body {
     color: white;
 }
 
-.connect {
+.connect, .start-sweep {
     background-color: #088b85;
 }
 
-.disconnect {
+.connect:hover, .start-sweep:hover {
+    background-color: #075f5b;
+}
+
+.disconnect, .stop-sweep {
     background-color: #eb510a;
 }
 
-.start-sweep {
-    background-color: #4690bb;
+.disconnect:hover, .stop-sweep:hover {
+    background-color: #e25c1e;
 }
 
 .start-sweep:active {
