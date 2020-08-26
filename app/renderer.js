@@ -43,6 +43,14 @@ const isEqual = (a, b) => {
     return true
 }
 
+const digitalToVoltage = (dv) => {
+    return (OPVOLTS / maxDAC) * (maxDAC / 2 - dv)
+}
+
+const digitalToCurrent = (dc) => {
+    return ((dc - (maxDAC / 2) * maxADC / maxDAC) * vToFR / maxADC) * 1e6
+}
+
 // get ports once the dom content is loaded
 window.addEventListener("DOMContentLoaded", () => {
     showStatusMessage()
@@ -120,9 +128,8 @@ window.api.receive("send-data", (raw_data) => {
         const data = text_data.map(d => Number(d))
         // data format [ss,sr,halt,mode,pcom,pstart,pend]
         const [ch1, ch2, ch3, ...rest] = data
-        voltage = (OPVOLTS / maxDAC) * (maxDAC / 2 - ch2)
-        current = ((ch3 - (maxDAC / 2) * maxADC / maxDAC) * vToFR / maxADC) * 1e6
-        running = !!ch1 ? true : false
+        voltage = digitalToVoltage(ch2)
+        current = digitalToCurrent(ch3)
         if (running) {
             status = "RUNNING"
             domStartSweep.innerText = "Stop"
