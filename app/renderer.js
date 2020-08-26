@@ -130,6 +130,7 @@ window.api.receive("send-data", (raw_data) => {
         const data = text_data.map(d => Number(d))
         // data format [ss,sr,halt,mode,pcom,pstart,pend]
         const [ch1, ch2, ch3, ...rest] = data
+        running = !!ch1
         voltage = digitalToVoltage(ch2)
         current = digitalToCurrent(ch3)
         if (running) {
