@@ -42,6 +42,12 @@ const showStatusMessage = () => {
     domView.innerHTML = `<b>${state.status}:</b> voltage: ${state.voltage} V & current: ${state.current} uA`
 }
 
+const updateUI = () => {
+    domStartSweep.innerText = state.isPortOpen ? (state.running ? "Stop" : "Start") : "Disconnected"
+    domStartSweep.classList.add(state.running ? "stop-sweep" : "start-sweep")
+    domStartSweep.classList.remove(state.running ? "start-sweep" : "stop-sweep")
+}
+
 const isEqual = (a, b) => {
     if (a.length !== b.length) { return false }
     for (let i of a) {
@@ -85,9 +91,7 @@ domStartSweep.addEventListener("click", () => {
     if (state.running) {
         state.all_data = []
     }
-    domStartSweep.innerText = state.running ? "Stop" : "Start"
-    domStartSweep.classList.add(state.running ? "stop-sweep" : "start-sweep")
-    domStartSweep.classList.remove(state.running ? "start-sweep" : "stop-sweep")
+    updateUI()
     window.api.send("control-sweep", state.running)
 })
 
