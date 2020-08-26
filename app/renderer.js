@@ -29,7 +29,7 @@ const plotScale = {
     voltMin: -2.5, // in V
     voltMax: 2.5,  // in V
     currMin: -250, // in uA
-    currMax: 250,   // in uA
+    currMax: 250,  // in uA
     tickX: 0.5,
     tickY: 50
 }
@@ -116,7 +116,7 @@ window.api.receive("connection-open", (isOpen) => {
         domConnect.innerText = "Connect"
         domConnect.classList.add("connect")
         domConnect.classList.remove("disconnect")
-        domStartSweep.innerText = "Start"
+        domStartSweep.innerText = "Disconnected"
         domStartSweep.classList.remove("stop-sweep")
         domStartSweep.classList.add("start-sweep")
         domStartSweep.disabled = true

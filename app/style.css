@@ -49,13 +49,10 @@ table {
 }
 
 /* end of reset */
-
 body {
     background-color: #f0ecec;
     position: relative;
 }
-
-
 .main {
     max-height: 80vh;
     padding-top: 50px;
@@ -64,7 +61,6 @@ body {
     justify-content: center;
     align-content: center;
 }
-
 .footer {
     background-color: #9b9494;
     padding: 20px;
@@ -74,62 +70,49 @@ body {
     left: 0;
     right: 0;
 }
-
 .serial-connection {
     display: flex;
     justify-content: space-around;
 }
-
 .view-container   {
     text-align: center;
     max-height: fit-content;
 }
-
 .chart {
     background-color: #fafafa;
     border: 1px solid #808080;
     margin-top: 50px;
     margin: 50px auto;
 }
-
 .view {
     padding-bottom: 5px;
 }
-
 .btn, .ports {
     padding: 5px;
     width: 150px;
 }
-
 .btn {
     color: white;
 }
-
 .connect, .start-sweep {
     background-color: #088b85;
 }
-
 .connect:hover, .start-sweep:hover {
     background-color: #075f5b;
 }
-
 .disconnect, .stop-sweep {
     background-color: #eb510a;
 }
-
 .disconnect:hover, .stop-sweep:hover {
     background-color: #e25c1e;
 }
-
 .start-sweep:active {
     background-color: #3087b9;
 }
-
 .start-sweep:disabled {
     background-color: #5a8178;
-    color: #88a0ad;
+    color: #b9310f;
 }
-
 .axis {
     font-family: sans-serif;
     fill: #d35400;
