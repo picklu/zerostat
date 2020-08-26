@@ -13,7 +13,8 @@ let all_data = []
 
 const DAC_BIT = 8
 const ADC_BIT = 10
-const OPVOLTS = 5 // operating voltage (V) of teh microcontroller
+const OPVOLTS = 5  // operating voltage (V) of teh microcontroller
+const REF_DAC = 127 // Refrernce value
 const FR = 12120  // feedback resistor in Ohm in the trans-impedance amplifier
 const maxDAC = Math.pow(2, DAC_BIT)
 const maxADC = Math.pow(2, ADC_BIT)
@@ -48,7 +49,7 @@ const digitalToVoltage = (dv) => {
 }
 
 const digitalToCurrent = (dc) => {
-    return ((dc - (maxDAC / 2) * maxADC / maxDAC) * vToFR / maxADC) * 1e6
+    return ((dc - REF_DAC * maxADC / maxDAC) * vToFR / maxADC) * 1e6
 }
 
 // get ports once the dom content is loaded
@@ -121,6 +122,7 @@ window.api.receive("connection-open", (isOpen) => {
 window.api.receive("send-data", (raw_data) => {
     const text_data = raw_data.split(",")
     if (text_data[0] == "ready") {
+        running = false
         domStartSweep.innerText = "Start"
         domStartSweep.disabled = false
     }

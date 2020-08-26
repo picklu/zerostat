@@ -64,12 +64,11 @@ const createWindow = exports.createWindow = () => {
 app.allowRendererProcessReuse = false
 
 ipcMain.on("get-ports", (event) => {
-    const window = BrowserWindow.getFocusedWindow()
-
-    if (window) {
+    const senderWindow = event.sender
+    if (senderWindow) {
         SerialPort.list()
             .then(ports => {
-                window.send("send-ports", ports.map(port => port.path));
+                senderWindow.send("send-ports", ports.map(port => port.path));
             })
             .catch(error => console.log(error))
     }
