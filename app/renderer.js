@@ -3,14 +3,18 @@ const domConnect = document.getElementById("connect")
 const domStartSweep = document.getElementById("start-sweep")
 const domView = document.getElementById("view")
 
-// globa vars
-let isPortOpen = false
-let running = false
-let status = "STOPPED"
-let voltage, current
-let portList = []
-let all_data = []
+// global state object
+const state = {
+    isPortOpen: false,
+    running: false,
+    status: "STOPPED",
+    voltage: null,
+    current: null,
+    portList: [],
+    all_data: []
+}
 
+// as per microcontroller
 const DAC_BIT = 8
 const ADC_BIT = 10
 const OPVOLTS = 5  // operating voltage (V) of teh microcontroller
@@ -18,6 +22,9 @@ const REF_DAC = 127 // Refrernce value
 const FR = 12120  // feedback resistor in Ohm in the trans-impedance amplifier
 const maxDAC = Math.pow(2, DAC_BIT)
 const maxADC = Math.pow(2, ADC_BIT)
+const vToFR = OPVOLTS / FR // voltage to current conversion factor
+
+// d3js chart
 const plotScale = {
     voltMin: -2.5, // in V
     voltMax: 2.5,  // in V
@@ -26,14 +33,13 @@ const plotScale = {
     tickX: 0.5,
     tickY: 50
 }
-const vToFR = OPVOLTS / FR // voltage to current conversion factor
 const { axisX, xAxis, path, line } = setupPlot(plotScale) // initial setup of the chart
 
 // helper functions
 const showStatusMessage = () => {
-    voltage = voltage ? voltage : ".."
-    current = current ? current : ".."
-    domView.innerHTML = `<b>${status}:</b> voltage: ${voltage} V & current: ${current} uA`
+    state.voltage = state.voltage ? state.voltage : ".."
+    state.current = state.current ? state.current : ".."
+    domView.innerHTML = `<b>${state.status}:</b> voltage: ${state.voltage} V & current: ${state.current} uA`
 }
 
 const isEqual = (a, b) => {
@@ -56,7 +62,7 @@ const digitalToCurrent = (dc) => {
 window.addEventListener("DOMContentLoaded", () => {
     showStatusMessage()
     setInterval(() => {
-        if (!isPortOpen) {
+        if (!state.isPortOpen) {
             window.api.send("get-ports")
         }
     }, 2 * 1000)
@@ -65,7 +71,7 @@ window.addEventListener("DOMContentLoaded", () => {
 // call main process to open/close serial
 domConnect.addEventListener("click", (event) => {
     const port = domSerialPorts.value
-    if (isPortOpen) {
+    if (state.isPortOpen) {
         window.api.send("disconnect-serial", port)
     }
     else {
@@ -75,21 +81,21 @@ domConnect.addEventListener("click", (event) => {
 
 // call main process to start/stop potential sweep
 domStartSweep.addEventListener("click", () => {
-    running = !running
-    if (running) {
-        all_data = []
+    state.running = !state.running
+    if (state.running) {
+        state.all_data = []
     }
-    domStartSweep.innerText = running ? "Stop" : "Start"
-    domStartSweep.classList.add(running ? "stop-sweep" : "start-sweep")
-    domStartSweep.classList.remove(running ? "start-sweep" : "stop-sweep")
-    window.api.send("control-sweep", running)
+    domStartSweep.innerText = state.running ? "Stop" : "Start"
+    domStartSweep.classList.add(state.running ? "stop-sweep" : "start-sweep")
+    domStartSweep.classList.remove(state.running ? "start-sweep" : "stop-sweep")
+    window.api.send("control-sweep", state.running)
 })
 
 // populate options with ports
 window.api.receive("send-ports", (ports) => {
     const items = []
-    if (!isEqual(portList, ports)) {
-        portList = [...ports]
+    if (!isEqual(state.portList, ports)) {
+        state.portList = [...ports]
         ports.forEach(port => {
             items.push(`<option value="${port}">${port}</option>`)
         });
@@ -104,7 +110,7 @@ window.api.receive("connection-open", (isOpen) => {
         domConnect.classList.add("disconnect")
         domConnect.classList.remove("connect")
         domStartSweep.innerText = "Getting Ready"
-        isPortOpen = true
+        state.isPortOpen = true
     }
     else {
         domConnect.innerText = "Connect"
@@ -114,7 +120,7 @@ window.api.receive("connection-open", (isOpen) => {
         domStartSweep.classList.remove("stop-sweep")
         domStartSweep.classList.add("start-sweep")
         domStartSweep.disabled = true
-        isPortOpen = false
+        state.isPortOpen = false
     }
 })
 
@@ -122,7 +128,7 @@ window.api.receive("connection-open", (isOpen) => {
 window.api.receive("send-data", (raw_data) => {
     const text_data = raw_data.split(",")
     if (text_data[0] == "ready") {
-        running = false
+        state.running = false
         domStartSweep.innerText = "Start"
         domStartSweep.disabled = false
     }
@@ -130,21 +136,21 @@ window.api.receive("send-data", (raw_data) => {
         const data = text_data.map(d => Number(d))
         // data format [ss,sr,halt,mode,pcom,pstart,pend]
         const [ch1, ch2, ch3, ...rest] = data
-        running = !!ch1
-        voltage = digitalToVoltage(ch2)
-        current = digitalToCurrent(ch3)
-        if (running) {
-            status = "RUNNING"
+        state.running = !!ch1
+        state.voltage = digitalToVoltage(ch2)
+        state.current = digitalToCurrent(ch3)
+        if (state.running) {
+            state.status = "RUNNING"
             domStartSweep.innerText = "Stop"
-            all_data.push({ x: voltage, y: current })
-            drawPlot(all_data, axisX, xAxis, path, line)
+            state.all_data.push({ x: state.voltage, y: state.current })
+            drawPlot(state.all_data, axisX, xAxis, path, line)
         }
         else {
-            status = "STOPPED"
+            state.status = "STOPPED"
             domStartSweep.innerText = "Start"
         }
         showStatusMessage()
-        domStartSweep.classList.add(running ? "stop-sweep" : "start-sweep")
-        domStartSweep.classList.remove(running ? "start-sweep" : "stop-sweep")
+        domStartSweep.classList.add(state.running ? "stop-sweep" : "start-sweep")
+        domStartSweep.classList.remove(state.running ? "start-sweep" : "stop-sweep")
     }
 })
