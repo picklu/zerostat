@@ -7,6 +7,7 @@ const domView = document.getElementById("view")
 const state = {
     isPortOpen: false,
     running: false,
+    isReady: false,
     status: "STOPPED",
     voltage: null,
     current: null,
@@ -43,9 +44,20 @@ const showStatusMessage = () => {
 }
 
 const updateUI = () => {
-    domStartSweep.innerText = state.isPortOpen ? (state.running ? "Stop" : "Start") : "Disconnected"
+    domConnect.innerText = state.isPortOpen ? "Disconnect" : "Connect"
+    domConnect.classList.add(state.isPortOpen ? "disconnect" : "connect")
+    domConnect.classList.remove(state.isPortOpen ? "connect" : "disonnect")
+
+    domStartSweep.innerText = state.isPortOpen
+        ? state.isReady
+            ? state.running
+                ? "Stop"
+                : "Getting Ready"
+            : "Start"
+        : "Disconnected"
     domStartSweep.classList.add(state.running ? "stop-sweep" : "start-sweep")
     domStartSweep.classList.remove(state.running ? "start-sweep" : "stop-sweep")
+    domStartSweep.disabled = state.isPortOpen ? false : true
 }
 
 const isEqual = (a, b) => {
@@ -108,24 +120,9 @@ window.api.receive("send-ports", (ports) => {
 })
 
 // update ui on receiving connection status
-window.api.receive("connection-open", (isOpen) => {
-    if (isOpen) {
-        domConnect.innerText = "Disconnect"
-        domConnect.classList.add("disconnect")
-        domConnect.classList.remove("connect")
-        domStartSweep.innerText = "Getting Ready"
-        state.isPortOpen = true
-    }
-    else {
-        domConnect.innerText = "Connect"
-        domConnect.classList.add("connect")
-        domConnect.classList.remove("disconnect")
-        domStartSweep.innerText = "Disconnected"
-        domStartSweep.classList.remove("stop-sweep")
-        domStartSweep.classList.add("start-sweep")
-        domStartSweep.disabled = true
-        state.isPortOpen = false
-    }
+window.api.receive("connection-open", (isPortOpen) => {
+    state.isPortOpen = isPortOpen
+    updateUI()
 })
 
 // handle received data
