@@ -7,7 +7,6 @@ const domView = document.getElementById("view")
 const state = {
     isPortOpen: false,
     running: false,
-    isReady: false,
     status: "STOPPED",
     voltage: null,
     current: null,
@@ -46,13 +45,11 @@ const showStatusMessage = () => {
 const updateUI = () => {
     domConnect.innerText = state.isPortOpen ? "Disconnect" : "Connect"
     domConnect.classList.add(state.isPortOpen ? "disconnect" : "connect")
-    domConnect.classList.remove(state.isPortOpen ? "connect" : "disonnect")
+    domConnect.classList.remove(state.isPortOpen ? "connect" : "disconnect")
 
     domStartSweep.innerText = state.isPortOpen
-        ? state.isReady
-            ? state.running
-                ? "Stop"
-                : "Getting Ready"
+        ? state.running
+            ? "Stop"
             : "Start"
         : "Disconnected"
     domStartSweep.classList.add(state.running ? "stop-sweep" : "start-sweep")
@@ -89,6 +86,7 @@ window.addEventListener("DOMContentLoaded", () => {
 // call main process to open/close serial
 domConnect.addEventListener("click", (event) => {
     const port = domSerialPorts.value
+
     if (state.isPortOpen) {
         window.api.send("disconnect-serial", port)
     }
@@ -129,9 +127,9 @@ window.api.receive("connection-open", (isPortOpen) => {
 window.api.receive("send-data", (raw_data) => {
     const text_data = raw_data.split(",")
     if (text_data[0] == "ready") {
+        state.isReady = true
         state.running = false
-        domStartSweep.innerText = "Start"
-        domStartSweep.disabled = false
+        updateUI()
     }
     else {
         const data = text_data.map(d => Number(d))
@@ -145,13 +143,12 @@ window.api.receive("send-data", (raw_data) => {
             domStartSweep.innerText = "Stop"
             state.all_data.push({ x: state.voltage, y: state.current })
             drawPlot(state.all_data, axisX, xAxis, path, line)
+            updateUI()
         }
         else {
             state.status = "STOPPED"
-            domStartSweep.innerText = "Start"
+            updateUI()
         }
-        showStatusMessage()
-        domStartSweep.classList.add(state.running ? "stop-sweep" : "start-sweep")
-        domStartSweep.classList.remove(state.running ? "start-sweep" : "stop-sweep")
     }
+    showStatusMessage()
 })
