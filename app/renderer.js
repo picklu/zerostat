@@ -87,23 +87,17 @@ window.addEventListener("DOMContentLoaded", () => {
 // call main process to open/close serial
 domConnect.addEventListener("click", (event) => {
     const port = domSerialPorts.value
-    if (state.isPortOpen) {
-        state.isReady = false
-        state.isRunning = false
-        window.api.send("disconnect-serial", port)
-    }
-    else {
-        window.api.send("connect-serial", port)
-    }
+    const channel = state.isPortOpen ? "disconnect-serial" : "connect-serial"
+    state.isReady = false
+    state.isRunning = false
+    window.api.send(channel, port)
 })
 
 // call main process to start/stop potential sweep
 domStartSweep.addEventListener("click", () => {
     state.isRunning = !state.isRunning
-    if (state.isRunning) {
-        state.all_data = []
-    }
     updateUI()
+    if (state.isRunning) { state.all_data = [] }
     window.api.send("control-sweep", state.isRunning)
 })
 
