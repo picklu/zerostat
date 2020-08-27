@@ -94,16 +94,16 @@ body {
 .btn {
     color: white;
 }
-.connect, .start-sweep {
+.disconnected, .start-sweep {
     background-color: #088b85;
 }
-.connect:hover, .start-sweep:hover {
+.disconnected:hover, .start-sweep:hover {
     background-color: #075f5b;
 }
-.disconnect, .stop-sweep {
+.connected, .stop-sweep {
     background-color: #eb510a;
 }
-.disconnect:hover, .stop-sweep:hover {
+.connected:hover, .stop-sweep:hover {
     background-color: #e25c1e;
 }
 .start-sweep:active {

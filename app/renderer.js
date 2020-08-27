@@ -6,7 +6,8 @@ const domView = document.getElementById("view")
 // global state object
 const state = {
     isPortOpen: false,
-    running: false,
+    isReady: false,
+    isRunning: false,
     status: "STOPPED",
     voltage: null,
     current: null,
@@ -44,17 +45,17 @@ const showStatusMessage = () => {
 
 const updateUI = () => {
     domConnect.innerText = state.isPortOpen ? "Disconnect" : "Connect"
-    domConnect.classList.add(state.isPortOpen ? "disconnect" : "connect")
-    domConnect.classList.remove(state.isPortOpen ? "connect" : "disconnect")
+    domConnect.classList.add(state.isPortOpen ? "connected" : "disconnected")
+    domConnect.classList.remove(state.isPortOpen ? "disconnected" : "connected")
 
     domStartSweep.innerText = state.isPortOpen
-        ? state.running
+        ? state.isRunning
             ? "Stop"
             : "Start"
         : "Disconnected"
-    domStartSweep.classList.add(state.running ? "stop-sweep" : "start-sweep")
-    domStartSweep.classList.remove(state.running ? "start-sweep" : "stop-sweep")
-    domStartSweep.disabled = state.isPortOpen ? false : true
+    domStartSweep.classList.add(state.isRunning ? "stop-sweep" : "start-sweep")
+    domStartSweep.classList.remove(state.isRunning ? "start-sweep" : "stop-sweep")
+    domStartSweep.disabled = state.isReady && state.isPortOpen ? false : true
 }
 
 const isEqual = (a, b) => {
@@ -86,8 +87,9 @@ window.addEventListener("DOMContentLoaded", () => {
 // call main process to open/close serial
 domConnect.addEventListener("click", (event) => {
     const port = domSerialPorts.value
-
     if (state.isPortOpen) {
+        state.isReady = false
+
         window.api.send("disconnect-serial", port)
     }
     else {
@@ -97,12 +99,12 @@ domConnect.addEventListener("click", (event) => {
 
 // call main process to start/stop potential sweep
 domStartSweep.addEventListener("click", () => {
-    state.running = !state.running
-    if (state.running) {
+    state.isRunning = !state.isRunning
+    if (state.isRunning) {
         state.all_data = []
     }
     updateUI()
-    window.api.send("control-sweep", state.running)
+    window.api.send("control-sweep", state.isRunning)
 })
 
 // populate options with ports
@@ -128,17 +130,17 @@ window.api.receive("send-data", (raw_data) => {
     const text_data = raw_data.split(",")
     if (text_data[0] == "ready") {
         state.isReady = true
-        state.running = false
+        state.isRunning = false
         updateUI()
     }
     else {
         const data = text_data.map(d => Number(d))
         // data format [ss,sr,halt,mode,pcom,pstart,pend]
         const [ch1, ch2, ch3, ...rest] = data
-        state.running = !!ch1
+        state.isRunning = !!ch1
         state.voltage = digitalToVoltage(ch2)
         state.current = digitalToCurrent(ch3)
-        if (state.running) {
+        if (state.isRunning) {
             state.status = "RUNNING"
             domStartSweep.innerText = "Stop"
             state.all_data.push({ x: state.voltage, y: state.current })
