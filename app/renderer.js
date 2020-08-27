@@ -48,14 +48,14 @@ const updateUI = () => {
     domConnect.classList.add(state.isPortOpen ? "connected" : "disconnected")
     domConnect.classList.remove(state.isPortOpen ? "disconnected" : "connected")
 
-    domStartSweep.innerText = state.isPortOpen
-        ? state.isRunning
-            ? "Stop"
-            : "Start"
-        : "Disconnected"
     domStartSweep.classList.add(state.isRunning ? "stop-sweep" : "start-sweep")
     domStartSweep.classList.remove(state.isRunning ? "start-sweep" : "stop-sweep")
     domStartSweep.disabled = state.isReady && state.isPortOpen ? false : true
+    domStartSweep.innerText = state.isPortOpen
+        ? state.isReady
+            ? state.isRunning ? "Stop" : "Start"
+            : "Getting Ready"
+        : "Disconnected"
 }
 
 const isEqual = (a, b) => {
