@@ -52,14 +52,19 @@ function setupPlot(ps) {
     data = [{ x: ps.voltMin, y: 0 }, { x: ps.voltMax, y: 0 }]
     drawGridXY(chart, line, "rootXY", data)
 
-
     // return axis, line, and path
     const xAxis = d3.axisBottom().scale(xScale);
     const axisX = chart.append('g').attr('class', 'x axis')
-        .attr('transform', `translate(0, ${width})`)
+        .attr('transform', `translate(0, ${height - margin.top})`)
         .call(xAxis)
+
+    axisX.transition()
+        .duration(duration)
+        .ease(d3.easeLinear, 2)
+        .call(xAxis)
+
     const path = chart.append('path')
-    return { axisX, xAxis, path, line }
+    return { path, line }
 }
 
 function drawGridXY(chart, line, styleClass, data) {
@@ -69,14 +74,11 @@ function drawGridXY(chart, line, styleClass, data) {
         .attr("d", line)
 }
 
-function drawPlot(data, axisX, xAxis, path, line) {
-    // path.datum(data)
-    //     .attr('class', 'line')
-    //     .attr('d', line)
-    // axisX.transition()
-    //     .duration(duration)
-    //     .ease(d3.easeLinear, 2)
-    //     .call(xAxis)
+function drawPlot(data, path, line) {
+    path.datum(data)
+        .attr('class', 'line')
+        .attr('d', line)
+
     path.attr('transform', null)
         .transition()
         .duration(duration)

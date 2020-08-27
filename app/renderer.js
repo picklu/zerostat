@@ -34,7 +34,7 @@ const plotScale = {
     tickX: 0.5,
     tickY: 50
 }
-const { axisX, xAxis, path, line } = setupPlot(plotScale) // initial setup of the chart
+const { path, line } = setupPlot(plotScale) // initial setup of the chart
 
 // helper functions
 const showStatusMessage = () => {
@@ -138,7 +138,7 @@ window.api.receive("send-data", (raw_data) => {
             state.status = "RUNNING"
             domStartSweep.innerText = "Stop"
             state.all_data.push({ x: state.voltage, y: state.current })
-            drawPlot(state.all_data, axisX, xAxis, path, line)
+            drawPlot(state.all_data, path, line)
             updateUI()
         }
         else {
