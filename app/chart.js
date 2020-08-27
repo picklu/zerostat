@@ -4,14 +4,24 @@
  * d3js chart
  *
  **********************************************/
-const width = 900
-const height = 450
+const margin = {
+    top: 20,
+    right: 20,
+    bottom: 50,
+    left: 70
+}
+const width = 900 - margin.left - margin.right
+const height = 500 - margin.top - margin.bottom
 const duration = 50
+
 
 function setupPlot(ps) {
     const chart = d3.select('#chart')
-        .attr('width', width)
-        .attr('height', height)
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
 
     const xScale = d3.scaleLinear().domain([ps.voltMin, ps.voltMax]).range([0, width])
     const yScale = d3.scaleLinear().domain([ps.currMin, ps.currMax]).range([height, 0])
@@ -60,13 +70,13 @@ function drawGridXY(chart, line, styleClass, data) {
 }
 
 function drawPlot(data, axisX, xAxis, path, line) {
-    path.datum(data)
-        .attr('class', 'line')
-        .attr('d', line)
-    axisX.transition()
-        .duration(duration)
-        .ease(d3.easeLinear, 2)
-        .call(xAxis)
+    // path.datum(data)
+    //     .attr('class', 'line')
+    //     .attr('d', line)
+    // axisX.transition()
+    //     .duration(duration)
+    //     .ease(d3.easeLinear, 2)
+    //     .call(xAxis)
     path.attr('transform', null)
         .transition()
         .duration(duration)
