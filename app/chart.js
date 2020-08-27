@@ -12,7 +12,6 @@ const margin = {
 }
 const width = 900 - margin.left - margin.right
 const height = 500 - margin.top - margin.bottom
-const duration = 50
 
 
 function setupPlot(ps) {
@@ -80,9 +79,4 @@ function drawPlot(data, path, line) {
     path.datum(data)
         .attr('class', 'line')
         .attr('d', line)
-
-    path.attr('transform', null)
-        .transition()
-        .duration(duration)
-        .ease(d3.easeLinear, 2)
 }
