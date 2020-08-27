@@ -89,7 +89,7 @@ domConnect.addEventListener("click", (event) => {
     const port = domSerialPorts.value
     if (state.isPortOpen) {
         state.isReady = false
-
+        state.isRunning = false
         window.api.send("disconnect-serial", port)
     }
     else {
