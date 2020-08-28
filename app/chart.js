@@ -73,6 +73,17 @@ function setupPlot(ps) {
         .style("stroke", "none")
         .text("Voltage (V)")
 
+    // y-axis title
+    chart.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("x", 0 - (height / 2))
+        .attr("y", 0 - margin.right * 2)
+        .attr("dy", "0.71em")
+        .attr("text-anchor", "middle")
+        .style("font-size", "18px")
+        .style("stroke", "none")
+        .text("Current (\xB5A)")
+
     // return line, and path
     const path = chart.append('path')
     return { path, line }
