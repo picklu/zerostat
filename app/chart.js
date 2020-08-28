@@ -63,6 +63,16 @@ function setupPlot(ps) {
         .attr('transform', `translate(${width / 2}, 0)`)
         .call(yAxis)
 
+    // x-axis title
+    chart.append("text")
+        .attr("x", width / 2)
+        .attr("y", height + margin.top)
+        .attr("dy", "0.71em")
+        .attr("text-anchor", "middle")
+        .style("font-size", "18px")
+        .style("stroke", "none")
+        .text("Voltage (V)")
+
     // return line, and path
     const path = chart.append('path')
     return { path, line }
