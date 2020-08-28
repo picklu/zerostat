@@ -57,8 +57,7 @@ body {
     max-height: 80vh;
     padding-top: 50px;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    justify-content: space-around;
     align-content: center;
 }
 .footer {
@@ -70,28 +69,34 @@ body {
     left: 0;
     right: 0;
 }
-.serial-connection {
+.communication, .view-container {
+    border: 1px solid #9b9494;
+    padding: 20px;
+}
+.communication {
     display: flex;
-    justify-content: space-around;
+    flex-flow: column;
 }
 .view-container   {
     text-align: center;
     max-height: fit-content;
+    background-color: #fafafa;
 }
 .chart {
-    background-color: #fafafa;
-    border: 1px solid #808080;
-    margin: 30px auto;
+    margin: 0 auto;
 }
 .view {
     padding-bottom: 5px;
 }
 .btn, .ports {
     padding: 5px;
-    width: 150px;
+    width: 120px;
 }
 .btn {
     color: white;
+}
+.start-sweep, .stop-sweep {
+    width: 100%;
 }
 .disconnected, .start-sweep {
     background-color: #088b85;
@@ -105,6 +110,7 @@ body {
 .connected:hover, .stop-sweep:hover {
     background-color: #e25c1e;
 }
+
 .start-sweep:active {
     background-color: #3087b9;
 }
