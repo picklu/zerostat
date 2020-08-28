@@ -40,7 +40,7 @@ const { path, line } = setupPlot(plotScale) // initial setup of the chart
 const showStatusMessage = () => {
     state.voltage = state.voltage ? state.voltage : ".."
     state.current = state.current ? state.current : ".."
-    domView.innerHTML = `<b>${state.status}:</b> voltage: ${state.voltage} V & current: ${state.current} uA`
+    domView.innerHTML = `<b>${state.status}:</b> voltage: ${state.voltage} V & current: ${state.current} \xB5A`
 }
 
 const updateUI = () => {
