@@ -96,7 +96,7 @@ body {
 }
 
 .method-container label, .params__form label {
-    background-color: #faf6f6;
+    background-color: #b6c0c2;
     border: 1px solid #959595;
     padding: 5px;
     flex-grow: 1;
@@ -138,7 +138,7 @@ body {
 }
 
 .communication-serial, .method-container, .params {
-    background-color: #f0ecec;
+    background-color: #f8f1f1;
     border: 1px solid #959595;
     padding: 5px;
 }
@@ -173,10 +173,11 @@ body {
     background-color: #075f5b;
 }
 .connected, .stop-sweep {
-    background-color: #eb510a;
+    background-color: #238794;
+    color: #b9310f;
 }
 .connected:hover, .stop-sweep:hover {
-    background-color: #e25c1e;
+    background-color: #2f998b;
 }
 
 .start-sweep:active {

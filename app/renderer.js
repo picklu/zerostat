@@ -107,6 +107,7 @@ domMethod.addEventListener("change", (event) => {
                 input.classList.add("inactive")
                 input.classList.remove("active")
             }
+            // else do nothing
         })
 })
 
