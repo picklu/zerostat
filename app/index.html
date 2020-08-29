@@ -10,15 +10,49 @@
 <body>
 
     <main class="main">
-        <div class="serial-connection">
-            <div class="connection">
-                <button id="connect" class="btn disconnected">Connect</button>
+        <div class="communication"> <!-- for connecting to the serial with selected port-->
+            <div class="communication-serial">
+                <button id="connect" class="btn connection disconnected">Connect</button>
                 <select name="ports" class="ports" id="ports">
                     <option>COMX</option><!-- dummy port -->
                 </select>
             </div>
-            <div class="serial-write-read">
-                <button class="btn start-sweep" id="start-sweep" disabled>Disconnected</button>
+            <div class="method-container"> <!-- for selecting a method cv/lsv -->
+                <div class="params__form__input">
+                    <label for="method">Method</label>
+                    <select name="method" id="method" class="method">
+                        <option value="cv">Cyclic Voltammetry</option>
+                        <option value="lsv">Linear Sweep</option>
+                    </select>
+                </div>
+            </div>
+            <div class="params" >
+                <form class="params__form" id="params" action="#"> 
+                        
+                    <div class="params__form__input">
+                        <label for="vertex1">Vertex1 (V)</label>
+                        <input id="vertex1" class="vertex1" type="number" step="0.1" value="-1" min="-2" max="2" >
+                    </div>
+                    <div class="params__form__input">
+                        <label for="vertex2">Vertex2 (V)</label>
+                        <input id="vertex2" class="vertex2" type="number" step="0.1" value="1" min="-2" max="2">
+                    </div>
+                    <div class="params__form__input">
+                        <label for="estep">E Step (mV)</label>
+                        <input id="estep" class="estep" type="number" value="20" readonly="readonly" >
+                    </div>
+                    <div class="params__form__input">
+                        <label for="scanrate">Scan Rate (mV/s)</label>
+                        <input id="scanrate" class="scanrate" type="number" step="10" value="100" >
+                    </div>
+                    <div class="params__form__input">
+                        <label for="ncycles">N Cycles</label>
+                        <input id="ncycles" class="ncycles" type="number" step="1" value="1" >
+                    </div>
+                    <div class="params__form__btn">
+                        <button class="btn sweep start-sweep" id="sweep" disabled>Start</button>
+                    </div>
+                </form>
             </div>
         </div>
         

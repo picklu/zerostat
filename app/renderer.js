@@ -1,6 +1,7 @@
 const domSerialPorts = document.getElementById("ports")
 const domConnect = document.getElementById("connect")
-const domStartSweep = document.getElementById("start-sweep")
+const domFormParams = document.getElementById("params")
+const domSweep = document.getElementById("sweep")
 const domView = document.getElementById("view")
 
 // global state object
@@ -48,10 +49,10 @@ const updateUI = () => {
     domConnect.classList.add(state.isPortOpen ? "connected" : "disconnected")
     domConnect.classList.remove(state.isPortOpen ? "disconnected" : "connected")
 
-    domStartSweep.classList.add(state.isRunning ? "stop-sweep" : "start-sweep")
-    domStartSweep.classList.remove(state.isRunning ? "start-sweep" : "stop-sweep")
-    domStartSweep.disabled = state.isReady && state.isPortOpen ? false : true
-    domStartSweep.innerText = state.isPortOpen
+    domSweep.classList.add(state.isRunning ? "stop-sweep" : "start-sweep")
+    domSweep.classList.remove(state.isRunning ? "start-sweep" : "stop-sweep")
+    domSweep.disabled = state.isReady && state.isPortOpen ? false : true
+    domSweep.innerText = state.isPortOpen
         ? state.isReady
             ? state.isRunning ? "Stop" : "Start"
             : "Getting Ready"
@@ -94,7 +95,8 @@ domConnect.addEventListener("click", (event) => {
 })
 
 // call main process to start/stop potential sweep
-domStartSweep.addEventListener("click", () => {
+domFormParams.addEventListener("submit", (event) => {
+    event.preventDefault()
     state.isRunning = !state.isRunning
     updateUI()
     if (state.isRunning) { state.all_data = [] }
@@ -136,7 +138,7 @@ window.api.receive("send-data", (raw_data) => {
         state.current = digitalToCurrent(ch3)
         if (state.isRunning) {
             state.status = "RUNNING"
-            domStartSweep.innerText = "Stop"
+            domSweep.innerText = "Stop"
             state.all_data.push({ x: state.voltage, y: state.current })
             drawPlot(state.all_data, path, line)
             updateUI()

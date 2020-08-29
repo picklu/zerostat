@@ -71,31 +71,83 @@ body {
 }
 .communication, .view-container {
     border: 1px solid #9b9494;
+    border-radius: 3px;
     padding: 20px;
 }
 .communication {
     display: flex;
-    flex-flow: column;
+    flex-direction: column;
 }
-.view-container   {
+.view-container {
     text-align: center;
     max-height: fit-content;
-    background-color: #fafafa;
+    background-color: #fff;
 }
+.params {
+    height: 100%;
+}
+.params__form { 
+    display: flex;
+    flex-direction:column;
+    height: 100%;
+}
+.params__form__btn {
+    margin-top: auto;
+}
+
+.method-container label, .params__form label {
+    border: 1px solid #959595;
+    padding: 5px;
+    flex-grow: 1;
+    margin-right: 5px;
+}
+
+.method-container label {
+    padding: 7px;
+}
+
+.params__form__input {
+    padding: 2px;
+    display: flex;
+    align-items: center;
+}
+
+.view {
+    text-align: left;
+}
+
 .chart {
     margin: 0 auto;
 }
-.view {
-    padding-bottom: 5px;
+.communication-serial {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
 }
-.btn, .ports {
+.communication-serial, .method-container, .params {
     padding: 5px;
-    width: 120px;
+}
+
+.btn, .ports, .method,
+.vertex1, .vertex2, .estep, 
+.scanrate, .ncycles {
+    text-align: center;
+    padding: 5px;
+    width: 130px;
+}
+.method, .ports {
+    padding: 7px;
+    width: 145px;
 }
 .btn {
     color: white;
 }
-.start-sweep, .stop-sweep {
+.connection {
+    flex-grow: 1;
+    margin-right: 5px;
+}
+.sweep {
+    padding: 5px;
     width: 100%;
 }
 .disconnected, .start-sweep {
@@ -118,9 +170,17 @@ body {
     background-color: #5a8178;
     color: #b9310f;
 }
-.axis {
+
+
+/* style for d3js chart */
+.axis, .axis-title {
     font-family: sans-serif;
+}
+.axis {
     font-size: 12px;
+}
+.axis-title {
+    font-size: 16px;
 }
 .line {
     fill: none;

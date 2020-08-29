@@ -68,8 +68,8 @@ function setupPlot(ps) {
         .attr("x", width / 2)
         .attr("y", height + margin.top)
         .attr("dy", "0.71em")
+        .attr("class", "axis-title")
         .attr("text-anchor", "middle")
-        .style("font-size", "18px")
         .style("stroke", "none")
         .text("Voltage (V)")
 
@@ -78,8 +78,9 @@ function setupPlot(ps) {
         .attr("transform", "rotate(-90)")
         .attr("x", 0 - (height / 2))
         .attr("y", 0 - margin.right)
+        .attr("class", "axis-title")
         .attr("text-anchor", "middle")
-        .style("font-size", "18px")
+        // .style("font-size", "18px")
         .style("stroke", "none")
         .text("Current (\xB5A)")
 
