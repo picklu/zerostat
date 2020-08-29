@@ -112,11 +112,13 @@ domMethod.addEventListener("change", (event) => {
 
 // call main process to start/stop potential sweep
 domFormParams.addEventListener("submit", (event) => {
-    event.preventDefault()
     state.isRunning = !state.isRunning
     updateUI()
     if (state.isRunning) { state.all_data = [] }
     window.api.send("control-sweep", state.isRunning)
+    const formData = new FormData(event.target)
+    console.log(formData)
+    event.preventDefault()
 })
 
 // populate options with ports

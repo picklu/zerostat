@@ -70,9 +70,10 @@ body {
     right: 0;
 }
 .communication, .view-container {
+    background-color: #fff;
     border: 1px solid #9b9494;
     border-radius: 3px;
-    padding: 20px;
+    padding: 10px;
 }
 .communication {
     display: flex;
@@ -81,7 +82,6 @@ body {
 .view-container {
     text-align: center;
     max-height: fit-content;
-    background-color: #fff;
 }
 .params {
     height: 100%;
@@ -96,6 +96,7 @@ body {
 }
 
 .method-container label, .params__form label {
+    background-color: #faf6f6;
     border: 1px solid #959595;
     padding: 5px;
     flex-grow: 1;
@@ -128,11 +129,17 @@ body {
     margin: 0 auto;
 }
 .communication-serial {
-    margin-bottom: 10px;
+    
     display: flex;
     justify-content: space-between;
 }
+.communication-serial, .method-container {
+    margin-bottom: 10px;
+}
+
 .communication-serial, .method-container, .params {
+    background-color: #f0ecec;
+    border: 1px solid #959595;
     padding: 5px;
 }
 
