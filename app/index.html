@@ -43,11 +43,11 @@
                     </div>
                     <div class="params__form__input">
                         <label for="scanrate">Scan Rate (mV/s)</label>
-                        <input id="scanrate" class="scanrate" type="number" step="10" value="100" >
+                        <input id="scanrate" class="scanrate" type="number" step="5" value="100" min="5" max="300" >
                     </div>
                     <div class="params__form__input">
                         <label for="ncycles">N Cycles</label>
-                        <input id="ncycles" class="ncycles" type="number" step="1" value="1" >
+                        <input id="ncycles" class="ncycles" type="number" step="1" value="1" min="1" max="100" >
                     </div>
                     <div class="params__form__btn">
                         <button class="btn sweep start-sweep" id="sweep" disabled>Start</button>
