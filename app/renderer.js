@@ -12,6 +12,7 @@ const state = {
     isReady: false,
     isRunning: false,
     status: "STOPPED",
+    method: "LSV",
     voltage: null,
     current: null,
     portList: [],
@@ -97,6 +98,7 @@ domConnect.addEventListener("click", (event) => {
 })
 
 domMethod.addEventListener("change", (event) => {
+    state.method = domMethod.value.toUpperCase()
     Array.from(domFormInputs)
         .forEach((input) => {
             if (input.classList.contains("inactive")) {
