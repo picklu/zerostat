@@ -112,6 +112,14 @@ body {
     align-items: center;
 }
 
+.active {
+    display: flex;
+}
+
+.inactive {
+    display: none;
+}
+
 .view {
     text-align: left;
 }
@@ -129,8 +137,9 @@ body {
 }
 
 .btn, .ports, .method,
-.vertex1, .vertex2, .estep, 
-.scanrate, .ncycles {
+.estart, .estop, .vertex1, 
+.vertex2, .estep, .scanrate, 
+.ncycles {
     text-align: center;
     padding: 5px;
     width: 130px;

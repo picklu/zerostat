@@ -1,5 +1,7 @@
 const domSerialPorts = document.getElementById("ports")
 const domConnect = document.getElementById("connect")
+const domMethod = document.getElementById("method")
+const domFormInputs = document.getElementsByClassName("params__form__input")
 const domFormParams = document.getElementById("params")
 const domSweep = document.getElementById("sweep")
 const domView = document.getElementById("view")
@@ -92,6 +94,20 @@ domConnect.addEventListener("click", (event) => {
     state.isReady = false
     state.isRunning = false
     window.api.send(channel, port)
+})
+
+domMethod.addEventListener("change", (event) => {
+    Array.from(domFormInputs)
+        .forEach((input) => {
+            if (input.classList.contains("inactive")) {
+                input.classList.add("active")
+                input.classList.remove("inactive")
+            }
+            else if (input.classList.contains("active")) {
+                input.classList.add("inactive")
+                input.classList.remove("active")
+            }
+        })
 })
 
 // call main process to start/stop potential sweep
