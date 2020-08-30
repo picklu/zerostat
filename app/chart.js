@@ -8,7 +8,7 @@ const margin = {
     top: 20,
     right: 20,
     bottom: 50,
-    left: 60
+    left: 80
 }
 const width = 900 - margin.left - margin.right
 const height = 500 - margin.top - margin.bottom
@@ -54,20 +54,20 @@ function setupPlot(ps) {
     // x-axis label
     const xAxis = d3.axisBottom().scale(xScale);
     chart.append('g').attr('class', 'x axis')
-        .attr('transform', `translate(0, ${height / 2})`)
+        .attr('transform', `translate(0, ${height})`)
         .call(xAxis)
 
     // y-axis label
     const yAxis = d3.axisLeft().scale(yScale);
     chart.append('g').attr('class', 'y axis')
-        .attr('transform', `translate(${width / 2}, 0)`)
+        .attr('transform', `translate(0, 0)`)
         .call(yAxis)
 
     // x-axis title
     chart.append("text")
         .attr("x", width / 2)
         .attr("y", height + margin.top)
-        .attr("dy", "0.71em")
+        .attr("dy", "1.5em")
         .attr("class", "axis-title")
         .attr("text-anchor", "middle")
         .style("stroke", "none")
@@ -77,7 +77,7 @@ function setupPlot(ps) {
     chart.append("text")
         .attr("transform", "rotate(-90)")
         .attr("x", 0 - (height / 2))
-        .attr("y", 0 - margin.right)
+        .attr("y", 0 - margin.right * 2)
         .attr("class", "axis-title")
         .attr("text-anchor", "middle")
         // .style("font-size", "18px")

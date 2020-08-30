@@ -33,8 +33,8 @@ const vToFR = OPVOLTS / FR // voltage to current conversion factor
 const plotScale = {
     voltMin: -2.5, // in V
     voltMax: 2.5,  // in V
-    currMin: -250, // in uA
-    currMax: 250,  // in uA
+    currMin: -200, // in uA
+    currMax: 200,  // in uA
     tickX: 0.5,
     tickY: 50
 }
