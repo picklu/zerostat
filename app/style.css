@@ -100,7 +100,7 @@ body {
 .method-container label, .params__form label {
     background-color: #b7b9b9;
     border: 1px solid #959595;
-    padding: 5px;
+    padding: 7px;
     flex-grow: 1;
     margin-right: 5px;
     color: #080808;
@@ -108,7 +108,7 @@ body {
 }
 
 .method-container label {
-    padding: 7px;
+    padding: 9px;
 }
 
 .params__form__input {
@@ -186,6 +186,7 @@ body {
     margin-right: 5px;
 }
 .sweep {
+    height: 50px;
     padding: 5px;
     width: 100%;
 }
