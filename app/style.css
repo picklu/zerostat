@@ -176,7 +176,7 @@ body {
     box-shadow: 1px 1px #959595;
 }
 .btn:disabled {
-    color: #d4d1d1;
+    color: #e71717;
     text-shadow: 1px 1px 1px #2b2a2a;
 }
 .connection {
@@ -189,7 +189,7 @@ body {
 }
 
 .connected, .stop-sweep {
-    color: #b9310f;
+    color: #e71717;
 }
 
 /* style for d3js chart */
