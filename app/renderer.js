@@ -19,7 +19,7 @@ const state = {
     all_data: []
 }
 
-// as per microcontroller
+// spec of the microcontroller io and amplifier
 const DAC_BIT = 8
 const ADC_BIT = 10
 const OPVOLTS = 5  // operating voltage (V) of teh microcontroller

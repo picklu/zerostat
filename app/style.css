@@ -9,7 +9,7 @@ a, abbr, acronym, address, big, cite, code,
 del, dfn, em, img, ins, kbd, q, s, samp,
 small, strike, strong, sub, sup, tt, var,
 b, u, i, center,
-dl, dt, dd, ol, ul, li,
+dl, dt, dd, ol, ul, li, button,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
 article, aside, canvas, details, embed, 
@@ -96,11 +96,13 @@ body {
 }
 
 .method-container label, .params__form label {
-    background-color: #b6c0c2;
+    background-color: #b7b9b9;
     border: 1px solid #959595;
     padding: 5px;
     flex-grow: 1;
     margin-right: 5px;
+    color: #080808;
+    text-shadow: 1px 1px 1px #9c9999;
 }
 
 .method-container label {
@@ -156,7 +158,21 @@ body {
     width: 145px;
 }
 .btn {
-    color: white;
+    background-color: #b7b9b9;
+    border: 2px solid  #5f5d5d;
+    color: #080808;
+    font-weight: 600;
+    text-shadow: 1px 1px 1px #9c9999;
+}
+.btn:hover {
+    background-color:  #cbcccc;
+}
+.btn:active {
+    box-shadow: 1px 1px #959595;
+}
+.btn:disabled {
+    color: #d4d1d1;
+    text-shadow: 1px 1px 1px #2b2a2a;
 }
 .connection {
     flex-grow: 1;
@@ -166,28 +182,10 @@ body {
     padding: 5px;
     width: 100%;
 }
-.disconnected, .start-sweep {
-    background-color: #088b85;
-}
-.disconnected:hover, .start-sweep:hover {
-    background-color: #075f5b;
-}
+
 .connected, .stop-sweep {
-    background-color: #238794;
     color: #b9310f;
 }
-.connected:hover, .stop-sweep:hover {
-    background-color: #2f998b;
-}
-
-.start-sweep:active {
-    background-color: #3087b9;
-}
-.start-sweep:disabled {
-    background-color: #5a8178;
-    color: #b9310f;
-}
-
 
 /* style for d3js chart */
 .axis, .axis-title {
