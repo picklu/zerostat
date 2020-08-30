@@ -85,6 +85,8 @@ body {
     flex-direction: column;
 }
 .view-container {
+    display: flex;
+    flex-direction: column;
     text-align: center;
     max-height: fit-content;
 }
@@ -133,6 +135,7 @@ body {
 }
 
 .view {
+    margin-top: auto;
     text-align: left;
 }
 
