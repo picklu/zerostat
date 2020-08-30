@@ -119,7 +119,7 @@ domFormParams.addEventListener("submit", (event) => {
     updateUI()
     if (state.isRunning) { state.all_data = [] }
     window.api.send("control-sweep", state.isRunning)
-    const formData = new FormData(event.target)
+    const formData = new FormData(domFormParams)
     console.log(formData)
     event.preventDefault()
 })

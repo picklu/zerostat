@@ -115,6 +115,10 @@ body {
     align-items: center;
 }
 
+.params__form__input input:invalid {
+    border: 2px solid #b9310f;    
+}
+
 .active {
     display: flex;
 }
