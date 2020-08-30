@@ -31,31 +31,31 @@
                         
                     <div class="params__form__input active">
                         <label for="estart">E Start (V)</label>
-                        <input id="estart" class="estart" type="number" step="0.1" value="-1" min="-2" max="2" required >
+                        <input name="estart" id="estart" class="estart" type="number" step="0.1" value="-1" min="-2" max="2" required >
                     </div>
                     <div class="params__form__input active">
                         <label for="estop">E Stop (V)</label>
-                        <input id="estop" class="estop" type="number" step="0.1" value="1" min="-2" max="2" required >
+                        <input name="estop" id="estop" class="estop" type="number" step="0.1" value="1" min="-2" max="2" required >
                     </div>
                     <div class="params__form__input inactive">
                         <label for="vertex1">Vertex1 (V)</label>
-                        <input id="vertex1" class="vertex1" type="number" step="0.1" value="-1" min="-2" max="2" required >
+                        <input name="vertex1" id="vertex1" class="vertex1" type="number" step="0.1" value="-1" min="-2" max="2" required >
                     </div>
                     <div class="params__form__input inactive">
                         <label for="vertex2">Vertex2 (V)</label>
-                        <input id="vertex2" class="vertex2" type="number" step="0.1" value="1" min="-2" max="2" required >
+                        <input name="vertex2" id="vertex2" class="vertex2" type="number" step="0.1" value="1" min="-2" max="2" required >
                     </div>
                     <div class="params__form__input">
                         <label for="estep">E Step (mV)</label>
-                        <input id="estep" class="estep" type="number" value="20" readonly="readonly" >
+                        <input name="estep" id="estep" class="estep" type="number" value="20" readonly="readonly" >
                     </div>
                     <div class="params__form__input">
                         <label for="scanrate">Scan Rate (mV/s)</label>
-                        <input id="scanrate" class="scanrate" type="number" step="5" value="100" min="5" max="300" required>
+                        <input name="scanrate" id="scanrate" class="scanrate" type="number" step="5" value="100" min="5" max="300" required>
                     </div>
                     <div class="params__form__input inactive">
                         <label for="ncycles">N Cycles</label>
-                        <input id="ncycles" class="ncycles" type="number" step="1" value="1" min="1" max="100" required>
+                        <input name="ncycles" id="ncycles" class="ncycles" type="number" step="1" value="1" min="1" max="100" required>
                     </div>
                     <div class="params__form__btn">
                         <button class="btn sweep start-sweep" id="sweep" disabled>Disconnected</button>
