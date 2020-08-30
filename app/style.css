@@ -59,7 +59,7 @@ body {
     flex-direction: column;
 }
 .main {
-    border: 3px double #9b9494;
+    border: 2px solid #6b6767;
     max-height: 80vh;
     padding: 50px;
     display: flex;
@@ -68,7 +68,8 @@ body {
     flex-grow: 1;
 }
 .footer {
-    background-color: #9b9494;
+    background-color: #e4e3e3;
+    border: 2px solid #9b9999;
     padding: 20px;
     text-align: center;
     flex-grow: 1;
