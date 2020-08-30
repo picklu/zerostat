@@ -35,7 +35,7 @@ const vToFR = OPVOLTS / FR // voltage to current conversion factor
 const showStatusMessage = () => {
     state.voltage = state.voltage ? state.voltage : ".."
     state.current = state.current ? state.current : ".."
-    domView.innerHTML = `<b>${state.status}:</b> voltage: ${state.voltage} V & current: ${state.current} \xB5A`
+    domView.innerHTML = `<b class=${state.overflow ? "overflow" : "normal"}>${state.status}:</b> voltage: ${state.voltage} V & current: ${state.current} \xB5A`
 }
 
 const updateUI = () => {
@@ -156,8 +156,9 @@ window.api.receive("send-data", (raw_data) => {
         state.isRunning = !!ch1
         state.voltage = digitalToVoltage(ch2)
         state.current = digitalToCurrent(ch3)
+        state.overflow = state.current >= plotScale.currMax
         if (state.isRunning) {
-            state.status = "RUNNING"
+            state.status = state.overflow ? "OVERFLOW" : "RUNNING"
             domSweep.innerText = "Stop"
             state.all_data.push({ x: state.voltage, y: state.current })
             drawPlot(state.all_data)
