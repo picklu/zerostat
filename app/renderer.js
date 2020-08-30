@@ -16,7 +16,8 @@ const state = {
     voltage: null,
     current: null,
     portList: [],
-    all_data: []
+    all_data: [],
+    overflow: false
 }
 
 // spec of the microcontroller io and amplifier
@@ -29,16 +30,6 @@ const maxDAC = Math.pow(2, DAC_BIT)
 const maxADC = Math.pow(2, ADC_BIT)
 const vToFR = OPVOLTS / FR // voltage to current conversion factor
 
-// d3js chart
-const plotScale = {
-    voltMin: -2.5, // in V
-    voltMax: 2.5,  // in V
-    currMin: -200, // in uA
-    currMax: 200,  // in uA
-    tickX: 0.5,
-    tickY: 50
-}
-const { path, line } = setupPlot(plotScale) // initial setup of the chart
 
 // helper functions
 const showStatusMessage = () => {
@@ -169,7 +160,7 @@ window.api.receive("send-data", (raw_data) => {
             state.status = "RUNNING"
             domSweep.innerText = "Stop"
             state.all_data.push({ x: state.voltage, y: state.current })
-            drawPlot(state.all_data, path, line)
+            drawPlot(state.all_data)
             updateUI()
         }
         else {
