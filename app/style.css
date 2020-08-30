@@ -50,26 +50,28 @@ table {
 
 /* end of reset */
 body {
+    height: 100vh;
     background-color: #f0ecec;
     font-family: sans-serif;
     font-size: small;
     position: relative;
+    display: flex;
+    flex-direction: column;
 }
 .main {
+    border: 3px double #9b9494;
     max-height: 80vh;
-    padding-top: 50px;
+    padding: 50px;
     display: flex;
     justify-content: space-around;
     align-content: center;
+    flex-grow: 1;
 }
 .footer {
     background-color: #9b9494;
     padding: 20px;
     text-align: center;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    flex-grow: 1;
 }
 .communication, .view-container {
     background-color: #fff;
@@ -186,6 +188,7 @@ body {
     margin-right: 5px;
 }
 .sweep {
+    font-size: medium;
     height: 50px;
     padding: 5px;
     width: 100%;
