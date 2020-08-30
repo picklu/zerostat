@@ -78,6 +78,7 @@ body {
 }
 .communication, .view-container {
     background-color: #fff;
+    border: 1px solid #959595;
     border-radius: 3px;
     padding: 10px;
 }
