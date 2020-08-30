@@ -22,8 +22,8 @@ const state = {
 // spec of the microcontroller io and amplifier
 const DAC_BIT = 8
 const ADC_BIT = 10
-const OPVOLTS = 5  // operating voltage (V) of teh microcontroller
-const REF_DAC = 127 // Refrernce value
+const OPVOLTS = 5  // operating voltage (V) of the microcontroller
+const REF_DAC = 127 // Refrernce DAC value
 const FR = 12120  // feedback resistor in Ohm in the trans-impedance amplifier
 const maxDAC = Math.pow(2, DAC_BIT)
 const maxADC = Math.pow(2, ADC_BIT)
@@ -101,13 +101,16 @@ domMethod.addEventListener("change", (event) => {
     state.method = domMethod.value.toUpperCase()
     Array.from(domFormInputs)
         .forEach((input) => {
-            if (input.classList.contains("inactive")) {
-                input.classList.add("active")
-                input.classList.remove("inactive")
-            }
-            else if (input.classList.contains("active")) {
-                input.classList.add("inactive")
-                input.classList.remove("active")
+            if (!input.classList.contains("common")) {
+                if (input.classList.contains("inactive")) {
+                    input.classList.add("active")
+                    input.classList.remove("inactive")
+                }
+                else if (input.classList.contains("active")) {
+                    input.classList.add("inactive")
+                    input.classList.remove("active")
+                }
+                // else do nothing
             }
             // else do nothing
         })
