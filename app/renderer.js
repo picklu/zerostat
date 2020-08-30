@@ -48,18 +48,23 @@ const showStatusMessage = () => {
 }
 
 const updateUI = () => {
-    domConnect.innerText = state.isPortOpen ? "Disconnect" : "Connect"
+    domConnect.innerText = state.isPortOpen
+        ? state.isReady
+            ? "Disconnect"
+            : "Cancel"
+        : "Connect"
+    domSweep.innerText = state.isPortOpen
+        ? state.isReady
+            ? state.isRunning ? "Stop" : "Start"
+            : "Connecting ..."
+        : "Disconnected"
+
     domConnect.classList.add(state.isPortOpen ? "connected" : "disconnected")
     domConnect.classList.remove(state.isPortOpen ? "disconnected" : "connected")
 
     domSweep.classList.add(state.isRunning ? "stop-sweep" : "start-sweep")
     domSweep.classList.remove(state.isRunning ? "start-sweep" : "stop-sweep")
     domSweep.disabled = state.isReady && state.isPortOpen ? false : true
-    domSweep.innerText = state.isPortOpen
-        ? state.isReady
-            ? state.isRunning ? "Stop" : "Start"
-            : "Getting Ready"
-        : "Disconnected"
 }
 
 const isEqual = (a, b) => {
