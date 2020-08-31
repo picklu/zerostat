@@ -104,14 +104,11 @@ chart.append("text")
 const path = chart.append('path')
 
 function rescale() {
-    yScale.domain([0, Math.floor((Math.random() * 90) + 11)])
+    yScale.domain([plotScale.voltMin, plotScale.voltMax])
     d3.select("#chart")
         .select(".x.axis")
         .transition().duration(500).ease("sin-in-out")
         .call(xAxis);
-
-    vis.select(".yaxis_label")
-        .text("Rescaled Axis");
 }
 
 function drawGridXY(styleClass, data) {
