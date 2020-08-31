@@ -204,6 +204,14 @@ body {
     color: #e71717;
 }
 
+.status {
+    font-weight: 600;
+}
+
+.overflow {
+    color:  #e71717;
+}
+
 /* style for d3js chart */
 .axis, .axis-title {
     font-family: sans-serif;
