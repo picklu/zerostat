@@ -13,12 +13,12 @@ const margin = {
 
 // d3js chart
 const plotScale = {
-    voltMin: -2.5, // in V
-    voltMax: 2.5,  // in V
-    currMin: -200, // in uA
-    currMax: 200,  // in uA
-    tickX: 0.5,
-    tickY: 50
+    voltMin: -2.5,  // in V
+    voltMax: 2.5,   // in V
+    currMin: -200,  // in uA
+    currMax: 200,   // in uA
+    tickX: 0.5,     // in V
+    tickY: 50       // in uA
 }
 
 const width = 900 - margin.left - margin.right
