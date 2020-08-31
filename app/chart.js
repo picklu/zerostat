@@ -7,7 +7,7 @@
 const margin = {
     top: 20,
     right: 20,
-    bottom: 50,
+    bottom: 55,
     left: 80
 }
 
@@ -78,7 +78,7 @@ chart.append('g').attr('class', 'y axis')
 chart.append("text")
     .attr("x", width / 2)
     .attr("y", height + margin.top)
-    .attr("dy", "1.5em")
+    .attr("dy", "2em")
     .attr("class", "axis-title")
     .attr("text-anchor", "middle")
     .style("stroke", "none")
@@ -88,7 +88,8 @@ chart.append("text")
 chart.append("text")
     .attr("transform", "rotate(-90)")
     .attr("x", 0 - (height / 2))
-    .attr("y", 0 - margin.right * 2)
+    .attr("y", 0 - margin.right)
+    .attr("dy", "-2em")
     .attr("class", "axis-title")
     .attr("text-anchor", "middle")
     // .style("font-size", "18px")

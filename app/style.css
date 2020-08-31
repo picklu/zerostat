@@ -80,7 +80,7 @@ body {
     background-color: #fff;
     border: 1px solid #959595;
     border-radius: 3px;
-    padding: 10px;
+    padding: 5px;
 }
 .communication {
     display: flex;
@@ -117,31 +117,27 @@ body {
 .method-container label {
     padding: 9px;
 }
-
-.params__form__input {
-    padding: 2px;
+.params__method__input, .params__form__input {
     display: flex;
     align-items: center;
 }
-
+.params__form__input {
+    margin-bottom: 5px;
+}
 .params__form__input input:invalid {
     border: 2px solid #b9310f;    
 }
-
 .active {
     display: flex;
 }
-
 .inactive {
     display: none;
 }
-
 .view {
     margin-top: auto;
     padding: 5px 10px;
     text-align: left;
 }
-
 .chart {
     margin: 0 auto;
 }
@@ -153,13 +149,11 @@ body {
 .communication-serial, .method-container {
     margin-bottom: 10px;
 }
-
 .communication-serial, .method-container, .params {
     background-color: #f8f1f1;
     border: 1px solid #959595;
     padding: 5px;
 }
-
 .btn, .ports, .method,
 .estart, .estop, .vertex1, 
 .vertex2, .estep, .scanrate, 
@@ -200,16 +194,13 @@ body {
     padding: 5px;
     width: 100%;
 }
-
 .connected, .stop-sweep {
     color: #e71717;
 }
-
 .status {
     color: #0fa13b;
     font-weight: 600;
 }
-
 .overflow {
     color:  #e71717;
 }
