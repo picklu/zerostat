@@ -31,7 +31,7 @@ const chart = d3.select('#chart')
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform",
-        "translate(" + margin.left + "," + margin.top + ")");
+        "translate(" + margin.left + "," + margin.top + ")")
 
 let xScale = d3.scaleLinear().domain([plotScale.voltMin, plotScale.voltMax]).range([0, width])
 const yScale = d3.scaleLinear().domain([plotScale.currMin, plotScale.currMax]).range([height, 0])
@@ -67,13 +67,13 @@ data = [{ x: plotScale.voltMin, y: 0 }, { x: plotScale.voltMax, y: 0 }]
 drawGridXY("rootXY", data)
 
 // x-axis label
-const xAxis = d3.axisBottom().scale(xScale);
+const xAxis = d3.axisBottom().scale(xScale)
 chart.append('g').attr('class', 'x axis')
     .attr('transform', `translate(0, ${height})`)
     .call(xAxis)
 
 // y-axis label
-const yAxis = d3.axisLeft().scale(yScale);
+const yAxis = d3.axisLeft().scale(yScale)
 chart.append('g').attr('class', 'y axis')
     .attr('transform', `translate(0, 0)`)
     .call(yAxis)
@@ -104,11 +104,10 @@ chart.append("text")
 const path = chart.append('path')
 
 function rescale() {
-    yScale.domain([plotScale.voltMin, plotScale.voltMax])
-    d3.select("#chart")
-        .select(".x.axis")
-        .transition().duration(500).ease("sin-in-out")
-        .call(xAxis);
+    xScale.domain([plotScale.voltMin, plotScale.voltMax])
+    chart.select(".x.axis")
+        .transition().duration(500)
+        .call(xAxis)
 }
 
 function drawGridXY(styleClass, data) {
@@ -120,6 +119,6 @@ function drawGridXY(styleClass, data) {
 
 function drawPlot(data) {
     path.datum(data)
-        .attr('class', 'line')
-        .attr('d', line)
+        .attr("class", "line")
+        .attr("d", line)
 }

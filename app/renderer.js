@@ -139,9 +139,17 @@ domFormParams.addEventListener("submit", (event) => {
             }
             // else do nothing
         })
-        plotScale.voltMin = Math.min()
+        plotScale.voltMin = Math.min(
+            state.method.params.estart || state.method.params.vertex1,
+            state.method.params.estop || state.method.params.vertex2,
+        )
+        plotScale.voltMax = Math.max(
+            state.method.params.estart || state.method.params.vertex1,
+            state.method.params.estop || state.method.params.vertex2,
+        )
     }
     updateUI()
+    rescale()
     window.api.send("control-sweep", state.isRunning)
 })
 
