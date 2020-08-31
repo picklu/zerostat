@@ -190,7 +190,8 @@ window.api.receive("send-data", (raw_data) => {
         state.isRunning = !!ch1
         state.voltage = digitalToVoltage(ch2)
         state.current = digitalToCurrent(ch3)
-        state.overflow = state.current >= plotScale.currMax
+        state.overflow = state.current <= plotScale.currMin ||
+            state.current >= plotScale.currMax
         if (state.isRunning) {
             state.status = state.overflow ? "OVERFLOW" : "RUNNING"
             domSweep.innerText = "Stop"
