@@ -6,8 +6,21 @@ const domFormParams = document.getElementById("params")
 const domSweep = document.getElementById("sweep")
 const domView = document.getElementById("view")
 
+
+// spec of the microcontroller io and amplifier
+const DAC_BIT = 8
+const ADC_BIT = 10
+const OPVOLTS = 5  // operating voltage (V) of the microcontroller
+const REF_DAC = 127 // Refrernce DAC value
+const FR = 12120  // feedback resistor in Ohm in the trans-impedance amplifier
+const maxDAC = Math.pow(2, DAC_BIT)
+const maxADC = Math.pow(2, ADC_BIT)
+const vToFR = OPVOLTS / FR // voltage to current conversion factor
+
 // global state object
 const state = {
+    maxDAC: maxDAC,
+    refDAC: REF_DAC,
     isPortOpen: false,
     isReady: false,
     isRunning: false,
@@ -24,17 +37,6 @@ const state = {
     all_data: [],
     overflow: false
 }
-
-// spec of the microcontroller io and amplifier
-const DAC_BIT = 8
-const ADC_BIT = 10
-const OPVOLTS = 5  // operating voltage (V) of the microcontroller
-const REF_DAC = 127 // Refrernce DAC value
-const FR = 12120  // feedback resistor in Ohm in the trans-impedance amplifier
-const maxDAC = Math.pow(2, DAC_BIT)
-const maxADC = Math.pow(2, ADC_BIT)
-const vToFR = OPVOLTS / FR // voltage to current conversion factor
-
 
 // helper functions
 const showStatusMessage = () => {
@@ -139,6 +141,8 @@ domFormParams.addEventListener("submit", (event) => {
             }
             // else do nothing
         })
+
+        // update plot scale
         plotScale.voltMin = Math.min(
             state.method.params.estart || state.method.params.vertex1,
             state.method.params.estop || state.method.params.vertex2,
@@ -150,7 +154,7 @@ domFormParams.addEventListener("submit", (event) => {
     }
     updateUI()
     rescale()
-    window.api.send("control-sweep", state.isRunning)
+    window.api.send("control-sweep", state)
 })
 
 // populate options with ports

@@ -117,12 +117,27 @@ ipcMain.on("connect-serial", (event, portPath) => {
 
 })
 
-ipcMain.on("control-sweep", (event, running) => {
-    if (running) {
-        port.write("5,0,1,127,0,255")
-    }
-    else {
-        port.write("5,1,1,127,0,255")
-    }
+ipcMain.on("control-sweep", (event, state) => {
+    const scanrate = state.method.params.scanrate
+    const halt = state.isRunning ? 0 : 1
+    let estart = state.method.params.estart || state.method.params.vertex1
+    let estop = state.method.params.estop || state.method.params.vertex2
+    estart = Number((state.maxDAC * estart / 5 + state.refDAC).toFixed(0))
+    estop = Number((state.maxDAC * estop / 5 + state.refDAC).toFixed(0))
+    let ncycles = state.method.params.ncycles ? state.method.params.ncycles : 0
+    let mode
+    switch (state.method.type) {
+        case "LSV":
+            mode = 0
+            break
+        case "CV":
+            mode = 1
 
+            break
+        default:
+            mode = -1
+            break
+
+    }
+    port.write(`${scanrate},${halt},${mode},${ncycles},${state.refDAC},${estart},${estop}`)
 })

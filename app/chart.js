@@ -66,7 +66,6 @@ chart.append("text")
     .attr("dy", "-2em")
     .attr("class", "axis-title")
     .attr("text-anchor", "middle")
-    // .style("font-size", "18px")
     .style("stroke", "none")
     .text("Current (\xB5A)")
 
