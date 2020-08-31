@@ -138,6 +138,7 @@ body {
 
 .view {
     margin-top: auto;
+    padding: 5px 10px;
     text-align: left;
 }
 
@@ -205,6 +206,7 @@ body {
 }
 
 .status {
+    color: #0fa13b;
     font-weight: 600;
 }
 

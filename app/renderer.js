@@ -35,7 +35,10 @@ const vToFR = OPVOLTS / FR // voltage to current conversion factor
 const showStatusMessage = () => {
     state.voltage = state.voltage ? state.voltage : ".."
     state.current = state.current ? state.current : ".."
-    domView.innerHTML = `<b class="${state.overflow ? "status overflow" : "status"}">${state.status}:</b> voltage: ${state.voltage} V & current: ${state.current} \xB5A`
+    domView.innerHTML = `
+        <b class="${state.overflow ? "status overflow" : "status"}">
+            ${state.status}:
+        </b> voltage: ${state.voltage} V & current: ${state.current} \xB5A`
 }
 
 const updateUI = () => {
