@@ -139,5 +139,6 @@ ipcMain.on("control-sweep", (event, state) => {
             break
 
     }
+    console.log("=>", scanrate, "=>", mode, "=>", ncycles,)
     port.write(`${scanrate},${halt},${mode},${ncycles},${state.refDAC},${estart},${estop}`)
 })
