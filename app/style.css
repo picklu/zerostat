@@ -138,6 +138,7 @@ body {
 
 .view {
     margin-top: auto;
+    padding: 5px 10px;
     text-align: left;
 }
 
@@ -174,7 +175,7 @@ body {
 .btn {
     outline: none;
     background-color: #b7b9b9;
-    border: 2px solid  #5f5d5d;
+    border: 1px solid  #5f5d5d;
     color: #080808;
     font-weight: 600;
     text-shadow: 1px 1px 1px #9c9999;
@@ -205,6 +206,7 @@ body {
 }
 
 .status {
+    color: #0fa13b;
     font-weight: 600;
 }
 
