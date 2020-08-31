@@ -12,7 +12,12 @@ const state = {
     isReady: false,
     isRunning: false,
     status: "STOPPED",
-    method: "LSV",
+    method: {
+        type: "LSV",
+        params: {
+            // will be populated on submit
+        }
+    },
     voltage: null,
     current: null,
     portList: [],
@@ -97,7 +102,7 @@ domConnect.addEventListener("click", (event) => {
 })
 
 domMethod.addEventListener("change", (event) => {
-    state.method = domMethod.value.toUpperCase()
+    state.method.type = domMethod.value.toUpperCase()
     Array.from(domFormInputs)
         .forEach((input) => {
             if (!input.classList.contains("common")) {
@@ -117,13 +122,27 @@ domMethod.addEventListener("change", (event) => {
 
 // call main process to start/stop potential sweep
 domFormParams.addEventListener("submit", (event) => {
-    state.isRunning = !state.isRunning
-    updateUI()
-    if (state.isRunning) { state.all_data = [] }
-    window.api.send("control-sweep", state.isRunning)
-    const formData = new FormData(domFormParams)
-    console.log(formData)
     event.preventDefault()
+    state.isRunning = !state.isRunning
+    if (state.isRunning) {
+        state.all_data = []
+        Array.from(event.target).forEach(input => {
+            if (input.tagName === "INPUT") {
+                const key = input.getAttribute("name")
+                const value = input.value
+                if (input.parentElement.classList.contains("active")) {
+                    state.method.params[key] = Number(value)
+                }
+                else {
+                    state.method.params[key] = null
+                }
+            }
+            // else do nothing
+        })
+        plotScale.voltMin = Math.min()
+    }
+    updateUI()
+    window.api.send("control-sweep", state.isRunning)
 })
 
 // populate options with ports
