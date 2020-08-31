@@ -217,16 +217,16 @@ body {
 }
 .line {
     fill: none;
-    stroke: #c92734;
+    stroke: #ec1a2b;
     stroke-width: 2px;
 }
 .grid {
-    stroke: #70f1e2;
+    stroke: #61f1e1;
     stroke-width: 1px;
     fill: none;
 }
 .rootXY {
-    stroke: rgb(68, 68, 68);
+    stroke: #1ea595;
     stroke-width: 1px;
     fill: none;
 }
