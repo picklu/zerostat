@@ -43,13 +43,17 @@ const line = d3.line()
 let data = []
 
 // draw grids along x-axis
-for (let x = plotScale.voltMin; x <= plotScale.voltMax; x = x + plotScale.tickX) {
+for (let x = plotScale.voltMin + plotScale.tickX;
+    x <= plotScale.voltMax;
+    x = x + plotScale.tickX) {
     data = [{ x, y: plotScale.currMin }, { x, y: plotScale.currMax }]
     drawGridXY("grid", data)
 }
 
 // draw grids along y-axis
-for (let y = plotScale.currMin; y <= plotScale.currMax; y = y + plotScale.tickY) {
+for (let y = plotScale.currMin + plotScale.tickY;
+    y <= plotScale.currMax;
+    y = y + plotScale.tickY) {
     data = [{ x: plotScale.voltMin, y }, { x: plotScale.voltMax, y }]
     drawGridXY("grid", data)
 }
