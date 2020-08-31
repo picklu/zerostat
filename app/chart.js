@@ -11,7 +11,6 @@ const margin = {
     left: 80
 }
 
-// d3js chart
 const plotScale = {
     voltMin: -2.5,  // in V
     voltMax: 2.5,   // in V
@@ -23,9 +22,6 @@ const plotScale = {
 
 const width = 900 - margin.left - margin.right
 const height = 500 - margin.top - margin.bottom
-
-
-
 const chart = d3.select('#chart')
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -33,38 +29,12 @@ const chart = d3.select('#chart')
     .attr("transform",
         "translate(" + margin.left + "," + margin.top + ")")
 
-let xScale = d3.scaleLinear().domain([plotScale.voltMin, plotScale.voltMax]).range([0, width])
+const xScale = d3.scaleLinear().domain([plotScale.voltMin, plotScale.voltMax]).range([0, width])
 const yScale = d3.scaleLinear().domain([plotScale.currMin, plotScale.currMax]).range([height, 0])
 const line = d3.line()
     .x(d => xScale(d.x))
     .y(d => yScale(d.y))
     .curve(d3.curveMonotoneX)
-
-let data = []
-
-// draw grids along x-axis
-for (let x = plotScale.voltMin + plotScale.tickX;
-    x <= plotScale.voltMax;
-    x = x + plotScale.tickX) {
-    data = [{ x, y: plotScale.currMin }, { x, y: plotScale.currMax }]
-    drawGridXY("grid", data)
-}
-
-// draw grids along y-axis
-for (let y = plotScale.currMin + plotScale.tickY;
-    y <= plotScale.currMax;
-    y = y + plotScale.tickY) {
-    data = [{ x: plotScale.voltMin, y }, { x: plotScale.voltMax, y }]
-    drawGridXY("grid", data)
-}
-
-// x = 0 line
-data = [{ x: 0, y: plotScale.currMin }, { x: 0, y: plotScale.currMax }]
-drawGridXY("rootXY", data)
-
-// y = 0 line
-data = [{ x: plotScale.voltMin, y: 0 }, { x: plotScale.voltMax, y: 0 }]
-drawGridXY("rootXY", data)
 
 // x-axis label
 const xAxis = d3.axisBottom().scale(xScale)
@@ -100,14 +70,58 @@ chart.append("text")
     .style("stroke", "none")
     .text("Current (\xB5A)")
 
-// return line, and path
-const path = chart.append('path')
+// path for the the plot
+let path = chart.append("path") // initialize path
+    .attr("class", "line")
+
+// Initialize grid
+drawGrid()
+
+function drawGrid() {
+    let data = []
+
+    // draw grids along x-axis
+    for (let x = plotScale.voltMin + plotScale.tickX;
+        x <= plotScale.voltMax;
+        x = x + plotScale.tickX) {
+        data = [{ x, y: plotScale.currMin }, { x, y: plotScale.currMax }]
+        drawGridXY("x grid", data)
+    }
+
+    // draw grids along y-axis
+    for (let y = plotScale.currMin + plotScale.tickY;
+        y <= plotScale.currMax;
+        y = y + plotScale.tickY) {
+        data = [{ x: plotScale.voltMin, y }, { x: plotScale.voltMax, y }]
+        drawGridXY("y grid", data)
+    }
+
+    // x = 0 line
+    data = [{ x: 0, y: plotScale.currMin }, { x: 0, y: plotScale.currMax }]
+    drawGridXY("x root", data)
+
+    // y = 0 line
+    data = [{ x: plotScale.voltMin, y: 0 }, { x: plotScale.voltMax, y: 0 }]
+    drawGridXY("y root", data)
+}
 
 function rescale() {
-    xScale.domain([plotScale.voltMin, plotScale.voltMax])
-    chart.select(".x.axis")
+    xScale.domain([plotScale.voltMin, plotScale.voltMax]) // rescale
+    chart.selectAll(".x.grid").remove() // remove grid lines
+    chart.selectAll(".x.root").remove() // remove root lines
+    chart.selectAll("path.line").remove() // remove path of the curve
+
+    // redraw grids
+    drawGrid()
+
+    // apply updated scale
+    chart.selectAll(".x")
         .transition().duration(500)
         .call(xAxis)
+
+    // reassign path
+    path = chart.append("path") // recreate path for the curve
+        .attr("class", "line")
 }
 
 function drawGridXY(styleClass, data) {
