@@ -15,12 +15,14 @@ const REF_DAC = 127 // Refrernce DAC value
 const FR = 12120  // feedback resistor in Ohm in the trans-impedance amplifier
 const maxDAC = Math.pow(2, DAC_BIT)
 const maxADC = Math.pow(2, ADC_BIT)
+const step = OPVOLTS / maxDAC // potential step
 const vToFR = OPVOLTS / FR // voltage to current conversion factor
 
 // global state object
 const state = {
     maxDAC: maxDAC,
     refDAC: REF_DAC,
+    step: step,
     isPortOpen: false,
     isReady: false,
     isRunning: false,

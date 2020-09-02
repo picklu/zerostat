@@ -118,7 +118,8 @@ ipcMain.on("connect-serial", (event, portPath) => {
 })
 
 ipcMain.on("control-sweep", (event, state) => {
-    const scanrate = state.method.params.scanrate
+    const scanrate = state.method.params.scanrate // mV/s
+    const delay = (state.step * 1000 * 1000 / scanrate).toFixed(0) // ms
     const halt = state.isRunning ? 0 : 1
     let estart = state.method.params.estart || state.method.params.vertex1
     let estop = state.method.params.estop || state.method.params.vertex2
@@ -139,6 +140,5 @@ ipcMain.on("control-sweep", (event, state) => {
             break
 
     }
-    console.log("=>", scanrate, "=>", mode, "=>", ncycles,)
-    port.write(`${scanrate},${halt},${mode},${ncycles},${state.refDAC},${estart},${estop}`)
+    port.write(`${delay},${halt},${mode},${ncycles},${state.refDAC},${estart},${estop}`)
 })
