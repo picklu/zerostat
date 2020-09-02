@@ -123,8 +123,8 @@ ipcMain.on("control-sweep", (event, state) => {
     const halt = state.isRunning ? 0 : 1
     let estart = state.method.params.estart || state.method.params.vertex1
     let estop = state.method.params.estop || state.method.params.vertex2
-    estart = Number((state.maxDAC * estart / 5 + state.refDAC).toFixed(0))
-    estop = Number((state.maxDAC * estop / 5 + state.refDAC).toFixed(0))
+    estart = Number((state.maxDAC * estart / state.opVolts + state.refDAC).toFixed(0))
+    estop = Number((state.maxDAC * estop / state.opVolts + state.refDAC).toFixed(0))
     let ncycles = state.method.params.ncycles ? state.method.params.ncycles : 0
     let mode
     switch (state.method.type) {

@@ -22,6 +22,7 @@ const vToFR = OPVOLTS / FR // voltage to current conversion factor
 const state = {
     maxDAC: maxDAC,
     refDAC: REF_DAC,
+    opVolts: OPVOLTS,
     step: step,
     isPortOpen: false,
     isReady: false,
