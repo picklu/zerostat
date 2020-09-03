@@ -121,11 +121,11 @@ ipcMain.on("control-sweep", (event, state) => {
     const scanrate = state.method.params.scanrate // mV/s
     const delay = (state.step * 1000 * 1000 / scanrate).toFixed(0) // ms
     const halt = state.isRunning ? 0 : 1
-    let estart = state.method.params.estart || state.method.params.vertex1
-    let estop = state.method.params.estop || state.method.params.vertex2
-    estart = Number(state.refDAC - (state.maxDAC * estart / state.opVolts).toFixed(0))
-    estop = Number(state.refDAC - (state.maxDAC * estop / state.opVolts).toFixed(0))
-    let ncycles = state.method.params.ncycles ? state.method.params.ncycles : 0
+    const estartVolt = state.method.params.estart || state.method.params.vertex1
+    const estopVolt = state.method.params.estop || state.method.params.vertex2
+    const estart = Number(state.refDAC - (state.maxDAC * estartVolt / state.opVolts).toFixed(0))
+    const estop = Number(state.refDAC - (state.maxDAC * estopVolt / state.opVolts).toFixed(0))
+    const ncycles = state.method.params.ncycles ? state.method.params.ncycles : 0
     let mode
     switch (state.method.type) {
         case "LSV":
