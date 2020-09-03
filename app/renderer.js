@@ -154,7 +154,7 @@ domFormParams.addEventListener("submit", (event) => {
             // else do nothing
         })
 
-        // update plot scale
+        // update plot scale in the chart.js
         plotScale.voltMin = Math.min(
             state.method.params.estart || state.method.params.vertex1,
             state.method.params.estop || state.method.params.vertex2,
