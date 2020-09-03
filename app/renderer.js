@@ -80,7 +80,7 @@ const isEqual = (a, b) => {
 }
 
 const digitalToVoltage = (dv) => {
-    return (OPVOLTS / maxDAC) * (maxDAC / 2 - dv)
+    return (REF_DAC - dv) * (OPVOLTS / maxDAC)
 }
 
 const digitalToCurrent = (dc) => {
