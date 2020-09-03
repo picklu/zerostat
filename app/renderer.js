@@ -1,6 +1,7 @@
 const domSerialPorts = document.getElementById("ports")
 const domConnect = document.getElementById("connect")
 const domMethod = document.getElementById("method")
+const domCurrentLimit = document.getElementById("current-limit")
 const domFormInputs = document.getElementsByClassName("params__form__input")
 const domFormParams = document.getElementById("params")
 const domSweep = document.getElementById("sweep")
@@ -123,6 +124,12 @@ domMethod.addEventListener("change", (event) => {
             }
             // else do nothing
         })
+})
+
+domCurrentLimit.addEventListener("change", (event) => {
+    const currentLimit = Number(domCurrentLimit.value)
+    plotScale.currMin = -1 * currentLimit
+    plotScale.currMax = currentLimit
 })
 
 // call main process to start/stop potential sweep

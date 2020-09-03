@@ -120,7 +120,8 @@ body {
     display: flex;
     align-items: center;
 }
-.params__form__input {
+.params__method__input:first-child, 
+.params__form__input  {
     margin-bottom: 5px;
 }
 .params__form__input input:invalid {
@@ -161,7 +162,7 @@ body {
     padding: 5px;
     width: 130px;
 }
-.method, .ports {
+.method, .current-limit, .ports {
     padding: 7px;
     width: 145px;
 }

@@ -108,6 +108,11 @@ function rescale() {
     xScale.domain([plotScale.voltMin, plotScale.voltMax]) // rescale
     chart.selectAll(".x.grid").remove() // remove grid lines
     chart.selectAll(".x.root").remove() // remove root lines
+
+    yScale.domain([plotScale.currMin, plotScale.currMax]) // rescale
+    chart.selectAll(".y.grid").remove() // remove grid lines
+    chart.selectAll(".y.root").remove() // remove root lines
+
     chart.selectAll("path.line").remove() // remove path of the curve
 
     // redraw grids
@@ -117,6 +122,10 @@ function rescale() {
     chart.selectAll(".x")
         .transition().duration(500)
         .call(xAxis)
+
+    chart.selectAll(".y")
+        .transition().duration(500)
+        .call(yAxis)
 
     // reassign path
     path = chart.append("path") // recreate path for the curve
