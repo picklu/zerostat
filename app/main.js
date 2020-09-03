@@ -118,27 +118,31 @@ ipcMain.on("connect-serial", (event, portPath) => {
 })
 
 ipcMain.on("control-sweep", (event, state) => {
-    const scanrate = state.method.params.scanrate // mV/s
-    const delay = (state.step * 1000 * 1000 / scanrate).toFixed(0) // ms
     const halt = state.isRunning ? 0 : 1
-    const estartVolt = state.method.params.estart || state.method.params.vertex1
-    const estopVolt = state.method.params.estop || state.method.params.vertex2
-    const estart = Number(state.refDAC - (state.maxDAC * estartVolt / state.opVolts).toFixed(0)) // Analog to digital
-    const estop = Number(state.refDAC - (state.maxDAC * estopVolt / state.opVolts).toFixed(0))  // Analog to digital
-    const ncycles = state.method.params.ncycles ? state.method.params.ncycles : 0
-    let mode
-    switch (state.method.type) {
-        case "LSV":
-            mode = 0
-            break
-        case "CV":
-            mode = 1
+    if (halt) {
+        port.write(`0,${halt},0,0,${state.refDAC},0,0`)
+    } else {
+        const scanrate = state.method.params.scanrate // mV/s
+        const delay = (state.step * 1000 * 1000 / scanrate).toFixed(0) // ms
+        const estartVolt = state.method.params.estart || state.method.params.vertex1
+        const estopVolt = state.method.params.estop || state.method.params.vertex2
+        const estart = Number(state.refDAC - (state.maxDAC * estartVolt / state.opVolts).toFixed(0)) // Analog to digital
+        const estop = Number(state.refDAC - (state.maxDAC * estopVolt / state.opVolts).toFixed(0))  // Analog to digital
+        const ncycles = state.method.params.ncycles ? state.method.params.ncycles : 0
+        let mode
+        switch (state.method.type) {
+            case "LSV":
+                mode = 0
+                break
+            case "CV":
+                mode = 1
 
-            break
-        default:
-            mode = -1
-            break
+                break
+            default:
+                mode = -1
+                break
+        }
+        console.log(`${delay},${halt},${mode},${ncycles},${state.refDAC},${estart},${estop}`)
+        port.write(`${delay},${halt},${mode},${ncycles},${state.refDAC},${estart},${estop}`)
     }
-    console.log(`${delay},${halt},${mode},${ncycles},${state.refDAC},${estart},${estop}`)
-    port.write(`${delay},${halt},${mode},${ncycles},${state.refDAC},${estart},${estop}`)
 })
