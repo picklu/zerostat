@@ -123,8 +123,8 @@ ipcMain.on("control-sweep", (event, state) => {
     const halt = state.isRunning ? 0 : 1
     const estartVolt = state.method.params.estart || state.method.params.vertex1
     const estopVolt = state.method.params.estop || state.method.params.vertex2
-    const estart = Number(state.refDAC - (state.maxDAC * estartVolt / state.opVolts).toFixed(0))
-    const estop = Number(state.refDAC - (state.maxDAC * estopVolt / state.opVolts).toFixed(0))
+    const estart = Number(state.refDAC - (state.maxDAC * estartVolt / state.opVolts).toFixed(0)) // Analog to digital
+    const estop = Number(state.refDAC - (state.maxDAC * estopVolt / state.opVolts).toFixed(0))  // Analog to digital
     const ncycles = state.method.params.ncycles ? state.method.params.ncycles : 0
     let mode
     switch (state.method.type) {
