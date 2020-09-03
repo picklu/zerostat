@@ -1,0 +1,3 @@
+[submodule "unostat"]
+	path = unostat
+	url = git@github.com:picklu/unostat.git
