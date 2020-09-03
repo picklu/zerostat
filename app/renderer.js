@@ -37,7 +37,7 @@ const state = {
     voltage: null,
     current: null,
     portList: [],
-    all_data: [],
+    data: [],
     overflow: false
 }
 
@@ -130,7 +130,7 @@ domFormParams.addEventListener("submit", (event) => {
     event.preventDefault()
     state.isRunning = !state.isRunning
     if (state.isRunning) {
-        state.all_data = []
+        state.data = []
         Array.from(event.target).forEach(input => {
             if (input.tagName === "INPUT") {
                 const key = input.getAttribute("name")
@@ -198,8 +198,8 @@ window.api.receive("send-data", (raw_data) => {
                 state.current >= plotScale.currMax
             state.status = state.overflow ? "OVERFLOW" : "RUNNING"
             domSweep.innerText = "Stop"
-            state.all_data.push({ x: state.voltage, y: state.current })
-            drawPlot(state.all_data)
+            state.data.push({ x: state.voltage, y: state.current })
+            drawPlot(state.data)
             updateUI()
         }
         else {
