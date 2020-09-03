@@ -21,6 +21,8 @@ const vToFR = OPVOLTS / FR // voltage to current conversion factor
 
 // global state object
 const state = {
+    deviceModel: "",
+    firmwareVersion: "",
     maxDAC: maxDAC,
     refDAC: REF_DAC,
     opVolts: OPVOLTS,
@@ -188,7 +190,9 @@ window.api.receive("connection-open", (isPortOpen) => {
 // handle received data
 window.api.receive("send-data", (raw_data) => {
     const text_data = raw_data.split(",")
-    if (text_data[0] == "ready") {
+    if (text_data[2] == "READY") {
+        state.deviceModel = text_data[0]
+        state.firmwareVersion = text_data[1]
         state.isReady = true
         state.isRunning = false
         updateUI()
