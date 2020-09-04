@@ -130,8 +130,8 @@ domMethod.addEventListener("change", (event) => {
 
 domCurrentLimit.addEventListener("change", (event) => {
     const currentLimit = Number(domCurrentLimit.value)
-    plotScale.currMin = -1 * currentLimit
-    plotScale.currMax = currentLimit
+    DOMAIN.currMin = -1 * currentLimit
+    DOMAIN.currMax = currentLimit
 })
 
 // call main process to start/stop potential sweep
@@ -155,11 +155,11 @@ domFormParams.addEventListener("submit", (event) => {
         })
 
         // update plot scale in the chart.js
-        plotScale.voltMin = Math.min(
+        DOMAIN.voltMin = Math.min(
             state.method.params.estart || state.method.params.vertex1,
             state.method.params.estop || state.method.params.vertex2,
         )
-        plotScale.voltMax = Math.max(
+        DOMAIN.voltMax = Math.max(
             state.method.params.estart || state.method.params.vertex1,
             state.method.params.estop || state.method.params.vertex2,
         )
@@ -208,8 +208,8 @@ window.api.receive("send-data", (raw_data) => {
         if (state.isRunning) {
             state.voltage = digitalToVoltage(ch2)
             state.current = digitalToCurrent(ch3)
-            state.overflow = state.current <= plotScale.currMin ||
-                state.current >= plotScale.currMax
+            state.overflow = state.current <= DOMAIN.currMin ||
+                state.current >= DOMAIN.currMax
             state.status = state.overflow ? "OVERFLOW" : "RUNNING"
             domSweep.innerText = "Stop"
             state.data.push({ x: state.voltage, y: state.current })

@@ -4,14 +4,15 @@
  * d3js chart
  *
  **********************************************/
-const margin = {
+const WIDTH = 900
+const HEIGHT = 500
+const MARGIN = {
     top: 20,
     right: 20,
     bottom: 55,
     left: 80
 }
-
-const plotScale = {
+const DOMAIN = {
     voltMin: -2.5,  // in V
     voltMax: 2.5,   // in V
     currMin: -200,  // in uA
@@ -19,39 +20,40 @@ const plotScale = {
     tickX: 0.5,     // in V
     tickY: 50       // in uA
 }
+const INNER_WIDTH = WIDTH - MARGIN.left - MARGIN.right
+const INNER_HEIGHT = HEIGHT - MARGIN.top - MARGIN.bottom
 
-const width = 900 - margin.left - margin.right
-const height = 500 - margin.top - margin.bottom
 const chart = d3.select('#chart')
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+    .attr("width", WIDTH)
+    .attr("height", HEIGHT)
     .append("g")
-    .attr("transform",
-        "translate(" + margin.left + "," + margin.top + ")")
+    .attr("transform", `translate(${MARGIN.left}, ${MARGIN.top})`)
 
-const xScale = d3.scaleLinear().domain([plotScale.voltMin, plotScale.voltMax]).range([0, width])
-const yScale = d3.scaleLinear().domain([plotScale.currMin, plotScale.currMax]).range([height, 0])
+const xScale = d3.scaleLinear().domain([DOMAIN.voltMin, DOMAIN.voltMax]).range([0, INNER_WIDTH])
+const yScale = d3.scaleLinear().domain([DOMAIN.currMin, DOMAIN.currMax]).range([INNER_HEIGHT, 0])
 const line = d3.line()
     .x(d => xScale(d.x))
     .y(d => yScale(d.y))
     .curve(d3.curveMonotoneX)
 
-// x-axis label
 const xAxis = d3.axisBottom().scale(xScale)
+const yAxis = d3.axisLeft().scale(yScale)
+
+
+// x-axis label
 chart.append('g').attr('class', 'x axis')
-    .attr('transform', `translate(0, ${height})`)
+    .attr('transform', `translate(0, ${INNER_HEIGHT})`)
     .call(xAxis)
 
 // y-axis label
-const yAxis = d3.axisLeft().scale(yScale)
 chart.append('g').attr('class', 'y axis')
     .attr('transform', `translate(0, 0)`)
     .call(yAxis)
 
 // x-axis title
 chart.append("text")
-    .attr("x", width / 2)
-    .attr("y", height + margin.top)
+    .attr("x", INNER_WIDTH / 2)
+    .attr("y", INNER_HEIGHT + MARGIN.top)
     .attr("dy", "2em")
     .attr("class", "axis-title")
     .attr("text-anchor", "middle")
@@ -61,8 +63,8 @@ chart.append("text")
 // y-axis title
 chart.append("text")
     .attr("transform", "rotate(-90)")
-    .attr("x", 0 - (height / 2))
-    .attr("y", 0 - margin.right)
+    .attr("x", 0 - (INNER_HEIGHT / 2))
+    .attr("y", 0 - MARGIN.right)
     .attr("dy", "-2em")
     .attr("class", "axis-title")
     .attr("text-anchor", "middle")
@@ -73,50 +75,16 @@ chart.append("text")
 let path = chart.append("path") // initialize path
     .attr("class", "line")
 
-// Initialize grid
-drawGrid()
-
-function drawGrid() {
-    let data = []
-
-    // draw grids along x-axis
-    for (let x = plotScale.voltMin + plotScale.tickX;
-        x <= plotScale.voltMax;
-        x = x + plotScale.tickX) {
-        data = [{ x, y: plotScale.currMin }, { x, y: plotScale.currMax }]
-        drawGridXY("x grid", data)
-    }
-
-    // draw grids along y-axis
-    for (let y = plotScale.currMin + plotScale.tickY;
-        y <= plotScale.currMax;
-        y = y + plotScale.tickY) {
-        data = [{ x: plotScale.voltMin, y }, { x: plotScale.voltMax, y }]
-        drawGridXY("y grid", data)
-    }
-
-    // x = 0 line
-    data = [{ x: 0, y: plotScale.currMin }, { x: 0, y: plotScale.currMax }]
-    drawGridXY("x root", data)
-
-    // y = 0 line
-    data = [{ x: plotScale.voltMin, y: 0 }, { x: plotScale.voltMax, y: 0 }]
-    drawGridXY("y root", data)
-}
-
 function rescale() {
-    xScale.domain([plotScale.voltMin, plotScale.voltMax]) // rescale
+    xScale.domain([DOMAIN.voltMin, DOMAIN.voltMax]) // rescale
     chart.selectAll(".x.grid").remove() // remove grid lines
     chart.selectAll(".x.root").remove() // remove root lines
 
-    yScale.domain([plotScale.currMin, plotScale.currMax]) // rescale
+    yScale.domain([DOMAIN.currMin, DOMAIN.currMax]) // rescale
     chart.selectAll(".y.grid").remove() // remove grid lines
     chart.selectAll(".y.root").remove() // remove root lines
 
     chart.selectAll("path.line").remove() // remove path of the curve
-
-    // redraw grids
-    drawGrid()
 
     // apply updated scale
     chart.selectAll(".x")
