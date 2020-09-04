@@ -80,7 +80,7 @@ chart.append('g')
     .call(xAxisGrid);
 chart.append('g')
     .attr('class', 'y grid')
-    .call(yAxisGrid);
+    .call(yAxisGrid)
 
 // path for the the plot
 const path = chart.append("path") // initialize path for main curve
