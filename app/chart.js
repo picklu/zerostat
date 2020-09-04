@@ -17,8 +17,6 @@ const DOMAIN = {
     voltMax: 2.5,   // in V
     currMin: -200,  // in uA
     currMax: 200,   // in uA
-    tickX: 0.5,     // in V
-    tickY: 50       // in uA
 }
 const INNER_WIDTH = WIDTH - MARGIN.left - MARGIN.right
 const INNER_HEIGHT = HEIGHT - MARGIN.top - MARGIN.bottom
