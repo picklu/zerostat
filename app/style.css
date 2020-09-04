@@ -77,7 +77,7 @@ body {
 }
 .communication, .view-container {
     background-color: #fff;
-    border: 1px solid #959595;
+    border: 1px solid #838282;
     border-radius: 3px;
     padding: 5px;
 }
@@ -217,6 +217,11 @@ body {
 }
 .line {
     fill: none;
+    stroke: #0b7e1e;
+    stroke-width: 2px;
+}
+.pointer {
+    fill: #ec1a2b;
     stroke: #ec1a2b;
     stroke-width: 2px;
 }
