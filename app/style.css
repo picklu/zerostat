@@ -220,13 +220,7 @@ body {
     stroke: #ec1a2b;
     stroke-width: 2px;
 }
-.grid {
-    stroke: #61f1e1;
+g.grid {
     stroke-width: 1px;
-    fill: none;
-}
-.root {
-    stroke: #0a8b7c;
-    stroke-width: 1.5px;
-    fill: none;
+    opacity: 0.3;
 }
