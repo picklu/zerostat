@@ -4,7 +4,6 @@
   "description": "An GUI app for arduino-based potentiiostat",
   "main": "./app/main.js",
   "scripts": {
-    "build": "electron-rebuild",
     "dev": "nodemon --inspect --exec electron .",
     "start": "electron .",
     "build:windows": "electron-builder --win --dir",
@@ -30,7 +29,6 @@
   "devDependencies": {
     "electron": "^9.2.0",
     "electron-builder": "^22.8.0",
-    "electron-rebuild": "^1.11.0",
     "nodemon": "^2.0.4"
   },
   "dependencies": {
