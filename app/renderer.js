@@ -177,7 +177,10 @@ window.api.receive("send-ports", (ports) => {
         ports.forEach(port => {
             items.push(`<option value="${port}">${port}</option>`)
         });
-        domSerialPorts.innerHTML = items.join("")
+
+        domSerialPorts.innerHTML = items.length
+            ? items.join("")
+            : "<option value=\"COMX\">COMX</option>"
     }
 })
 
