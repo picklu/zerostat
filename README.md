@@ -5,6 +5,10 @@
 
 ![app](app/assets/app.png)
 
+![hardware 1](app/assets/hardware_1.jpg)
+
+![hardware 2](app/assets/hardware_2.jpg)
+
 
 ## Quick Start & Build
 -----------------------------
