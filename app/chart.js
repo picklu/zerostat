@@ -13,8 +13,8 @@ const MARGIN = {
     left: 80
 }
 const DOMAIN = {
-    voltMin: -2.5,  // in V
-    voltMax: 2.5,   // in V
+    voltMin: -1,  // in V
+    voltMax: 1,   // in V
     currMin: -200,  // in uA
     currMax: 200,   // in uA
 }
