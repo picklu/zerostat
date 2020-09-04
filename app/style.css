@@ -220,8 +220,8 @@ body {
     stroke: #0b7e1e;
     stroke-width: 2px;
 }
-.pointer {
-    fill: #ec1a2b;
+circle.pointer {
+    fill: #ec1a1a;
     stroke: #ec1a2b;
     stroke-width: 2px;
 }

@@ -83,8 +83,10 @@ chart.append('g')
     .call(yAxisGrid);
 
 // path for the the plot
-let path = chart.append("path") // initialize path
+const path = chart.append("path") // initialize path for main curve
     .attr("class", "line")
+
+const pointer = chart.append("g") // initialize pointer for current data point
 
 function rescale() {
     xScale.domain([DOMAIN.voltMin, DOMAIN.voltMax]) // rescale
@@ -108,8 +110,23 @@ function rescale() {
         .call(yAxis)
 }
 
-function drawPlot(data) {
-    path.datum(data)
+function drawPlot(state) {
+    const dt = []
+    const cxy = {}
+    if (state.isRunning) {
+        cxy.y = 0
+        cxy.x = xScale(state.data.slice(-1)[0].x)
+        dt.push(cxy)
+    }
+    pointer.selectAll("circle.pointer").remove()
+        .data(dt).enter()
+        .append("circle")
+        .attr("class", "pointer")
+        .attr("cx", d => d.x)
+        .attr("cy", d => d.y)
+        .attr("r", 4)
+
+    path.datum(state.data)
         .attr("class", "line")
         .attr("d", line)
 }

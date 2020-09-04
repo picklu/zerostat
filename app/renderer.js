@@ -213,7 +213,6 @@ window.api.receive("send-data", (raw_data) => {
             state.status = state.overflow ? "OVERFLOW" : "RUNNING"
             domSweep.innerText = "Stop"
             state.data.push({ x: state.voltage, y: state.current })
-            drawPlot(state.data)
             updateUI()
         }
         else {
@@ -222,5 +221,6 @@ window.api.receive("send-data", (raw_data) => {
             updateUI()
         }
     }
+    drawPlot(state)
     showStatusMessage()
 })
