@@ -220,7 +220,8 @@ body {
     stroke: #ec1a2b;
     stroke-width: 2px;
 }
-g.grid {
+.grid line {
+    stroke: #677272;
     stroke-width: 1px;
-    opacity: 0.3;
+    opacity: 0.5;
 }
