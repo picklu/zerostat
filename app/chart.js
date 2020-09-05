@@ -31,7 +31,10 @@ const chart = d3.select('#chart')
 const xScale = d3.scaleLinear().domain([DOMAIN.voltMin, DOMAIN.voltMax]).range([0, INNER_WIDTH])
 const yScale = d3.scaleLinear().domain([DOMAIN.currMin, DOMAIN.currMax]).range([INNER_HEIGHT, 0])
 const line = d3.line()
-    .x(d => xScale(d.x))
+    .x(d => {
+        const x = xScale(d.x)
+        return (x > 0 ? x > INNER_WIDTH ? INNER_WIDTH : x : 0)
+    })
     .y(d => {
         const y = yScale(d.y)
         return (y > 0 ? y > INNER_HEIGHT ? INNER_HEIGHT : y : 0)
@@ -120,6 +123,11 @@ function drawPlot(state) {
     if (state.isRunning) {
         cxy.x = xScale(data.x)
         cxy.y = yScale(data.y)
+        cxy.x = cxy.x > 0
+            ? cxy.x > INNER_WIDTH
+                ? INNER_WIDTH
+                : cxy.x
+            : 0
         cxy.y = cxy.y > 0
             ? cxy.y > INNER_HEIGHT
                 ? INNER_HEIGHT
