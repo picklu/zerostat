@@ -142,7 +142,6 @@ ipcMain.on("control-sweep", (event, state) => {
                 mode = -1
                 break
         }
-        console.log(`${delay},${halt},${mode},${ncycles},${state.refDAC},${estart},${estop}`)
         port.write(`${delay},${halt},${mode},${ncycles},${state.refDAC},${estart},${estop}`)
     }
 })
