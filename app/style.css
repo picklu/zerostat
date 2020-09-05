@@ -221,7 +221,7 @@ body {
     stroke-width: 2px;
 }
 circle.pointer {
-    fill: #ec1a1a;
+    fill: none;
     stroke: #ec1a2b;
     stroke-width: 2px;
 }

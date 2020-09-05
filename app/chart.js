@@ -32,7 +32,10 @@ const xScale = d3.scaleLinear().domain([DOMAIN.voltMin, DOMAIN.voltMax]).range([
 const yScale = d3.scaleLinear().domain([DOMAIN.currMin, DOMAIN.currMax]).range([INNER_HEIGHT, 0])
 const line = d3.line()
     .x(d => xScale(d.x))
-    .y(d => yScale(d.y))
+    .y(d => {
+        const y = yScale(d.y)
+        return (y > 0 ? y > INNER_HEIGHT ? INNER_HEIGHT : y : 0)
+    })
     .curve(d3.curveMonotoneX)
 
 // Axes
@@ -113,9 +116,15 @@ function rescale() {
 function drawPlot(state) {
     const dt = []
     const cxy = {}
+    const data = state.data.slice(-1)[0]
     if (state.isRunning) {
-        cxy.y = 0
-        cxy.x = xScale(state.data.slice(-1)[0].x)
+        cxy.x = xScale(data.x)
+        cxy.y = yScale(data.y)
+        cxy.y = cxy.y > 0
+            ? cxy.y > INNER_HEIGHT
+                ? INNER_HEIGHT
+                : cxy.y
+            : 0
         dt.push(cxy)
     }
     pointer.selectAll("circle.pointer").remove()
@@ -124,7 +133,7 @@ function drawPlot(state) {
         .attr("class", "pointer")
         .attr("cx", d => d.x)
         .attr("cy", d => d.y)
-        .attr("r", 4)
+        .attr("r", 3)
 
     path.datum(state.data)
         .attr("class", "line")
