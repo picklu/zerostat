@@ -7,7 +7,6 @@ const domFormParams = document.getElementById("params")
 const domSweep = document.getElementById("sweep")
 const domView = document.getElementById("view")
 
-
 // spec of the microcontroller io and amplifier
 const DAC_BIT = 8
 const ADC_BIT = 10
@@ -30,6 +29,7 @@ const state = {
     isPortOpen: false,
     isReady: false,
     isRunning: false,
+    errorMessage: "",
     status: "STOPPED",
     method: {
         type: "LSV",
@@ -48,10 +48,15 @@ const state = {
 const showStatusMessage = () => {
     state.voltage = state.voltage ? state.voltage : ".."
     state.current = state.current ? state.current : ".."
-    domView.innerHTML = `
-        <b class="${state.overflow ? "status overflow" : "status"}">
-            ${state.status}:
-        </b> voltage: ${state.voltage} V & current: ${state.current} \xB5A`
+    if (state.errorMessage !== "") {
+        domView.innerHTML = `<span class="error bold">ERROR ${state.errorMessage}</span>`
+        state.errorMessage = ""
+    } else {
+        domView.innerHTML = `
+            <b class="${state.overflow ? "status overflow" : "status"}">
+                ${state.status}:
+            </b> voltage: ${state.voltage} V & current: ${state.current} \xB5A`
+    }
 }
 
 const updateUI = () => {
@@ -185,8 +190,11 @@ window.api.receive("send-ports", (ports) => {
 })
 
 // update ui on receiving connection status
-window.api.receive("connection-open", (isPortOpen) => {
+window.api.receive("connection-open", (isPortOpen, error) => {
+    console.log(isPortOpen, error)
     state.isPortOpen = isPortOpen
+    state.errorMessage = error
+    showStatusMessage()
     updateUI()
 })
 

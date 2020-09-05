@@ -201,10 +201,12 @@ body {
     color: #0fa13b;
     font-weight: 600;
 }
-.overflow {
+.error, .overflow {
     color:  #e71717;
 }
-
+.bold {
+    font-weight: 600;
+}
 /* style for d3js chart */
 .axis, .axis-title {
     font-family: sans-serif;

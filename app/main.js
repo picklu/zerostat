@@ -93,15 +93,16 @@ ipcMain.on("connect-serial", (event, portPath) => {
         if (!port.isOpen) {
             port.open((error) => {
                 if (error) {
-                    console.log(`Error opening port => ${error.message}`)
-                    senderWindow.send("connection-open", false)
+                    const errorMessage = `Error opening port => ${error.message}`
+                    console.log(errorMessage)
+                    senderWindow.send("connection-open", false, error.message)
                 }
                 else {
                     console.log("==> connected")
                     port.on("close", () => {
                         port = null
                         parser = null
-                        senderWindow.send("connection-open", false)
+                        senderWindow.send("connection-open", false, "")
                         console.log("==> disconnected")
                     })
 
@@ -109,7 +110,7 @@ ipcMain.on("connect-serial", (event, portPath) => {
                         senderWindow.send("send-data", data)
                     })
 
-                    senderWindow.send("connection-open", true)
+                    senderWindow.send("connection-open", true, "")
                 }
             })
         }
