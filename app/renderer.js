@@ -30,7 +30,7 @@ const state = {
     isReady: false,
     isRunning: false,
     errorMessage: "",
-    status: "disconnected",
+    status: "not ready",
     method: {
         type: "LSV",
         params: {
@@ -52,7 +52,7 @@ const showStatusMessage = () => {
         domView.innerHTML = `<span class="error bold">ERROR ${state.errorMessage}</span>`
         state.errorMessage = ""
     } else if (state.isPortOpen && !state.isReady) {
-        domView.innerHTML = "<b class=\"status\">Connecting ...</b>"
+        domView.innerHTML = "<b class=\"status\">Getting ready ...</b>"
     } else {
         domView.innerHTML = `
             <b class="${state.overflow ? "status overflow" : "status"}">
@@ -130,6 +130,17 @@ domConnect.addEventListener("click", (event) => {
     window.api.send(channel, port)
 })
 
+// update ui on receiving connection status
+window.api.receive("connection-open", (isPortOpen, error) => {
+    state.voltage = isPortOpen ? state.voltage : 0
+    state.current = isPortOpen ? state.current : 0
+    state.isPortOpen = isPortOpen
+    state.errorMessage = error
+    state.status = !error ? "disconnected" : "error"
+    showStatusMessage()
+    updateUI()
+})
+
 domMethod.addEventListener("change", (event) => {
     state.method.type = domMethod.value.toUpperCase()
     Array.from(domFormInputs)
@@ -190,15 +201,6 @@ domFormParams.addEventListener("submit", (event) => {
     window.api.send("control-sweep", state)
 })
 
-// update ui on receiving connection status
-window.api.receive("connection-open", (isPortOpen, error) => {
-    state.isPortOpen = isPortOpen
-    state.errorMessage = error
-    state.status = !error ? "disconnected" : "error"
-    showStatusMessage()
-    updateUI()
-})
-
 // handle received data
 window.api.receive("send-data", (raw_data) => {
     const text_data = raw_data.split(",")
@@ -223,14 +225,13 @@ window.api.receive("send-data", (raw_data) => {
             state.status = state.overflow ? "OVERFLOW" : "RUNNING"
             domSweep.innerText = "Stop"
             state.data.push({ x: state.voltage, y: state.current })
-            updateUI()
         }
         else {
             state.status = "STOPPED"
             state.overflow = false
-            updateUI()
         }
     }
+    updateUI()
     drawPlot(state)
     showStatusMessage()
 })
