@@ -30,7 +30,7 @@ const state = {
     isReady: false,
     isRunning: false,
     errorMessage: "",
-    status: "STOPPED",
+    status: "disconnected",
     method: {
         type: "LSV",
         params: {
@@ -51,10 +51,12 @@ const showStatusMessage = () => {
     if (state.errorMessage !== "") {
         domView.innerHTML = `<span class="error bold">ERROR ${state.errorMessage}</span>`
         state.errorMessage = ""
+    } else if (state.isPortOpen && !state.isReady) {
+        domView.innerHTML = "<b class=\"status\">Connecting ...</b>"
     } else {
         domView.innerHTML = `
             <b class="${state.overflow ? "status overflow" : "status"}">
-                ${state.status}:
+                ${state.status.toUpperCase()}:
             </b> voltage: ${state.voltage} V & current: ${state.current} \xB5A`
     }
 }
@@ -103,7 +105,21 @@ window.addEventListener("DOMContentLoaded", () => {
             window.api.send("get-ports")
         }
     }, 2 * 1000)
-});
+})
+
+// populate options with ports
+window.api.receive("send-ports", (ports) => {
+    const items = []
+    if (ports.length === 0) { ports.push("COMX") }
+    if (!isEqual(state.portList, ports)) {
+        state.portList = [...ports]
+        ports.forEach(port => {
+            items.push(`<option value="${port}">${port}</option>`)
+        });
+
+        domSerialPorts.innerHTML = items.join("")
+    }
+})
 
 // call main process to open/close serial
 domConnect.addEventListener("click", (event) => {
@@ -174,26 +190,11 @@ domFormParams.addEventListener("submit", (event) => {
     window.api.send("control-sweep", state)
 })
 
-// populate options with ports
-window.api.receive("send-ports", (ports) => {
-    const items = []
-    if (!isEqual(state.portList, ports)) {
-        state.portList = [...ports]
-        ports.forEach(port => {
-            items.push(`<option value="${port}">${port}</option>`)
-        });
-
-        domSerialPorts.innerHTML = items.length
-            ? items.join("")
-            : "<option value=\"COMX\">COMX</option>"
-    }
-})
-
 // update ui on receiving connection status
 window.api.receive("connection-open", (isPortOpen, error) => {
-    console.log(isPortOpen, error)
     state.isPortOpen = isPortOpen
     state.errorMessage = error
+    state.status = !error ? "disconnected" : "error"
     showStatusMessage()
     updateUI()
 })
@@ -206,6 +207,7 @@ window.api.receive("send-data", (raw_data) => {
         state.firmwareVersion = text_data[1]
         state.isReady = true
         state.isRunning = false
+        state.status = "ready"
         updateUI()
     }
     else {
