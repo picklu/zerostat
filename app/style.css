@@ -162,7 +162,7 @@ body {
     padding: 5px;
     width: 130px;
 }
-.method, .current-limit, .ports {
+.method, .maxcurrent, .ports {
     padding: 7px;
     width: 145px;
 }

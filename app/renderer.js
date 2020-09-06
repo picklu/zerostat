@@ -1,7 +1,7 @@
 const domSerialPorts = document.getElementById("ports")
 const domConnect = document.getElementById("connect")
 const domMethod = document.getElementById("method")
-const domCurrentLimit = document.getElementById("current-limit")
+const domDOMAIN = document.querySelectorAll(".xydomain")
 const domFormInputs = document.getElementsByClassName("params__form__input")
 const domFormParams = document.getElementById("params")
 const domSweep = document.getElementById("sweep")
@@ -97,6 +97,34 @@ const digitalToCurrent = (dc) => {
     return ((dc - REF_DAC * maxADC / maxDAC) * vToFR / maxADC) * 1e6
 }
 
+const updateDomain = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+    domDOMAIN.forEach(input => {
+        const key = input.getAttribute("name")
+        const value = input.value
+        console.log(Number(value))
+        if (input.parentElement.classList.contains("active")) {
+            state.method.params[key] = Number(value)
+        }
+        else {
+            state.method.params[key] = null
+        }
+    })
+    // update plot scale in the chart.js
+    DOMAIN.voltMin = Math.min(
+        state.method.params.estart || state.method.params.vertex1,
+        state.method.params.estop || state.method.params.vertex2
+    )
+    DOMAIN.voltMax = Math.max(
+        state.method.params.estart || state.method.params.vertex1,
+        state.method.params.estop || state.method.params.vertex2
+    )
+    DOMAIN.currMin = -1 * state.method.params.maxcurrent
+    DOMAIN.currMax = state.method.params.maxcurrent
+    rescale()
+}
+
 // get ports once the dom content is loaded
 window.addEventListener("DOMContentLoaded", () => {
     showStatusMessage()
@@ -154,16 +182,32 @@ domMethod.addEventListener("change", (event) => {
                     input.classList.add("inactive")
                     input.classList.remove("active")
                 }
+
+
+                domDOMAIN.forEach(input => {
+                    switch (input.getAttribute("name")) {
+                        case "estart":
+                            input.value = state.method.params.estart || state.method.params.vertex1
+                            break;
+                        case "estop":
+                            input.value = state.method.params.estop || state.method.params.vertex2
+                            break;
+                        case "vertex1":
+                            input.value = state.method.params.estart || state.method.params.vertex1
+                            break;
+                        case "vertex2":
+                            input.value = state.method.params.estop || state.method.params.vertex2
+                            break;
+                    }
+                })
                 // else do nothing
             }
             // else do nothing
         })
 })
 
-domCurrentLimit.addEventListener("change", (event) => {
-    const currentLimit = Number(domCurrentLimit.value)
-    DOMAIN.currMin = -1 * currentLimit
-    DOMAIN.currMax = currentLimit
+domDOMAIN.forEach(input => {
+    input.addEventListener("change", updateDomain)
 })
 
 // call main process to start/stop potential sweep
@@ -185,19 +229,8 @@ domFormParams.addEventListener("submit", (event) => {
             }
             // else do nothing
         })
-
-        // update plot scale in the chart.js
-        DOMAIN.voltMin = Math.min(
-            state.method.params.estart || state.method.params.vertex1,
-            state.method.params.estop || state.method.params.vertex2,
-        )
-        DOMAIN.voltMax = Math.max(
-            state.method.params.estart || state.method.params.vertex1,
-            state.method.params.estop || state.method.params.vertex2,
-        )
     }
     updateUI()
-    rescale()
     window.api.send("control-sweep", state)
 })
 
