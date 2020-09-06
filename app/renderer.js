@@ -115,7 +115,12 @@ const updateDomain = (event) => {
     DOMAIN.voltMax = Math.max(state.method.params.estart, state.method.params.estop)
     DOMAIN.currMin = -1 * state.method.params.maxcurrent
     DOMAIN.currMax = state.method.params.maxcurrent
+
+    // rescale the plot
     rescale()
+
+    // redraw the plot if not running
+    if (!state.isRunning) { drawPlot(state) }
 }
 
 // get ports once the dom content is loaded
