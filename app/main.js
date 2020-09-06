@@ -128,8 +128,8 @@ ipcMain.on("control-sweep", (event, state) => {
     } else {
         const scanrate = state.method.params.scanrate // mV/s
         const delay = (state.step * 1000 * 1000 / scanrate).toFixed(0) // ms
-        const estartVolt = state.method.params.estart || state.method.params.vertex1
-        const estopVolt = state.method.params.estop || state.method.params.vertex2
+        const estartVolt = state.method.params.estart
+        const estopVolt = state.method.params.estop
         const estart = Number(state.refDAC - (state.maxDAC * estartVolt / state.opVolts).toFixed(0)) // Analog to digital
         const estop = Number(state.refDAC - (state.maxDAC * estopVolt / state.opVolts).toFixed(0))  // Analog to digital
         const ncycles = state.method.params.ncycles ? state.method.params.ncycles : 0

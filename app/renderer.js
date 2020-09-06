@@ -103,7 +103,6 @@ const updateDomain = (event) => {
     domDOMAIN.forEach(input => {
         const key = input.getAttribute("name")
         const value = input.value
-        console.log(Number(value))
         if (input.parentElement.classList.contains("active")) {
             state.method.params[key] = Number(value)
         }
@@ -112,14 +111,8 @@ const updateDomain = (event) => {
         }
     })
     // update plot scale in the chart.js
-    DOMAIN.voltMin = Math.min(
-        state.method.params.estart || state.method.params.vertex1,
-        state.method.params.estop || state.method.params.vertex2
-    )
-    DOMAIN.voltMax = Math.max(
-        state.method.params.estart || state.method.params.vertex1,
-        state.method.params.estop || state.method.params.vertex2
-    )
+    DOMAIN.voltMin = Math.min(state.method.params.estart, state.method.params.estop)
+    DOMAIN.voltMax = Math.max(state.method.params.estart, state.method.params.estop)
     DOMAIN.currMin = -1 * state.method.params.maxcurrent
     DOMAIN.currMax = state.method.params.maxcurrent
     rescale()
@@ -169,43 +162,30 @@ window.api.receive("connection-open", (isPortOpen, error) => {
     updateUI()
 })
 
+// Update input param fileds according to the selected method
 domMethod.addEventListener("change", (event) => {
-    state.method.type = domMethod.value.toUpperCase()
-    Array.from(domFormInputs)
-        .forEach((input) => {
-            if (!input.classList.contains("common")) {
-                if (input.classList.contains("inactive")) {
-                    input.classList.add("active")
-                    input.classList.remove("inactive")
-                }
-                else if (input.classList.contains("active")) {
-                    input.classList.add("inactive")
-                    input.classList.remove("active")
-                }
-
-
-                domDOMAIN.forEach(input => {
-                    switch (input.getAttribute("name")) {
-                        case "estart":
-                            input.value = state.method.params.estart || state.method.params.vertex1
-                            break;
-                        case "estop":
-                            input.value = state.method.params.estop || state.method.params.vertex2
-                            break;
-                        case "vertex1":
-                            input.value = state.method.params.estart || state.method.params.vertex1
-                            break;
-                        case "vertex2":
-                            input.value = state.method.params.estop || state.method.params.vertex2
-                            break;
-                    }
-                })
-                // else do nothing
-            }
-            // else do nothing
-        })
+    const methodType = domMethod.value.toUpperCase()
+    const domEStart = document.getElementById("estart")
+    const domEStop = document.getElementById("estop")
+    const domNCycles = document.getElementById("ncycles")
+    state.method.type = methodType
+    switch (methodType) {
+        case "CV":
+            domEStart.parentElement.firstElementChild.innerText = "Vertex1 (V)"
+            domEStop.parentElement.firstElementChild.innerText = "Vertex2 (V)"
+            domNCycles.parentElement.classList.remove("inactive")
+            domNCycles.parentElement.classList.add("active")
+            break
+        case "LSV":
+            domEStart.parentElement.firstElementChild.innerText = "E Start (V)"
+            domEStop.parentElement.firstElementChild.innerText = "E Stop (V)"
+            domNCycles.parentElement.classList.remove("active")
+            domNCycles.parentElement.classList.add("inactive")
+            break;
+    }
 })
 
+// Update plot domain
 domDOMAIN.forEach(input => {
     input.addEventListener("change", updateDomain)
 })

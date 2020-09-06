@@ -22,7 +22,7 @@
                     <label for="method">Method</label>
                     <select name="method" id="method" class="method">
                         <option value="cv">Cyclic Voltammetry</option>
-                        <option value="lsv" selected>Linear Sweep</option>
+                        <option value="lsv" selected>Linear Sweep Voltammetry</option>
                     </select>
                 </div>
                 <div class="params__method__input active">
@@ -44,22 +44,14 @@
             <div class="params" >
                 <form class="params__form" id="params" method="GET" action="#"> 
                         
-                    <div class="params__form__input active">
+                    <div class="params__form__input active common">
                         <label for="estart">E Start (V)</label>
                         <input name="estart" id="estart" class="estart voltage-limit  xydomain" type="number" step="0.1" value="-1" min="-2" max="2" required >
                     </div>
-                    <div class="params__form__input active">
+                    <div class="params__form__input active common">
                         <label for="estop">E Stop (V)</label>
                         <input name="estop" id="estop" class="estop voltage-limit  xydomain" type="number" step="0.1" value="1" min="-2" max="2" required >
-                    </div>
-                    <div class="params__form__input inactive">
-                        <label for="vertex1">Vertex1 (V)</label>
-                        <input name="vertex1" id="vertex1" class="vertex1 voltage-limit  xydomain" type="number" step="0.1" value="-1" min="-2" max="2" required >
-                    </div>
-                    <div class="params__form__input inactive">
-                        <label for="vertex2">Vertex2 (V)</label>
-                        <input name="vertex2" id="vertex2" class="vertex2 voltage-limit  xydomain" type="number" step="0.1" value="1" min="-2" max="2" required >
-                    </div>
+                    </div>      
                     <div class="params__form__input active common">
                         <label for="estep">E Step (mV)</label>
                         <input name="estep" id="estep" class="estep" type="number" value="20" readonly="readonly" >
