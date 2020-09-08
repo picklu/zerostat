@@ -58,7 +58,7 @@ const showStatusMessage = () => {
         message = `
             <b class="${state.overflow ? "status overflow" : "status"}">
                 ${state.status.toUpperCase()}:
-            </b> voltage: ${state.voltage.toFixed(4)} V & current: ${state.current.toFixed(4)} \xB5A`
+            </b> Voltage: ${state.voltage.toFixed(4)} V & Current: ${state.current.toFixed(4)} \xB5A`
     }
     domView.innerHTML = message
 }
