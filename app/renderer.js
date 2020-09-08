@@ -37,8 +37,8 @@ const state = {
             // will be populated on submit
         }
     },
-    voltage: null,
-    current: null,
+    voltage: 0,
+    current: 0,
     portList: [],
     data: [],
     overflow: false
@@ -46,19 +46,21 @@ const state = {
 
 // helper functions
 const showStatusMessage = () => {
-    state.voltage = state.voltage ? state.voltage : ".."
-    state.current = state.current ? state.current : ".."
+    let message = ""
+    state.voltage = state.voltage ? state.voltage : 0
+    state.current = state.current ? state.current : 0
     if (state.errorMessage !== "") {
-        domView.innerHTML = `<span class="error bold">ERROR ${state.errorMessage}</span>`
+        message = `<span class="error bold">ERROR ${state.errorMessage}</span>`
         state.errorMessage = ""
     } else if (state.isPortOpen && !state.isReady) {
-        domView.innerHTML = "<b class=\"status\">Getting ready ...</b>"
+        message = "<b class=\"status\">Getting ready ...</b>"
     } else {
-        domView.innerHTML = `
+        message = `
             <b class="${state.overflow ? "status overflow" : "status"}">
                 ${state.status.toUpperCase()}:
-            </b> voltage: ${state.voltage} V & current: ${state.current} \xB5A`
+            </b> voltage: ${state.voltage.toFixed(4)} V & current: ${state.current.toFixed(4)} \xB5A`
     }
+    domView.innerHTML = message
 }
 
 const updateUI = () => {
@@ -238,13 +240,13 @@ window.api.receive("data", (raw_data) => {
         state.current = digitalToCurrent(ch3)
         state.overflow = state.current <= DOMAIN.currMin ||
             state.current >= DOMAIN.currMax
-        state.status = state.overflow ? "OVERFLOW" : "RUNNING"
+        state.status = state.overflow ? "overflow" : "running"
         if (state.isRunning) {
             domSweep.innerText = "Stop"
             state.data.push({ x: state.voltage, y: state.current })
         }
         else {
-            state.status = "STOPPED"
+            state.status = "ready"
             state.overflow = false
         }
     }
