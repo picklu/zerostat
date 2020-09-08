@@ -234,12 +234,12 @@ window.api.receive("data", (raw_data) => {
         // data format [ss,sr,halt,mode,pcom,pstart,pend]
         const [ch1, ch2, ch3, ...rest] = data
         state.isRunning = !!ch1
+        state.voltage = digitalToVoltage(ch2)
+        state.current = digitalToCurrent(ch3)
+        state.overflow = state.current <= DOMAIN.currMin ||
+            state.current >= DOMAIN.currMax
+        state.status = state.overflow ? "OVERFLOW" : "RUNNING"
         if (state.isRunning) {
-            state.voltage = digitalToVoltage(ch2)
-            state.current = digitalToCurrent(ch3)
-            state.overflow = state.current <= DOMAIN.currMin ||
-                state.current >= DOMAIN.currMax
-            state.status = state.overflow ? "OVERFLOW" : "RUNNING"
             domSweep.innerText = "Stop"
             state.data.push({ x: state.voltage, y: state.current })
         }
