@@ -63,30 +63,24 @@ const createWindow = exports.createWindow = () => {
 
 app.allowRendererProcessReuse = false
 
-ipcMain.on("get-ports", (event) => {
+ipcMain.on("ports", (event) => {
     const senderWindow = event.sender
     if (senderWindow) {
         SerialPort.list()
             .then(ports => {
-                senderWindow.send("send-ports", ports.map(port => port.path));
+                senderWindow.send("ports", ports.map(port => port.path));
             })
             .catch(error => console.log(error))
     }
 })
 
-
-ipcMain.on("disconnect-serial", (event, portPath) => {
-
+ipcMain.on("connection", (event, portPath) => {
+    const senderWindow = event.sender
     if (port && port.isOpen) {
         port.close()
         port = null
         console.log("==> disconnecting ...")
-    }
-})
-
-ipcMain.on("connect-serial", (event, portPath) => {
-    const senderWindow = event.sender
-    if (senderWindow) {
+    } else if (senderWindow) {
         if (!port) {
             port = new SerialPort(portPath, { autoOpen: false })
             parser = port.pipe(new Readline())
@@ -98,22 +92,22 @@ ipcMain.on("connect-serial", (event, portPath) => {
                     port = null
                     parser = null
                     console.log(error.message)
-                    senderWindow.send("connection-open", false, error.message)
+                    senderWindow.send("connection", false, error.message)
                 }
                 else {
                     console.log("==> connected")
                     port.on("close", () => {
                         port = null
                         parser = null
-                        senderWindow.send("connection-open", false, "")
+                        senderWindow.send("connection", false, "")
                         console.log("==> disconnected")
                     })
 
                     parser.on('data', (data) => {
-                        senderWindow.send("send-data", data)
+                        senderWindow.send("data", data)
                     })
 
-                    senderWindow.send("connection-open", true, "")
+                    senderWindow.send("connection", true, "")
                 }
             })
         }
@@ -121,7 +115,7 @@ ipcMain.on("connect-serial", (event, portPath) => {
 
 })
 
-ipcMain.on("control-sweep", (event, state) => {
+ipcMain.on("sweep", (event, state) => {
     const halt = state.isRunning ? 0 : 1
     if (halt) {
         port.write(`0,${halt},0,0,${state.refDAC},0,0`)

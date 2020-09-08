@@ -128,13 +128,13 @@ window.addEventListener("DOMContentLoaded", () => {
     showStatusMessage()
     setInterval(() => {
         if (!state.isPortOpen) {
-            window.api.send("get-ports")
+            window.api.send("ports")
         }
     }, 2 * 1000)
 })
 
 // populate options with ports
-window.api.receive("send-ports", (ports) => {
+window.api.receive("ports", (ports) => {
     const items = []
     if (ports.length === 0) { ports.push("COMX") }
     if (!isEqual(state.portList, ports)) {
@@ -150,14 +150,13 @@ window.api.receive("send-ports", (ports) => {
 // call main process to open/close serial
 domConnect.addEventListener("click", (event) => {
     const port = domSerialPorts.value
-    const channel = state.isPortOpen ? "disconnect-serial" : "connect-serial"
     state.isReady = false
     state.isRunning = false
-    window.api.send(channel, port)
+    window.api.send("connection", port)
 })
 
 // update ui on receiving connection status
-window.api.receive("connection-open", (isPortOpen, error) => {
+window.api.receive("connection", (isPortOpen, error) => {
     state.voltage = isPortOpen ? state.voltage : 0
     state.current = isPortOpen ? state.current : 0
     state.isPortOpen = isPortOpen
@@ -216,11 +215,11 @@ domFormParams.addEventListener("submit", (event) => {
         })
     }
     updateUI()
-    window.api.send("control-sweep", state)
+    window.api.send("sweep", state)
 })
 
 // handle received data
-window.api.receive("send-data", (raw_data) => {
+window.api.receive("data", (raw_data) => {
     const text_data = raw_data.split(",")
     if (text_data[2] == "READY") {
         state.deviceModel = text_data[0]
