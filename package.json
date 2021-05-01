@@ -2,7 +2,7 @@
   "name": "zerostat",
   "version": "1.0.0",
   "description": "A GUI app for arduino-based potentiiostat",
-  "main": "./app/main.js",
+  "main": "./src/app.js",
   "scripts": {
     "build-css": "node-sass --output-style expanded --include-path=node_modules/bulma app/sass/main.scss app/css/style.css",
     "dev-css": "npm run build-css -- --watch",

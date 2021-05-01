@@ -35,7 +35,7 @@ const createWindow = exports.createWindow = () => {
         x, y,
         show: false,
         title: windowTitle,
-        icon: path.join(__dirname, "assets/electrostat.png"),
+        icon: path.join(__dirname, "../app/assets/electrostat.png"),
         webPreferences: {
             enableRemoteModule: false,
             nodeIntegration: false,
@@ -45,7 +45,7 @@ const createWindow = exports.createWindow = () => {
         }
     })
 
-    newWindow.loadFile("./app/index.html")
+    newWindow.loadFile("app/index.html")
 
     newWindow.once("ready-to-show", () => {
         newWindow.maximize()
