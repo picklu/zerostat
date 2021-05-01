@@ -1,3 +1,6 @@
+@charset "utf-8";
+
+
 /* http://meyerweb.com/eric/tools/css/reset/ 
    v2.0 | 20110126
    License: none (public domain)
@@ -58,6 +61,7 @@ body {
     display: flex;
     flex-direction: column;
 }
+
 .main {
     border: 5px double #6b6767;
     border-bottom: none;

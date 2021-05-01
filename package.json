@@ -1,14 +1,20 @@
 {
   "name": "zerostat",
   "version": "1.0.0",
-  "description": "An GUI app for arduino-based potentiiostat",
+  "description": "A GUI app for arduino-based potentiiostat",
   "main": "./app/main.js",
   "scripts": {
-    "dev": "nodemon --inspect --exec electron .",
-    "start": "electron .",
-    "build:windows": "electron-builder --win --dir",
-    "dist:windows": "electron-builder --win",
-    "postinstall": "electron-builder install-app-deps"
+    "build-css": "node-sass --output-style expanded --include-path=node_modules/bulma app/sass/main.scss app/css/style.css",
+    "dev-css": "npm run build-css -- --watch",
+    "dev-electron": "nodemon --inspect --exec electron .",
+    "start-electron": "electron .",
+    "build-windows": "electron-builder --win --dir",
+    "dist-windows": "electron-builder --win",
+    "postinstall": "electron-builder install-app-deps",
+    "dev": "npm-run-all --parallel dev-css dev-electron",
+    "start": "npm-run-all build-css start-electron",
+    "make": "npm-run-all build-css build-windows",
+    "make:dist": "npm-run-all build-css dist-windows"
   },
   "repository": {
     "type": "git",
@@ -27,12 +33,14 @@
   },
   "homepage": "https://github.com/picklu/zerostat#readme",
   "devDependencies": {
-    "electron": "^9.3.1",
+    "electron": "^9.4.4",
     "electron-builder": "^22.8.0",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "npm-run-all": "^4.1.5"
   },
   "dependencies": {
     "d3": "^6.1.1",
+    "node-sass": "^5.0.0",
     "serialport": "^9.0.1"
   }
 }

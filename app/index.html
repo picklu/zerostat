@@ -1,86 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ head.title }}</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
 
-    <main class="main">
-        <div class="communication"> <!-- for connecting to the serial with selected port-->
-            <div class="communication-serial">
-                <button id="connect" class="btn connection disconnected">Connect</button>
-                <select name="ports" class="ports" id="ports">
-                    <option>COMX</option><!-- dummy port -->
-                </select>
-            </div>
-            <div class="method-container"> <!-- for selecting a method cv/lsv -->
-                <div class="params__method__input active">
-                    <label for="method">Method</label>
-                    <select name="method" id="method" class="method">
-                        <option value="cv">Cyclic Voltammetry</option>
-                        <option value="lsv" selected>Linear Sweep Voltammetry</option>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{ head.title }}</title>
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+
+    <body>
+
+        <!-- main  -->
+        <main class="main">
+
+            <!-- communicating with hardware -->
+            <div class="communication">
+
+                <!-- serial connection -->
+                <div class="communication-serial">
+                    <button id="connect" class="btn connection disconnected">Connect</button>
+                    <select name="ports" class="ports" id="ports">
+                        <option>COMX</option><!-- dummy port -->
                     </select>
                 </div>
-                <div class="params__method__input active">
-                    <label for="maxcurrent">Current Limit</label>
-                    <select name="maxcurrent" id="maxcurrent" class="maxcurrent xydomain">
-                        <option value="5">5 &micro;A</option>
-                        <option value="10">10 &micro;A</option>
-                        <option value="50">50 &micro;A</option>
-                        <option value="100">100 &micro;A</option>
-                        <option value="150">150 &micro;A</option>
-                        <option value="200" selected>200 &micro;A</option>
-                        <option value="250">250 &micro;A</option>
-                        <option value="500">500 &micro;A</option>
-                        <option value="750">750 &micro;A</option>
-                        <option value="1000">1 mA</option>
-                    </select>
+
+                <!-- methods cv/lsv -->
+                <div class="method-container">
+                    <div class="params__method__input active">
+                        <label for="method">Method</label>
+                        <select name="method" id="method" class="method">
+                            <option value="cv">CV</option>
+                            <option value="lsv" selected>LSV</option>
+                        </select>
+                    </div>
+
+                    <!-- current limits  -->
+                    <div class="params__method__input active">
+                        <label for="maxcurrent">Current Limit</label>
+                        <select name="maxcurrent" id="maxcurrent" class="maxcurrent xydomain">
+                            <option value="5">5 &micro;A</option>
+                            <option value="10">10 &micro;A</option>
+                            <option value="50">50 &micro;A</option>
+                            <option value="100">100 &micro;A</option>
+                            <option value="150">150 &micro;A</option>
+                            <option value="200" selected>200 &micro;A</option>
+                            <option value="250">250 &micro;A</option>
+                            <option value="500">500 &micro;A</option>
+                            <option value="750">750 &micro;A</option>
+                            <option value="1000">1 mA</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- parameters -->
+                <div class="params">
+                    <form class="params__form" id="params" method="GET" action="#">
+
+                        <div class="params__form__input active common">
+                            <label for="estart">E Start (V)</label>
+                            <input name="estart" id="estart" class="estart voltage-limit  xydomain" type="number"
+                                step="0.1" value="-1" min="-1.1" max="1.1" required>
+                        </div>
+                        <div class="params__form__input active common">
+                            <label for="estop">E Stop (V)</label>
+                            <input name="estop" id="estop" class="estop voltage-limit  xydomain" type="number"
+                                step="0.1" value="1" min="-1.1" max="1.1" required>
+                        </div>
+                        <div class="params__form__input active common">
+                            <label for="estep">E Step (mV)</label>
+                            <input name="estep" id="estep" class="estep" type="number" value="2" min="1" max="100"
+                                required>
+                        </div>
+                        <div class="params__form__input active common">
+                            <label for="scanrate">Scan Rate (mV/s)</label>
+                            <input name="scanrate" id="scanrate" class="scanrate" type="number" step="5" value="100"
+                                min="5" max="500" required>
+                        </div>
+                        <div class="params__form__input inactive">
+                            <label for="ncycles">N Cycles</label>
+                            <input name="ncycles" id="ncycles" class="ncycles" type="number" step="1" value="1" min="1"
+                                max="100" required>
+                        </div>
+                        <div class="params__form__btn">
+                            <button class="btn sweep start-sweep" id="sweep" disabled>Disconnected</button>
+                        </div>
+                    </form>
                 </div>
             </div>
-            <div class="params" >
-                <form class="params__form" id="params" method="GET" action="#"> 
-                        
-                    <div class="params__form__input active common">
-                        <label for="estart">E Start (V)</label>
-                        <input name="estart" id="estart" class="estart voltage-limit  xydomain" type="number" step="0.1" value="-1" min="-2" max="2" required >
-                    </div>
-                    <div class="params__form__input active common">
-                        <label for="estop">E Stop (V)</label>
-                        <input name="estop" id="estop" class="estop voltage-limit  xydomain" type="number" step="0.1" value="1" min="-2" max="2" required >
-                    </div>      
-                    <div class="params__form__input active common">
-                        <label for="estep">E Step (mV)</label>
-                        <input name="estep" id="estep" class="estep" type="number" value="20" readonly="readonly" >
-                    </div>
-                    <div class="params__form__input active common">
-                        <label for="scanrate">Scan Rate (mV/s)</label>
-                        <input name="scanrate" id="scanrate" class="scanrate" type="number" step="5" value="100" min="5" max="500" required>
-                    </div>
-                    <div class="params__form__input inactive">
-                        <label for="ncycles">N Cycles</label>
-                        <input name="ncycles" id="ncycles" class="ncycles" type="number" step="1" value="1" min="1" max="100" required>
-                    </div>
-                    <div class="params__form__btn">
-                        <button class="btn sweep start-sweep" id="sweep" disabled>Disconnected</button>
-                    </div>
-                </form>
+
+            <!-- data chart  -->
+            <div class="view-container">
+                <svg class="chart" id="chart"></svg>
+                <div class="view" id="view"></div>
             </div>
-        </div>
-        
-        <div class="view-container">
-            <svg class="chart" id="chart"></svg>
-            <div class="view" id="view"></div>
-        </div>    
-    </main>
-    <footer class="footer">
-        <div class="copy">&copy; Subrata Sarker 2020</div>
-    </footer>
-    <script src="../node_modules/d3/dist/d3.min.js" charset="utf-8"></script>
-    <script src="./chart.js"></script>
-    <script src="./renderer.js"></script>
-</body>
+        </main>
+
+        <!-- footer -->
+        <footer class="footer">
+            <div class="copy">&copy; Subrata Sarker 2020</div>
+        </footer>
+
+        <!-- script -->
+        <script src="../node_modules/d3/dist/d3.min.js" charset="utf-8"></script>
+        <script src="./chart.js"></script>
+        <script src="./renderer.js"></script>
+    </body>
+
 </html>

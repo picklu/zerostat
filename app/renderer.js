@@ -1,3 +1,4 @@
+
 const domSerialPorts = document.getElementById("ports")
 const domConnect = document.getElementById("connect")
 const domMethod = document.getElementById("method")
@@ -8,14 +9,15 @@ const domSweep = document.getElementById("sweep")
 const domView = document.getElementById("view")
 
 // spec of the microcontroller io and amplifier
-const DAC_BIT = 8
-const ADC_BIT = 10
-const OPVOLTS = 5  // operating voltage (V) of the microcontroller
-const REF_DAC = 127 // Refrernce DAC value
-const FR = 12120  // feedback resistor in Ohm in the trans-impedance amplifier
+const DAC_BIT = 12
+const ADC_BIT = 12
+const OUTVOLTS = 2.2    // 0.55 to 2.75
+const OPVOLTS = 3.3     // operating voltage (V) of the microcontroller
+const REF_DAC = 2048    // Refrernce DAC value
+const FR = 12120        // feedback resistor in Ohm in the trans-impedance amplifier
 const maxDAC = Math.pow(2, DAC_BIT)
 const maxADC = Math.pow(2, ADC_BIT)
-const step = OPVOLTS / maxDAC // potential step
+const voltRes = OUTVOLTS * 1000 / maxDAC // voltage resolution in mV
 const vToFR = OPVOLTS / FR // voltage to current conversion factor
 
 // global state object
@@ -24,8 +26,9 @@ const state = {
     firmwareVersion: "",
     maxDAC: maxDAC,
     refDAC: REF_DAC,
+    outVolts: OUTVOLTS,
     opVolts: OPVOLTS,
-    step: step,
+    voltRes: voltRes,
     isPortOpen: false,
     isReady: false,
     isRunning: false,
@@ -92,11 +95,11 @@ const isEqual = (a, b) => {
 }
 
 const digitalToVoltage = (dv) => {
-    return (REF_DAC - dv) * (OPVOLTS / maxDAC)
+    return +((REF_DAC - dv) * (OPVOLTS / maxADC)).toFixed(5)
 }
 
 const digitalToCurrent = (dc) => {
-    return ((dc - REF_DAC * maxADC / maxDAC) * vToFR / maxADC) * 1e6
+    return +(((dc - REF_DAC * maxADC / maxDAC) * vToFR / maxADC) * 1e6).toFixed(5)
 }
 
 const updateDomain = (event) => {
@@ -128,11 +131,18 @@ const updateDomain = (event) => {
 // get ports once the dom content is loaded
 window.addEventListener("DOMContentLoaded", () => {
     showStatusMessage()
-    setInterval(() => {
+
+    setInterval(() => { // update port
         if (!state.isPortOpen) {
             window.api.send("ports")
         }
     }, 2 * 1000)
+
+    setInterval(() => {
+        if (state.isRunning && state.data.length) {
+            drawPlot(state)
+        }
+    }, 50)
 })
 
 // populate options with ports
@@ -233,7 +243,8 @@ window.api.receive("data", (raw_data) => {
     }
     else {
         const data = text_data.map(d => Number(d))
-        // data format [ss,sr,halt,mode,pcom,pstart,pend]
+        // data format [ss,sr,halt,mode,pcom,pstart,pend
+
         const [ch1, ch2, ch3, ...rest] = data
         state.isRunning = !!ch1
         state.voltage = digitalToVoltage(ch2)
@@ -242,8 +253,7 @@ window.api.receive("data", (raw_data) => {
             state.current >= DOMAIN.currMax
         state.status = state.overflow ? "overflow" : "running"
         if (state.isRunning) {
-            domSweep.innerText = "Stop"
-            state.data.push({ x: state.voltage, y: state.current })
+            state.data.push({ voltADC: ch2, currADC: ch3, x: state.voltage, y: state.current })
         }
         else {
             state.status = "ready"
@@ -251,6 +261,5 @@ window.api.receive("data", (raw_data) => {
         }
     }
     updateUI()
-    drawPlot(state)
     showStatusMessage()
 })

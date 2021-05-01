@@ -1,8 +1,9 @@
 const { app, BrowserWindow, ipcMain } = require("electron")
 const path = require("path")
 const SerialPort = require("serialport")
-const Readline = require('@serialport/parser-readline')
+const Readline = require("@serialport/parser-readline")
 const { send } = require("process")
+const { stat } = require("fs")
 
 const windows = new Set()
 
@@ -47,6 +48,7 @@ const createWindow = exports.createWindow = () => {
     newWindow.loadFile("./app/index.html")
 
     newWindow.once("ready-to-show", () => {
+        newWindow.maximize()
         newWindow.show()
     })
 
@@ -83,7 +85,7 @@ ipcMain.on("connection", (event, portPath) => {
         console.log("==> disconnecting ...")
     } else if (senderWindow) {
         if (!port) {
-            port = new SerialPort(portPath, { autoOpen: false })
+            port = new SerialPort(portPath, { baudRate: 115200, autoOpen: false })
             parser = port.pipe(new Readline())
         }
 
@@ -104,7 +106,7 @@ ipcMain.on("connection", (event, portPath) => {
                         console.log("==> disconnected")
                     })
 
-                    parser.on('data', (data) => {
+                    parser.on("data", (data) => {
                         senderWindow.send("data", data)
                     })
 
@@ -121,12 +123,14 @@ ipcMain.on("sweep", (event, state) => {
     if (halt) {
         port.write(`0,${halt},0,0,${state.refDAC},0,0`)
     } else {
-        const scanrate = state.method.params.scanrate // mV/s
-        const delay = (state.step * 1000 * 1000 / scanrate).toFixed(0) // ms
+        const stepDAC = Math.round(state.method.params.estep / state.voltRes)
+        const dV = stepDAC * state.voltRes
+        const scanrate = state.method.params.scanrate  // mV/s
+        const delay = Math.round(dV * 1000 / scanrate) // ms
         const estartVolt = state.method.params.estart
         const estopVolt = state.method.params.estop
-        const estart = Number(state.refDAC - (state.maxDAC * estartVolt / state.opVolts).toFixed(0)) // Analog to digital
-        const estop = Number(state.refDAC - (state.maxDAC * estopVolt / state.opVolts).toFixed(0))  // Analog to digital
+        const estart = Math.round(state.refDAC - (state.maxDAC * estartVolt / state.outVolts)) // Analog to digital
+        const estop = Math.round(state.refDAC - (state.maxDAC * estopVolt / state.outVolts))   // Analog to digital
         const ncycles = state.method.params.ncycles ? state.method.params.ncycles : 0
         let mode
         switch (state.method.type) {
@@ -135,12 +139,12 @@ ipcMain.on("sweep", (event, state) => {
                 break
             case "CV":
                 mode = 1
-
                 break
             default:
                 mode = -1
                 break
         }
-        port.write(`${delay},${halt},${mode},${ncycles},${state.refDAC},${estart},${estop}`)
+        console.log(`stepDAC => ${stepDAC}, dV => ${dV}, scanrate => ${scanrate}, delay =>${delay}`)
+        port.write(`${delay},${halt},${mode},${ncycles},${state.refDAC},${estart},${estop},${stepDAC}`)
     }
 })
