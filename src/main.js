@@ -115,7 +115,6 @@ ipcMain.on("connection", (event, portPath) => {
             })
         }
     }
-
 })
 
 ipcMain.on("sweep", (event, state) => {
@@ -132,6 +131,7 @@ ipcMain.on("sweep", (event, state) => {
         const estart = Math.round(state.refDAC - (state.maxDAC * estartVolt / state.outVolts)) // Analog to digital
         const estop = Math.round(state.refDAC - (state.maxDAC * estopVolt / state.outVolts))   // Analog to digital
         const ncycles = state.method.params.ncycles ? state.method.params.ncycles : 0
+        const equilibrationTime = state.method.params.equilibrationtime ? state.method.params.equilibrationtime : 0
         let mode
         switch (state.method.type) {
             case "LSV":
@@ -144,7 +144,7 @@ ipcMain.on("sweep", (event, state) => {
                 mode = -1
                 break
         }
-        console.log(`stepDAC => ${stepDAC}, dV => ${dV}, scanrate => ${scanrate}, delay =>${delay}`)
-        port.write(`${delay},${halt},${mode},${ncycles},${state.refDAC},${estart},${estop},${stepDAC}`)
+        console.log(`stepDAC => ${stepDAC}, dV => ${dV}, scanrate => ${scanrate}, delay =>${delay}, eqlTime => ${equilibrationTime}`)
+        port.write(`${delay},${halt},${mode},${ncycles},${state.refDAC},${estart},${estop},${stepDAC},${equilibrationTime}`)
     }
 })

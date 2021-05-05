@@ -32,6 +32,7 @@ const state = {
     isPortOpen: false,
     isReady: false,
     isRunning: false,
+    isEquilibrating: false,
     errorMessage: "",
     status: "not ready",
     method: {
@@ -243,17 +244,21 @@ window.api.receive("data", (raw_data) => {
     }
     else {
         const data = text_data.map(d => Number(d))
-        // data format [ss,sr,halt,mode,pcom,pstart,pend
+        // data format [ss,sr,halt,mode,pcom,pstart,pend,eqltime
 
         const [ch1, ch2, ch3, ...rest] = data
-        state.isRunning = !!ch1
+        state.isRunning = ch1 === 1
+        state.isEquilibrating = ch1 === -1
         state.voltage = digitalToVoltage(ch2)
         state.current = digitalToCurrent(ch3)
         state.overflow = state.current <= DOMAIN.currMin ||
             state.current >= DOMAIN.currMax
         state.status = state.overflow ? "overflow" : "running"
-        if (state.isRunning) {
+        if (state.isRunning && !state.isEquilibrating) {
             state.data.push({ voltADC: ch2, currADC: ch3, x: state.voltage, y: state.current })
+        } else if (!state.isRunning && state.isEquilibrating) {
+            state.status = "equilibrating"
+            state.overflow = false
         }
         else {
             state.status = "ready"
