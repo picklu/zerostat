@@ -180,7 +180,7 @@ body {
 .btn, .ports, .method,
 .estart, .estop, .vertex1,
 .vertex2, .estep, .scanrate,
-.ncycles {
+.ncycles, .equilibrationtime {
   text-align: center;
   padding: 5px;
   width: 130px;
