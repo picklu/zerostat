@@ -96,7 +96,7 @@ const isEqual = (a, b) => {
 }
 
 const digitalToVoltage = (dv) => {
-    return +((REF_DAC - dv) * (OPVOLTS / maxADC)).toFixed(5)
+    return +((REF_DAC - dv) * (OUTVOLTS / maxADC)).toFixed(5)
 }
 
 const digitalToCurrent = (dc) => {

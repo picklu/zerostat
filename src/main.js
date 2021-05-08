@@ -123,7 +123,7 @@ ipcMain.on("sweep", (event, state) => {
         port.write(`0,${halt},0,0,${state.refDAC},0,0`)
     } else {
         const stepDAC = Math.round(state.method.params.estep / state.voltRes)
-        const dV = stepDAC * state.voltRes
+        const dV = stepDAC * state.voltRes  // mV
         const scanrate = state.method.params.scanrate  // mV/s
         const delay = Math.round(dV * 1000 / scanrate) // ms
         const estartVolt = state.method.params.estart
@@ -144,7 +144,7 @@ ipcMain.on("sweep", (event, state) => {
                 mode = -1
                 break
         }
-        console.log(`stepDAC => ${stepDAC}, dV => ${dV}, scanrate => ${scanrate}, delay =>${delay}, eqlTime => ${equilibrationTime}`)
+        console.log(`estartVolt => ${estartVolt}(${estart}), estopVolt => ${estopVolt}(${estop}), stepDAC => ${stepDAC}, dV => ${dV}, scanrate => ${scanrate}, delay => ${delay}, eqlTime => ${equilibrationTime}`)
         port.write(`${delay},${halt},${mode},${ncycles},${state.refDAC},${estart},${estop},${stepDAC},${equilibrationTime}`)
     }
 })
