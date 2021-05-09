@@ -4,27 +4,26 @@
  * d3js chart
  *
  **********************************************/
-const WIDTH = 900
+const WIDTH = 960
 const HEIGHT = 500
 const MARGIN = {
-    top: 20,
-    right: 20,
-    bottom: 55,
-    left: 80
-}
+    top: 10,
+    bottom: 20,
+    left: 90,
+    right: 10
+};
 const DOMAIN = {
-    voltMin: -1,  // in V
-    voltMax: 1,   // in V
+    voltMin: -1,    // in V
+    voltMax: 1,     // in V
     currMin: -200,  // in uA
     currMax: 200,   // in uA
 }
+
 const INNER_WIDTH = WIDTH - MARGIN.left - MARGIN.right
 const INNER_HEIGHT = HEIGHT - MARGIN.top - MARGIN.bottom
 
 const chart = d3.select('#chart')
-    .attr("width", "100%")
-    .attr("height", "100%")
-    .attr("viewBox", `0 0 ${WIDTH + MARGIN.left + MARGIN.right} ${HEIGHT + MARGIN.top + MARGIN.bottom}`)
+    .attr("viewBox", `0 0 ${WIDTH + MARGIN.left + MARGIN.right} ${HEIGHT + MARGIN.top + MARGIN.bottom} `)
     .attr("preserveAspectRatio", "xMinYMin")
     .append("g")
     .attr("transform", `translate(${MARGIN.left}, ${MARGIN.top})`)
