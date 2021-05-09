@@ -96,6 +96,12 @@ body {
   padding: 5px;
 }
 
+@media screen and (max-width: 780px) {
+  .communication, .view-container {
+    width: 100%;
+  }
+}
+
 .communication {
   display: flex;
   flex-direction: column;

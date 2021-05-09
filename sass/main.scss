@@ -89,6 +89,10 @@ body {
     border: 1px solid #838282;
     border-radius: 3px;
     padding: 5px;
+    
+    @media screen and (max-width: 780px) {
+        width: 100%;
+    }
 }
 .communication {
     display: flex;
@@ -101,6 +105,7 @@ body {
     flex-direction: column;
     text-align: center;
     max-height: fit-content;
+    
 }
 .params {
     height: 100%;
