@@ -255,7 +255,7 @@ window.api.receive("data", (raw_data) => {
             state.current >= DOMAIN.currMax
         state.status = state.overflow ? "overflow" : "running"
         if (state.isRunning && !state.isEquilibrating) {
-            state.data.push({ voltADC: ch2, currADC: ch3, x: state.voltage, y: state.current })
+            state.data.push({ x: state.voltage, y: state.current })
         } else if (!state.isRunning && state.isEquilibrating) {
             state.status = "equilibrating"
             state.overflow = false
