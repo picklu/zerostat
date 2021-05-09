@@ -24,7 +24,7 @@ const INNER_HEIGHT = HEIGHT - MARGIN.top - MARGIN.bottom
 
 const chart = d3.select('#chart')
     .attr("viewBox", `0 0 ${WIDTH + MARGIN.left + MARGIN.right} ${HEIGHT + MARGIN.top + MARGIN.bottom} `)
-    .attr("preserveAspectRatio", "xMinYMin")
+    .attr("preserveAspectRatio", "xMidYMid meet")
     .append("g")
     .attr("transform", `translate(${MARGIN.left}, ${MARGIN.top})`)
 
