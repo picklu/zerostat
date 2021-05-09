@@ -72,6 +72,10 @@ body {
     justify-content: space-around;
     align-content: center;
     flex-grow: 1;
+
+    @media screen and (max-width: 780px) {
+        flex-direction: column;
+    }
 }
 .footer {
     border: 5px double #6b6767;
@@ -91,6 +95,8 @@ body {
     flex-direction: column;
 }
 .view-container {
+    flex-grow: 1;
+    flex-shrink: 1;
     display: flex;
     flex-direction: column;
     text-align: center;
