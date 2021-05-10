@@ -7,7 +7,7 @@
 const WIDTH = 960
 const HEIGHT = 500
 const MARGIN = {
-    top: 10,
+    top: 15,
     bottom: 20,
     left: 90,
     right: 10
