@@ -7,6 +7,7 @@ const domFormInputs = document.getElementsByClassName("params__form__input")
 const domFormParams = document.getElementById("params")
 const domSweep = document.getElementById("sweep")
 const domView = document.getElementById("view")
+const domChart = document.getElementById("chart")
 
 // spec of the microcontroller io and amplifier
 const DAC_BIT = 12
@@ -251,8 +252,8 @@ window.api.receive("data", (raw_data) => {
         state.isEquilibrating = ch1 === -1
         state.voltage = digitalToVoltage(ch2)
         state.current = digitalToCurrent(ch3)
-        state.overflow = state.current <= DOMAIN.currMin ||
-            state.current >= DOMAIN.currMax
+        state.overflow = state.current <= domain.currMin ||
+            state.current >= domain.currMax
         state.status = state.overflow ? "overflow" : "running"
         if (state.isRunning && !state.isEquilibrating) {
             state.data.push({ x: state.voltage, y: state.current })
