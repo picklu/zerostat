@@ -248,18 +248,18 @@ window.api.receive("data", (raw_data) => {
         // data format [ss,sr,halt,mode,pcom,pstart,pend,eqltime
 
         const [ch1, ch2, ch3, ch4, ch5, eqltime] = data
-        state.isRunning = ch1 === 1
+        state.isRunning = ch1 === 1 || ch1 === -1
         state.isEquilibrating = ch1 === -1
         state.voltage = digitalToVoltage(ch2)
         state.current = digitalToCurrent(ch3)
         state.overflow = state.current <= domain.currMin ||
             state.current >= domain.currMax
         state.status = state.overflow ? "overflow" : "running"
+
         if (state.isRunning && !state.isEquilibrating) {
             state.data.push({ x: state.voltage, y: state.current })
-        } else if (!state.isRunning && state.isEquilibrating) {
+        } else if (state.isRunning && state.isEquilibrating) {
             state.status = `equilibrating [${eqltime}]`
-
             state.overflow = false
         }
         else {
