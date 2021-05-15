@@ -3,7 +3,6 @@ const domSerialPorts = document.getElementById("ports")
 const domConnect = document.getElementById("connect")
 const domMethod = document.getElementById("method")
 const domDOMAIN = document.querySelectorAll(".xydomain")
-const domFormInputs = document.getElementsByClassName("params__form__input")
 const domFormParams = document.getElementById("params")
 const domSweep = document.getElementById("sweep")
 const domView = document.getElementById("view")
@@ -46,7 +45,7 @@ const state = {
     current: 0,
     portList: [],
     data: [],
-    overflow: false
+    overflow: false,
 }
 
 // helper functions
@@ -228,7 +227,6 @@ domFormParams.addEventListener("submit", (event) => {
             // else do nothing
         })
     }
-    updateUI()
     window.api.send("sweep", state)
 })
 
@@ -241,7 +239,6 @@ window.api.receive("data", (raw_data) => {
         state.isReady = true
         state.isRunning = false
         state.status = "ready"
-        updateUI()
     }
     else {
         const data = text_data.map(d => Number(d))
@@ -260,11 +257,9 @@ window.api.receive("data", (raw_data) => {
             state.data.push({ x: state.voltage, y: state.current })
         } else if (state.isRunning && state.isEquilibrating) {
             state.status = `equilibrating [${eqltime}]`
-            state.overflow = false
         }
         else {
             state.status = "ready"
-            state.overflow = false
         }
     }
     updateUI()
