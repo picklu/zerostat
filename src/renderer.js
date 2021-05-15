@@ -118,10 +118,10 @@ const updateDomain = (event) => {
         }
     })
     // update plot scale in the chart.js
-    DOMAIN.voltMin = Math.min(state.method.params.estart, state.method.params.estop)
-    DOMAIN.voltMax = Math.max(state.method.params.estart, state.method.params.estop)
-    DOMAIN.currMin = -1 * state.method.params.maxcurrent
-    DOMAIN.currMax = state.method.params.maxcurrent
+    domain.voltMax = Math.max(state.method.params.estart, state.method.params.estop)
+    domain.currMin = -1 * state.method.params.maxcurrent
+    domain.voltMin = Math.min(state.method.params.estart, state.method.params.estop)
+    domain.currMax = state.method.params.maxcurrent
 
     // rescale the plot
     rescale()
