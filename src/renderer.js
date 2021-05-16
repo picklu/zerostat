@@ -140,7 +140,7 @@ window.addEventListener("DOMContentLoaded", () => {
     }, 2 * 1000)
 
     setInterval(() => {
-        if (state.isRunning && state.data.length) {
+        if (state.isRunning) {
             drawPlot(state)
         }
     }, 50)
@@ -243,7 +243,6 @@ window.api.receive("data", (raw_data) => {
     else {
         const data = text_data.map(d => Number(d))
         // data format [ss,sr,halt,mode,pcom,pstart,pend,eqltime
-
         const [ch1, ch2, ch3, ch4, ch5, eqltime] = data
         state.isRunning = ch1 === 1 || ch1 === -1
         state.isEquilibrating = ch1 === -1
@@ -252,14 +251,14 @@ window.api.receive("data", (raw_data) => {
         state.overflow = state.current <= domain.currMin ||
             state.current >= domain.currMax
         state.status = state.overflow ? "overflow" : "running"
-        if (state.isRunning) {
+        if (state.isRunning) { // sweeping or equilibrating (ch1 = 1 or -1)
             if (state.isEquilibrating) {
                 state.status = `equilibrating [${eqltime}]`
             } else {
                 state.data.push({ x: state.voltage, y: state.current })
             }
         }
-        else {
+        else { // ch1 must be 0 that is not running
             state.status = "ready"
         }
     }
