@@ -3,7 +3,8 @@ const path = require("path")
 const SerialPort = require("serialport")
 const Readline = require("@serialport/parser-readline")
 const { send } = require("process")
-const { stat } = require("fs")
+const { stat } = require('fs')
+const { writeToCSV } = require("./helpers")
 
 const windows = new Set()
 
@@ -147,4 +148,19 @@ ipcMain.on("sweep", (event, state) => {
         console.log(`estartVolt => ${estartVolt}(${estart}), estopVolt => ${estopVolt}(${estop}), stepDAC => ${stepDAC}, dV => ${dV}, scanrate => ${scanrate}, delay => ${delay}, eqlTime => ${equilibrationTime}`)
         port.write(`${delay},${halt},${mode},${ncycles},${state.refDAC},${estart},${estop},${stepDAC},${equilibrationTime}`)
     }
+})
+
+ipcMain.on("save", (event, state) => {
+    const senderWindow = event.sender
+
+    writeToCSV(state, ({ filePath, error }) => {
+        if (filePath) {
+            senderWindow.send("saved", { filePath })
+            console.log('successfully saved')
+        }
+        else if (error) {
+            senderWindow.send("saved", { error })
+            console.log(error)
+        }
+    })
 })

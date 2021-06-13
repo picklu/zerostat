@@ -143,6 +143,11 @@ window.addEventListener("DOMContentLoaded", () => {
         if (state.isRunning) {
             drawPlot(state)
         }
+        else {
+            if (state.data.length) {
+                window.api.send("save", state)
+            }
+        }
     }, 50)
 })
 
@@ -264,4 +269,13 @@ window.api.receive("data", (raw_data) => {
     }
     updateUI()
     showStatusMessage()
+})
+
+window.api.receive("saved", ({ filePath, error }) => {
+    if (filePath) {
+        state.data = []
+        console.log(`Data have been saved to file "${filePath}"`)
+    } else {
+        console.log(error);
+    }
 })
