@@ -122,8 +122,9 @@ function rescale() {
 function drawPlot(state) {
     const dt = []
     const cxy = {}
-    const data = state.data.slice(-1)[0]
-    if (state.isRunning) {
+
+    if (state.data.length) {
+        const data = state.data.slice(-1)[0]
         cxy.x = xScale(data.x)
         cxy.y = yScale(data.y)
         cxy.x = cxy.x > 0
