@@ -28,7 +28,7 @@ helpers.writeToCSV = (dataStream, callback) => {
     const header = [
         [`Method: ${methodType.toUpperCase()} measured by ${deviceModel}-${firmwareVersion}`],
         [`E start: ${estart} V; E Stop: ${estop} V; E Step: ${estep} mV`],
-        [`Measured on ${new Date().toISOString()}`],
+        [`Measured time: ${new Date().toISOString()}`],
         [],
         ['Voltage (V)', 'Current (mA)']
     ];
