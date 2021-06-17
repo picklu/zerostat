@@ -15,27 +15,32 @@ const timeString = (time = null) => {
     return `${year}${month}${date}_${hours}${minutes}${seconds}${milliSeconds}`;
 };
 
-helpers.writeToCSV = (dataStream, callback) => {
-    const {
-        deviceModel,
-        firmwareVersion,
-        method: { type: methodType, params: { estart, estop, estep } },
-        data } = dataStream;
-    const filePath = `${methodType}-${timeString()}.txt`;
-    const newData = data.map(({ x, y }) => {
-        return [x, y];
-    });
-    const header = [
-        [`Method: ${methodType.toUpperCase()} measured by ${deviceModel}-${firmwareVersion}`],
-        [`E start: ${estart} V; E Stop: ${estop} V; E Step: ${estep} mV`],
-        [`Measured time: ${new Date().toISOString()}`],
-        [],
-        ['Voltage (V)', 'Current (mA)']
-    ];
+helpers.writeToCSV = (() => {
+    let scanNum = 0;
+    return (dataStream, callback) => {
+        const {
+            deviceModel,
+            firmwareVersion,
+            method: { type: methodType, params: { estart, estop, estep } },
+            data } = dataStream;
+        const scanId = (++scanNum).toString().padStart(3, '0');
+        const filePath = `tmp${scanId}_${methodType.toLowerCase()}_${timeString()}.txt`;
+        const newData = data.map(({ x, y }) => {
+            return [x, y];
+        });
+        const header = [
+            [`Scan ID: ${scanId}`],
+            [`Method: ${methodType} measured by ${deviceModel}-${firmwareVersion}`],
+            [`E start: ${estart} V; E Stop: ${estop} V; E Step: ${estep} mV`],
+            [`Measured time: ${new Date().toISOString()}`],
+            [],
+            ['Voltage (V)', 'Current (mA)']
+        ];
 
-    writeToPath(filePath, [...header, ...newData])
-        .on('error', error => callback({ error }))
-        .on('finish', () => callback({ filePath }));
-};
+        writeToPath(filePath, [...header, ...newData])
+            .on('error', error => callback({ error }))
+            .on('finish', () => callback({ filePath }));
+    }
+})();
 
 module.exports = helpers;
