@@ -2,15 +2,15 @@ const { writeToPath } = require('@fast-csv/format');
 
 const helpers = {};
 
-const timeString = () => {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = (now.getMonth() + 1).toString().padStart(2, '0');
-    const date = now.getDate().toString().padStart(2, '0');
-    const hours = now.getHours().toString().padStart(2, '0');
-    const minutes = now.getMinutes().toString().padStart(2, '0');
-    const seconds = now.getSeconds().toString().padStart(2, '0');
-    const milliSeconds = now.getMilliseconds().toString().padStart(3, '0');
+const timeString = (time = null) => {
+    time = time ? time : new Date();
+    const year = time.getFullYear();
+    const month = (time.getMonth() + 1).toString().padStart(2, '0');
+    const date = time.getDate().toString().padStart(2, '0');
+    const hours = time.getHours().toString().padStart(2, '0');
+    const minutes = time.getMinutes().toString().padStart(2, '0');
+    const seconds = time.getSeconds().toString().padStart(2, '0');
+    const milliSeconds = time.getMilliseconds().toString().padStart(3, '0');
 
     return `${year}${month}${date}_${hours}${minutes}${seconds}${milliSeconds}`;
 };
