@@ -29,7 +29,7 @@ helpers.writeToCSV = (() => {
             method: { type: methodType, params: { estart, estop, estep } },
             data } = dataStream;
         const scanId = (++scanNum).toString().padStart(3, '0');
-        const filePath = path.join(tmpDir, `tmp${scanId}_${methodType.toLowerCase()}_${timeString()}.txt`);
+        const filePath = path.join(tmpDir, `tmp_${methodType.toLowerCase()}_${timeString()}_${scanId}.txt`);
         const newData = data.map(({ x, y }) => {
             return [x, y];
         });
@@ -38,8 +38,7 @@ helpers.writeToCSV = (() => {
             [`Method: ${methodType} measured by ${deviceModel}-${firmwareVersion}`],
             [`E start: ${estart} V; E Stop: ${estop} V; E Step: ${estep} mV`],
             [`Measured time: ${new Date().toISOString()}`],
-            [],
-            ['start ==>']
+            ['<======= start =======>'],
             ['Voltage (V)', 'Current (mA)'],
         ];
 
