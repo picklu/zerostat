@@ -1,5 +1,10 @@
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
 const { writeToPath } = require('@fast-csv/format');
 
+const tmpDir = path.join(os.tmpdir(), 'zerostat');
+if (!fs.existsSync(tmpDir)) { fs.mkdirSync(tmpDir) };
 const helpers = {};
 
 const timeString = (time = null) => {
@@ -24,7 +29,7 @@ helpers.writeToCSV = (() => {
             method: { type: methodType, params: { estart, estop, estep } },
             data } = dataStream;
         const scanId = (++scanNum).toString().padStart(3, '0');
-        const filePath = `tmp${scanId}_${methodType.toLowerCase()}_${timeString()}.txt`;
+        const filePath = path.join(tmpDir, `tmp${scanId}_${methodType.toLowerCase()}_${timeString()}.txt`);
         const newData = data.map(({ x, y }) => {
             return [x, y];
         });
