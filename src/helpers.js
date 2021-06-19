@@ -28,8 +28,8 @@ helpers.writeToCSV = (() => {
             firmwareVersion,
             method: { type: methodType, params: { estart, estop, estep } },
             data } = dataStream;
-        const scanId = (++scanNum).toString().padStart(3, '0');
-        const filePath = path.join(tmpDir, `tmp_${methodType.toLowerCase()}_${timeString()}_${scanId}.txt`);
+        const scanId = `${timeString()}_${(++scanNum).toString().padStart(3, '0')}`;
+        const filePath = path.join(tmpDir, `tmp_${methodType.toLowerCase()}_${scanId}.txt`);
         const newData = data.map(({ x, y }) => {
             return [x, y];
         });
