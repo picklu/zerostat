@@ -7,6 +7,7 @@ const tmpDir = path.join(os.tmpdir(), 'zerostat');
 if (!fs.existsSync(tmpDir)) { fs.mkdirSync(tmpDir) };
 const helpers = {};
 
+
 const timeString = (time = null) => {
     time = time ? time : new Date();
     const year = time.getFullYear();
@@ -20,9 +21,19 @@ const timeString = (time = null) => {
     return `${year}${month}${date}_${hours}${minutes}${seconds}${milliSeconds}`;
 };
 
+helpers.listTmpDir = (func) => {
+    fs.readdir(tmpDir, (error, files) => {
+        if (error) {
+            func({ error });
+        } else {
+            func({ files });
+        }
+    });
+};
+
 helpers.writeToCSV = (() => {
     let scanNum = 0;
-    return (dataStream, callback) => {
+    return (dataStream, func) => {
         const {
             deviceModel,
             firmwareVersion,
@@ -39,13 +50,13 @@ helpers.writeToCSV = (() => {
             [`Device Model: ${deviceModel}-${firmwareVersion}`],
             [`E start: ${estart} V; E Stop: ${estop} V; E Step: ${estep} mV`],
             [`Measured time: ${new Date().toISOString()}`],
-            ['<======= start =======>'],
+            ['======= start ======='],
             ['Voltage (V)', 'Current (uA)'],
         ];
 
         writeToPath(filePath, [...header, ...newData])
-            .on('error', error => callback({ error }))
-            .on('finish', () => callback({ filePath }));
+            .on('error', error => func({ error }))
+            .on('finish', () => func({ filePath }));
     }
 })();
 
