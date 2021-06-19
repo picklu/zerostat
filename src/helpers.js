@@ -35,7 +35,8 @@ helpers.writeToCSV = (() => {
         });
         const header = [
             [`Scan ID: ${scanId}`],
-            [`Method: ${methodType} measured by ${deviceModel}-${firmwareVersion}`],
+            [`Method: ${methodType}`],
+            [`Device Model: ${deviceModel}-${firmwareVersion}`],
             [`E start: ${estart} V; E Stop: ${estop} V; E Step: ${estep} mV`],
             [`Measured time: ${new Date().toISOString()}`],
             ['<======= start =======>'],
