@@ -133,6 +133,7 @@ const updateDomain = (event) => {
 // get ports once the dom content is loaded
 window.addEventListener("DOMContentLoaded", () => {
     showStatusMessage()
+    window.api.send("listFiles")
 
     setInterval(() => { // update port
         if (!state.isPortOpen) {
@@ -277,8 +278,21 @@ window.api.receive("saved", ({ filePath, error }) => {
     if (filePath) {
         state.data = []
         state.isWritingData = false
-        console.log(`Data have been saved to file "${filePath}"`)
+        window.api.send("listFiles")
+    } else if (error) {
+        console.log(error)
     } else {
-        console.log(error);
+        console.log("Something went wrong!")
+    }
+})
+
+window.api.receive("listFiles", ({ files, error }) => {
+    if (files && files.length) {
+        console.log(files)
+    } else if (error) {
+        console.log(error)
+    }
+    else {
+        console.log("Something went wrong!")
     }
 })

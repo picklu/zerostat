@@ -161,17 +161,23 @@ ipcMain.on("save", (event, state) => {
         else if (error) {
             senderWindow.send("saved", { error })
             console.log(error)
+        } else {
+            console.log("Something went wrong!")
         }
     })
 })
 
+ipcMain.on("listFiles", (event) => {
+    const senderWindow = event.sender
 
-listTmpDir((result) => {
-    if (result.error && result.error.path) {
-        console.log(result.error.path);
-    } else if (result.files) {
-        console.log(result.files);
-    } else {
-        console.log("Something went wrong!");
-    }
-});
+    listTmpDir((result) => {
+        if (result.error && result.error.path) {
+            senderWindow.send("listFiles", { error });
+        } else if (result.files) {
+            senderWindow.send("listFiles", { files: result.files });
+        } else {
+            console.log(result)
+            senderWindow.send("listFiles", { error: "Something went wrong!" });
+        }
+    });
+})
