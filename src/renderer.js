@@ -35,6 +35,7 @@ const state = {
     isEquilibrating: false,
     errorMessage: "",
     status: "not ready",
+    isWritingData: false,
     method: {
         type: "LSV",
         params: {
@@ -144,7 +145,8 @@ window.addEventListener("DOMContentLoaded", () => {
             drawPlot(state)
         }
         else {
-            if (state.data.length) {
+            if (!state.isWritingData && state.data.length) {
+                state.isWritingData = true
                 window.api.send("save", state)
             }
         }
@@ -274,6 +276,7 @@ window.api.receive("data", (raw_data) => {
 window.api.receive("saved", ({ filePath, error }) => {
     if (filePath) {
         state.data = []
+        state.isWritingData = false
         console.log(`Data have been saved to file "${filePath}"`)
     } else {
         console.log(error);

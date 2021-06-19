@@ -4,7 +4,7 @@ const SerialPort = require("serialport")
 const Readline = require("@serialport/parser-readline")
 const { send } = require("process")
 const { stat } = require('fs')
-const { writeToCSV } = require("./helpers")
+const { listTmpDir, writeToCSV } = require("./helpers")
 
 const windows = new Set()
 
@@ -164,3 +164,14 @@ ipcMain.on("save", (event, state) => {
         }
     })
 })
+
+
+listTmpDir((result) => {
+    if (result.error && result.error.path) {
+        console.log(result.error.path);
+    } else if (result.files) {
+        console.log(result.files);
+    } else {
+        console.log("Something went wrong!");
+    }
+});
