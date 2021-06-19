@@ -39,7 +39,8 @@ helpers.writeToCSV = (() => {
             [`E start: ${estart} V; E Stop: ${estop} V; E Step: ${estep} mV`],
             [`Measured time: ${new Date().toISOString()}`],
             [],
-            ['Voltage (V)', 'Current (mA)']
+            ['start ==>']
+            ['Voltage (V)', 'Current (mA)'],
         ];
 
         writeToPath(filePath, [...header, ...newData])
