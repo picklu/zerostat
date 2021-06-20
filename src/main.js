@@ -179,5 +179,5 @@ ipcMain.on("listFiles", (event) => {
             console.log(result)
             senderWindow.send("listFiles", { error: "Something went wrong!" });
         }
-    });
+    })
 })

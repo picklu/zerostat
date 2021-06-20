@@ -40,7 +40,7 @@ helpers.writeToCSV = (() => {
             method: { type: methodType, params: { estart, estop, estep } },
             data } = dataStream;
         const scanId = `${timeString()}_${(++scanNum).toString().padStart(3, '0')}`
-        const filePath = path.join(tmpDir, `tmp_${methodType.toLowerCase()}_${scanId}.txt`)
+        const filePath = path.join(tmpDir, `${scanId}_${methodType.toLowerCase()}.txt`)
         const newData = data.map(({ x, y }) => {
             return [x, y]
         });
