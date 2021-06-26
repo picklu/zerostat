@@ -5,8 +5,8 @@ const domMethod = document.getElementById("method")
 const domDOMAIN = document.querySelectorAll(".xydomain")
 const domFormParams = document.getElementById("params")
 const domSweep = document.getElementById("sweep")
-const domView = document.getElementById("view")
-const domChart = document.getElementById("chart")
+const domStatusMessage = document.querySelector(".status-message")
+
 
 // spec of the microcontroller io and amplifier
 const DAC_BIT = 12
@@ -65,7 +65,7 @@ const showStatusMessage = () => {
                 ${state.status.toUpperCase()}:
             </b> Voltage: ${state.voltage.toFixed(4)} V & Current: ${state.current.toFixed(4)} \xB5A`
     }
-    domView.innerHTML = message
+    domStatusMessage.innerHTML = message
 }
 
 const updateUI = () => {
@@ -127,7 +127,7 @@ const updateDomain = (event) => {
     rescale()
 
     // redraw the plot if not running
-    if (!state.isRunning) { drawPlot(state) }
+    if (!state.isRunning) { draw(state) }
 }
 
 // get ports once the dom content is loaded
@@ -143,7 +143,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     setInterval(() => {
         if (state.isRunning) {
-            drawPlot(state)
+            draw(state)
         }
         else {
             if (!state.isWritingData && state.data.length) {

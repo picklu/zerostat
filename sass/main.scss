@@ -1,216 +1,156 @@
 @charset "utf-8";
+@import "variables";
+@import "reset";
+@import "layout";
 
 
-/* http://meyerweb.com/eric/tools/css/reset/ 
-   v2.0 | 20110126
-   License: none (public domain)
-*/
-
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li, button,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
-}
-/* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section {
-	display: block;
-}
-body {
-    box-sizing: border-box;
-	line-height: 1;
-}
-ol, ul {
-	list-style: none;
-}
-blockquote, q {
-	quotes: none;
-}
-blockquote:before, blockquote:after,
-q:before, q:after {
-	content: '';
-	content: none;
-}
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
-}
-/* end of reset */
-
-
-body {
-    height: 100vh;
-    background-color: #c9bebe;
-    font-family: sans-serif;
-    font-size: small;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-}
 
 .main {
-    border: 5px double #6b6767;
-    border-bottom: none;
-    max-height: 80vh;
-    padding: 50px;
-    display: flex;
-    justify-content: space-around;
-    align-content: center;
-    flex-grow: 1;
+    font-size: 2em;
+    background-color: $grey-secondary ;
+    border: $border-width-secondary groove $grey-tertiary;
+    border-radius: 5px;
 
-    @media screen and (max-width: 780px) {
-        flex-direction: column;
+    @media only screen and (min-width: 1200px) {
+        font-size: 2.2em;
     }
-}
-.footer {
-    border: 5px double #6b6767;
-    background-color: rgb(224, 220, 220);
-    padding: 20px;
-    text-align: center;
-    flex-grow: 1;
-}
-.communication, .view-container {
-    background-color: #fff;
-    border: 1px solid #838282;
-    border-radius: 3px;
-    padding: 5px;
     
-    @media screen and (max-width: 780px) {
-        width: 100%;
+    &__cell {
+        background-color: $white-secondary;
+        border: $border-width-secondary groove $grey-tertiary;
+        border-radius: 5px;
+        padding: $padding-secondary;
     }
-}
-.communication {
-    display: flex;
-    flex-direction: column;
-}
-.view-container {
-    flex-grow: 1;
-    flex-shrink: 1;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    max-height: fit-content;
     
-}
-.params {
-    height: 100%;
+    .serial-comm {
+        display: grid;
+        grid-template-columns: 5fr 3fr;
+        grid-column-gap: $border-width-secondary;
+    }
+    
+    .method-params {
+        &__form{
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
 
-    &__form { 
-        display: flex;
-        flex-direction:column;
-        height: 100%;
-
+        &__input {
+            margin-bottom: $margin-tertiary;
+            display: grid;
+            grid-template-columns: 5fr 3fr;
+            grid-column-gap: $border-width-secondary;
+        }
+        
         &__btn {
             margin-top: auto;
+            
+            .btn {
+                padding: $padding-secondary;
+                width: 100%;
+                
+                @media only screen and (min-width: 992px) {
+                    padding: $padding-primary;
+                }
+            }
         }
     }
-
 }
 
-.method-container, .params__form {
-    label {
-        background-color: #b7b9b9;
-        border: 1px solid #959595;
-        padding: 7px;
-        flex-grow: 1;
-        margin-right: 5px;
-        color: #080808;
-        text-shadow: 1px 1px 1px #9c9999;
+.btn {
+    font-weight: 600;
+}
+
+.btn,
+.label {
+    background-color: $grey-tertiary;
+    color: $black-primary;
+    font-size: 0.8em;
+    outline: none;
+}
+
+.btn,
+.input,
+.label,
+.options {
+    border: $border-width-tertiary solid  $grey-primary;
+    box-shadow: 1px 1px 1px $grey-secondary;
+    border-radius: 3px;
+    padding: $padding-secondary;
+    text-shadow: 1px 1px $grey-tertiary;
+    width: 100%;
+    
+    &:hover {
+        box-shadow: 2px 2px 2px $grey-secondary;
     }
 }
 
-.method-container label {
-    padding: 9px;
-}
-.params__method__input, .params__form__input {
-    display: flex;
-    align-items: center;
-}
-.params__method__input:first-child, 
-.params__form__input  {
-    margin-bottom: 5px;
-}
-.params__form__input input:invalid {
-    border: 2px solid #d3340c;    
-}
-.active {
-    display: flex;
-}
-.inactive {
-    display: none;
+.input {
+    text-align: center;
 }
 
-// Style for Chart
-.view {
-    margin-top: auto;
-    padding: 5px 10px;
-    text-align: left;
+.options {
+    text-align-last: center;
 }
-.chart {
-    margin: 0 auto;
-}
-.communication-serial {
-    
-    display: flex;
-    justify-content: space-between;
-}
-.communication-serial, .method-container {
-    margin-bottom: 10px;
-}
-.communication-serial, .method-container, .params {
-    background-color: #f8f1f1;
-    border: 1px solid #959595;
-    padding: 5px;
-}
-.btn, .ports, .method,
-.estart, .estop, .vertex1, 
-.vertex2, .estep, .scanrate, 
-.ncycles, .equilibrationtime {
-    text-align: center;
-    padding: 5px;
-    width: 130px;
-}
-.method, .maxcurrent, .ports {
-    padding: 7px;
-    width: 145px;
-}
-.btn {
-    outline: none;
-    background-color: #b7b9b9;
-    border: 1px solid  #5f5d5d;
-    color: #080808;
-    font-weight: 600;
-    text-shadow: 1px 1px 1px #9c9999;
-}
+
 .btn:hover {
-    background-color:  #cbcccc;
+    background-color: $grey-secondary;
+  }
+  
+  .btn:active {
+    box-shadow: 1px 1px 1px $grey-tertiary;
+  }
+  
+  .btn:disabled {
+    color: $red-primary;
+    text-shadow: 1px 1px 1px $green-primary;
+  }
+
+
+.footer {
+    background-color: $blue-primary;
+    color: $white-primary;
+    font-size: 0.8em;
+    padding: 0 $padding-primary;
 }
-.btn:active {
-    box-shadow: 1px 1px 1px #959595;
+
+/* style for d3js chart */
+.chart-window {
+    background-color: $white-primary;
+
+    .chart {
+        height: 100%;
+        width: 100%;
+    }
+    
+    .axis, .axis-title {
+        font-family: sans-serif;
+    }
+    .axis {
+        font-size: 12px;
+    }
+    .axis-title {
+        font-size: 16px;
+    }
+    .line {
+        fill: none;
+        stroke: #0b7e1e;
+        stroke-width: 2px;
+    }
+    circle.pointer {
+        fill: none;
+        stroke: #ec1a2b;
+        stroke-width: 2px;
+    }
+    .grid line {
+        stroke: #677272;
+        stroke-width: 1px;
+        opacity: 0.5;
+    }
+    
 }
-.btn:disabled {
-    color: #e71717;
-    text-shadow: 1px 1px 1px #2b2a2a;
-}
-.connection {
-    flex-grow: 1;
-    margin-right: 5px;
-}
+
 .sweep {
     font-size: medium;
     height: 50px;
@@ -230,28 +170,4 @@ body {
 .bold {
     font-weight: 600;
 }
-/* style for d3js chart */
-.axis, .axis-title {
-    font-family: sans-serif;
-}
-.axis {
-    font-size: 12px;
-}
-.axis-title {
-    font-size: 16px;
-}
-.line {
-    fill: none;
-    stroke: #0b7e1e;
-    stroke-width: 2px;
-}
-circle.pointer {
-    fill: none;
-    stroke: #ec1a2b;
-    stroke-width: 2px;
-}
-.grid line {
-    stroke: #677272;
-    stroke-width: 1px;
-    opacity: 0.5;
-}
+

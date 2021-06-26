@@ -1,0 +1,90 @@
+@charset "utf-8";
+
+/* grid layout */
+.grid {
+    height: 100vh;
+    width: 100vw;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 50px repeat(4, 1fr) 50px;
+    grid-template-areas:
+        "hcn dtl flp flp"
+        "chr chr chr chr"
+        "chr chr chr chr"
+        "mar mar mdt mdt"
+        "tfl tfl tfl tfl"
+        "ftr ftr ftr ftr";
+
+        @media only screen and (min-width: 992px) {
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: 55px repeat(4, 1fr) 50px;
+            grid-template-areas:
+                "hcn flp flp dtl"
+                "mar chr chr chr"
+                "mar chr chr chr"
+                "mar tfl tfl tfl"
+                "mar mdt mdt mdt"
+                "ftr ftr ftr ftr";
+        }
+
+        @media only screen and (min-width: 1200px) {
+            grid-template-columns: 3fr 7fr 2fr;
+            grid-template-rows: 60px repeat(3, 1fr) 50px;
+            grid-template-areas:
+                "hcn flp dtl"
+                "mar chr mdt"
+                "mar chr mdt"
+                "mar tfl mdt"
+                "ftr ftr ftr";
+        }    
+}
+
+.serial-comm {
+    grid-area: hcn;
+}
+
+.file-path {
+    grid-area: flp;
+}
+
+.data-load {
+    grid-area: dtl;
+}
+
+.method-params {
+    grid-area: mar;
+}
+
+.chart-window {
+    grid-area: chr;
+}
+
+.meta-data {
+    grid-area: mdt;
+}
+
+.temporary-files {
+    grid-area: tfl;
+}
+
+
+.footer {
+    grid-area: ftr;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: center;
+
+    @media only screen and (min-width: 1200px) {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+    }
+}
+
+.copy {
+    grid-column: 2/4;
+    justify-self: center;
+
+    @media screen and (min-width: 1200px) {
+        grid-column: 3/5;
+    }
+}
