@@ -139,7 +139,7 @@
     align-items: center;
     
     &__text {
-        margin-left: $margin-primary;
+        margin: 0 $margin-primary;
         font-size: 0.8em;
         overflow-x: hidden;
     }

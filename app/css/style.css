@@ -268,7 +268,7 @@ table {
 }
 
 .file-path__text {
-  margin-left: 15px;
+  margin: 0 15px;
   font-size: 0.8em;
   overflow-x: hidden;
 }
