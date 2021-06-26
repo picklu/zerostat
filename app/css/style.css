@@ -116,32 +116,19 @@ table {
 .footer {
   grid-area: ftr;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   align-items: center;
-}
-
-@media only screen and (min-width: 1200px) {
-  .footer {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-  }
 }
 
 .copy {
   grid-column: 2/4;
-  justify-self: center;
-}
-
-@media screen and (min-width: 1200px) {
-  .copy {
-    grid-column: 3/5;
-  }
+  justify-self: end;
 }
 
 .main {
   font-size: 2em;
-  background-color: #a5a8a8;
-  border: 3px groove #c8cbce;
+  background-color: #b9bbbb;
+  border: 3px groove #e6e7e9;
   border-radius: 5px;
 }
 
@@ -152,8 +139,8 @@ table {
 }
 
 .main__cell {
-  background-color: #dcdfe0;
-  border: 3px groove #c8cbce;
+  background-color: #edf1f5;
+  border: 3px groove #e6e7e9;
   border-radius: 5px;
   padding: 5px;
 }
@@ -199,7 +186,7 @@ table {
 
 .btn,
 .label {
-  background-color: #c8cbce;
+  background-color: #e6e7e9;
   color: #080808;
   font-size: 0.8em;
   outline: none;
@@ -210,10 +197,10 @@ table {
 .label,
 .options {
   border: 1px solid #6b6767;
-  box-shadow: 1px 1px 1px #a5a8a8;
+  box-shadow: 1px 1px 1px #b9bbbb;
   border-radius: 3px;
   padding: 5px;
-  text-shadow: 1px 1px #c8cbce;
+  text-shadow: 1px 1px #e6e7e9;
   width: 100%;
 }
 
@@ -221,7 +208,7 @@ table {
 .input:hover,
 .label:hover,
 .options:hover {
-  box-shadow: 2px 2px 2px #a5a8a8;
+  box-shadow: 2px 2px 2px #b9bbbb;
 }
 
 .input {
@@ -233,11 +220,11 @@ table {
 }
 
 .btn:hover {
-  background-color: #a5a8a8;
+  background-color: #b9bbbb;
 }
 
 .btn:active {
-  box-shadow: 1px 1px 1px #c8cbce;
+  box-shadow: 1px 1px 1px #e6e7e9;
 }
 
 .btn:disabled {
@@ -248,7 +235,7 @@ table {
 .footer {
   background-color: #053a6b;
   color: #fdfdfd;
-  font-size: 0.8em;
+  font-size: 0.6em;
   padding: 0 10px;
 }
 
@@ -301,11 +288,6 @@ table {
 
 .connected, .stop-sweep {
   color: #e71717;
-}
-
-.status {
-  color: #0fa13b;
-  font-weight: 600;
 }
 
 .error, .overflow {

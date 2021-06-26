@@ -4,7 +4,6 @@
 @import "layout";
 
 
-
 .main {
     font-size: 2em;
     background-color: $grey-secondary ;
@@ -16,7 +15,7 @@
     }
     
     &__cell {
-        background-color: $white-secondary;
+        background-color: $white-tertiary;
         border: $border-width-secondary groove $grey-tertiary;
         border-radius: 5px;
         padding: $padding-secondary;
@@ -111,9 +110,10 @@
 .footer {
     background-color: $blue-primary;
     color: $white-primary;
-    font-size: 0.8em;
+    font-size: 0.6em;
     padding: 0 $padding-primary;
 }
+
 
 /* style for d3js chart */
 .chart-window {
@@ -148,7 +148,6 @@
         stroke-width: 1px;
         opacity: 0.5;
     }
-    
 }
 
 .sweep {
@@ -157,16 +156,15 @@
     padding: 5px;
     width: 100%;
 }
+
 .connected, .stop-sweep {
     color: #e71717;
 }
-.status {
-    color: #0fa13b;
-    font-weight: 600;
-}
+
 .error, .overflow {
     color:  #e71717;
 }
+
 .bold {
     font-weight: 600;
 }

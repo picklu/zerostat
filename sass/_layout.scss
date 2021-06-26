@@ -71,20 +71,11 @@
 .footer {
     grid-area: ftr;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     align-items: center;
-
-    @media only screen and (min-width: 1200px) {
-        display: grid;
-        grid-template-columns: repeat(6, 1fr);
-    }
 }
 
 .copy {
     grid-column: 2/4;
-    justify-self: center;
-
-    @media screen and (min-width: 1200px) {
-        grid-column: 3/5;
-    }
+    justify-self: end;
 }
