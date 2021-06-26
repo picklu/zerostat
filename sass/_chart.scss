@@ -1,0 +1,37 @@
+
+@charset "utf-8";
+
+/* style for d3js chart */
+.chart-window {
+    background-color: $white-primary;
+
+    .chart {
+        height: 100%;
+        width: 100%;
+    }
+    
+    .axis, .axis-title {
+        font-family: sans-serif;
+    }
+    .axis {
+        font-size: 12px;
+    }
+    .axis-title {
+        font-size: 16px;
+    }
+    .line {
+        fill: none;
+        stroke: #0b7e1e;
+        stroke-width: 2px;
+    }
+    circle.pointer {
+        fill: none;
+        stroke: #ec1a2b;
+        stroke-width: 2px;
+    }
+    .grid line {
+        stroke: #677272;
+        stroke-width: 1px;
+        opacity: 0.5;
+    }
+}

@@ -239,6 +239,25 @@ table {
   padding: 0 10px;
 }
 
+.sweep {
+  font-size: medium;
+  height: 50px;
+  padding: 5px;
+  width: 100%;
+}
+
+.connected, .stop-sweep {
+  color: #e71717;
+}
+
+.error, .overflow {
+  color: #e71717;
+}
+
+.bold {
+  font-weight: 600;
+}
+
 /* style for d3js chart */
 .chart-window {
   background-color: #fdfdfd;
@@ -277,23 +296,4 @@ table {
   stroke: #677272;
   stroke-width: 1px;
   opacity: 0.5;
-}
-
-.sweep {
-  font-size: medium;
-  height: 50px;
-  padding: 5px;
-  width: 100%;
-}
-
-.connected, .stop-sweep {
-  color: #e71717;
-}
-
-.error, .overflow {
-  color: #e71717;
-}
-
-.bold {
-  font-weight: 600;
 }
