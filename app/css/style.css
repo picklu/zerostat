@@ -170,18 +170,22 @@ table {
 }
 
 .main .method-params__btn .btn {
-  padding: 5px;
   width: 100%;
 }
 
-@media only screen and (min-width: 992px) {
-  .main .method-params__btn .btn {
-    padding: 10px;
-  }
+.main .data-load {
+  display: grid;
 }
 
 .btn {
   font-weight: 600;
+  padding: 5px;
+}
+
+@media only screen and (min-width: 992px) {
+  .btn {
+    padding: 10px;
+  }
 }
 
 .btn,

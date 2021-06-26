@@ -43,19 +43,23 @@
             margin-top: auto;
             
             .btn {
-                padding: $padding-secondary;
                 width: 100%;
-                
-                @media only screen and (min-width: 992px) {
-                    padding: $padding-primary;
-                }
             }
         }
+    }
+
+    .data-load {
+        display: grid;
     }
 }
 
 .btn {
     font-weight: 600;
+    padding: $padding-secondary;
+                
+    @media only screen and (min-width: 992px) {
+        padding: $padding-primary;
+    }
 }
 
 .btn,
