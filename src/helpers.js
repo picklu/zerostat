@@ -26,7 +26,7 @@ helpers.listTmpDir = (func) => {
         if (error) {
             func({ error });
         } else {
-            func({ files });
+            func({ files, tmpDir });
         }
     })
 }

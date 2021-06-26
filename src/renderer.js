@@ -6,6 +6,7 @@ const domDOMAIN = document.querySelectorAll(".xydomain")
 const domFormParams = document.getElementById("params")
 const domSweep = document.getElementById("sweep")
 const domStatusMessage = document.querySelector(".status-message")
+const domFilePath = document.querySelector(".fpath")
 
 
 // spec of the microcontroller io and amplifier
@@ -286,8 +287,10 @@ window.api.receive("saved", ({ filePath, error }) => {
     }
 })
 
-window.api.receive("listFiles", ({ files, error }) => {
+window.api.receive("listFiles", ({ files, tmpDir, error }) => {
     if (files && files.length) {
+        const lastFile = [...files].pop() || "..."
+        domFilePath.innerText = `${tmpDir}\\${lastFile}`
         console.log(files)
     } else if (error) {
         console.log(error)

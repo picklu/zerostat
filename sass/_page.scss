@@ -129,3 +129,18 @@
 .bold {
     font-weight: 600;
 }
+
+.file-path {
+    display: flex;
+    align-items: center;
+    
+    &__text {
+        margin-left: $margin-primary;
+        font-size: 0.8em;
+        overflow-x: hidden;
+    }
+}
+
+.bold {
+    font-weight: 600;
+}

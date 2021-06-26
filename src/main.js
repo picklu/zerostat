@@ -174,7 +174,7 @@ ipcMain.on("listFiles", (event) => {
         if (result.error && result.error.path) {
             senderWindow.send("listFiles", { error });
         } else if (result.files) {
-            senderWindow.send("listFiles", { files: result.files });
+            senderWindow.send("listFiles", { ...result });
         } else {
             console.log(result)
             senderWindow.send("listFiles", { error: "Something went wrong!" });
