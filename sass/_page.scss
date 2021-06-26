@@ -148,3 +148,11 @@
 .bold {
     font-weight: 600;
 }
+
+.meta-data {
+
+    &__content {
+        margin: $margin-secondary;
+        font-size: 0.8em;
+    }
+}

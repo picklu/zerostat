@@ -277,6 +277,11 @@ table {
   font-weight: 600;
 }
 
+.meta-data__content {
+  margin: 10px;
+  font-size: 0.8em;
+}
+
 /* style for d3js chart */
 .chart-window {
   background-color: #fdfdfd;
