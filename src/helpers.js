@@ -37,7 +37,7 @@ helpers.writeToCSV = (() => {
         const {
             deviceModel,
             firmwareVersion,
-            method: { type: methodType, params: { estart, estop, estep } },
+            method: { type: methodType, params: { estart, estop, estep, scanrate } },
             data } = dataStream;
         const scanId = `${timeString()}_${(++scanNum).toString().padStart(3, '0')}`
         const filePath = path.join(tmpDir, `${scanId}_${methodType.toLowerCase()}.txt`)
@@ -49,6 +49,7 @@ helpers.writeToCSV = (() => {
             [`Method: ${methodType}`],
             [`Device Model: ${deviceModel}-${firmwareVersion}`],
             [`E start: ${estart} V; E Stop: ${estop} V; E Step: ${estep} mV`],
+            [`Scan rate: ${scanrate}`],
             [`Measured time: ${new Date().toISOString()}`],
             ['======= start ======='],
             ['Voltage (V)', 'Current (uA)'],
