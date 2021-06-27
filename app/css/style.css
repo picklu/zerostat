@@ -73,7 +73,7 @@ table {
   .grid {
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: 55px repeat(4, 1fr) 50px;
-    grid-template-areas: "hcn flp flp dtl" "mar chr chr chr" "mar chr chr chr" "mar tfl tfl tfl" "mar mdt mdt mdt" "ftr ftr ftr ftr";
+    grid-template-areas: "hcn flp flp dtl" "mar chr chr chr" "mar chr chr chr" "mar mdt mdt mdt" "mar tfl tfl tfl" "ftr ftr ftr ftr";
   }
 }
 
