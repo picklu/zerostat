@@ -270,7 +270,7 @@ table {
 .file-path__text {
   margin: 0 15px;
   font-size: 0.8em;
-  overflow-x: hidden;
+  overflow-x: auto;
 }
 
 .bold {
