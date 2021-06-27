@@ -35,9 +35,10 @@ const state = {
     isReady: false,
     isRunning: false,
     isEquilibrating: false,
+    isDataReady: false,
+    isWritingData: false,
     errorMessage: "",
     status: "not ready",
-    isWritingData: false,
     method: {
         type: "LSV",
         params: {
@@ -176,8 +177,9 @@ window.addEventListener("DOMContentLoaded", () => {
             draw(state)
         }
         else {
-            if (!state.isWritingData && state.data.length) {
+            if (!state.isWritingData && !state.isRunning && state.isDataReady) {
                 state.isWritingData = true
+                state.isDataReady = false
                 window.api.send("save", state)
             }
         }
@@ -293,6 +295,10 @@ window.api.receive("data", (raw_data) => {
             if (state.isEquilibrating) {
                 state.status = `equilibrating [${eqltime}]`
             } else {
+                if (!state.isDataReady) {
+                    state.isDataReady = true
+                    state.data = []
+                }
                 state.data.push({ x: state.voltage, y: state.current })
             }
         }
@@ -306,7 +312,6 @@ window.api.receive("data", (raw_data) => {
 
 window.api.receive("saved", ({ filePath, error }) => {
     if (filePath) {
-        state.data = []
         state.isWritingData = false
         window.api.send("listFiles")
     } else if (error) {
