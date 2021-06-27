@@ -242,7 +242,7 @@ domMethod.addEventListener("change", (event) => {
     }
 })
 
-// Update plot domain
+// Add updateDomain as change event listener to all the form fields
 domDOMAIN.forEach(input => {
     input.addEventListener("change", updateDomain)
 })
@@ -270,7 +270,7 @@ domFormParams.addEventListener("submit", (event) => {
     window.api.send("sweep", state)
 })
 
-// handle received data
+// On receiving data act accordingly
 window.api.receive("data", (raw_data) => {
     const text_data = raw_data.split(",")
     if (text_data[2] == "READY") {
@@ -310,6 +310,7 @@ window.api.receive("data", (raw_data) => {
     showStatusMessage()
 })
 
+// On saving data query for list of files
 window.api.receive("saved", ({ filePath, error }) => {
     if (filePath) {
         state.isWritingData = false
@@ -321,6 +322,7 @@ window.api.receive("saved", ({ filePath, error }) => {
     }
 })
 
+// On receiving list of files update dom
 window.api.receive("listFiles", ({ files, tmpDir, error }) => {
     if (files && files.length) {
         const lastFile = [...files].pop() || "..."
