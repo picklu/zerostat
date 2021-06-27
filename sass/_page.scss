@@ -18,39 +18,40 @@
         padding: $padding-secondary;
     }
     
-    .serial-comm {
+}
+
+.serial-comm {
+    display: grid;
+    grid-template-columns: 5fr 3fr;
+    grid-column-gap: $border-width-secondary;
+}
+
+.method-params {
+    &__form{
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__input {
+        margin-bottom: $margin-tertiary;
         display: grid;
         grid-template-columns: 5fr 3fr;
         grid-column-gap: $border-width-secondary;
     }
     
-    .method-params {
-        &__form{
-            height: 100%;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-
-        &__input {
-            margin-bottom: $margin-tertiary;
-            display: grid;
-            grid-template-columns: 5fr 3fr;
-            grid-column-gap: $border-width-secondary;
-        }
+    &__btn {
+        margin-top: auto;
         
-        &__btn {
-            margin-top: auto;
-            
-            .btn {
-                width: 100%;
-            }
+        .btn {
+            width: 100%;
         }
     }
+}
 
-    .data-load {
-        display: grid;
-    }
+.data-load {
+    display: grid;
 }
 
 .btn {
@@ -155,4 +156,56 @@
         margin: $margin-secondary;
         font-size: 0.8em;
     }
+}
+
+.temporary-files {
+
+    &__table {
+        font-size: 0.7em;
+        display: grid;
+        grid-template-rows: 40px 100%;
+        height: 100%;
+        
+        
+        .table__head {
+            margin: 0;
+            padding: 0;
+            background-color: $white-primary;
+            font-weight: 600;
+            
+            .table__row {
+                height: 40px;
+            }
+        }
+        
+        .table__body {
+            background-color: $white-primary;
+            overflow-x: hidden;
+            overflow-y: auto;
+            max-height: calc((100vh - 100px) / 8);
+            
+            @media only screen and (min-width: 992px) {
+                max-height: calc((100vh - 105px) / 6);
+
+            } 
+            
+            @media only screen and (min-width: 1200px) {
+                max-height: calc((100vh - 110px) / 4);
+            }
+        }
+
+        .table__row {
+            border-bottom: $border-width-secondary solid $grey-secondary;
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            height: 30px;
+            
+            & > div {
+                align-self: center;
+                text-align: center;
+            }
+        }
+    }
+
+    
 }

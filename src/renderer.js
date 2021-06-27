@@ -7,6 +7,7 @@ const domFormParams = document.getElementById("params")
 const domSweep = document.getElementById("sweep")
 const domStatusMessage = document.querySelector(".status-message")
 const domFilePath = document.querySelector(".fpath")
+const domTableBody = document.querySelector(".table__body")
 
 
 // spec of the microcontroller io and amplifier
@@ -130,6 +131,34 @@ const updateDomain = (event) => {
     // redraw the plot if not running
     if (!state.isRunning) { draw(state) }
 }
+
+
+const listFilesInTable = (files) => {
+    const childNodes = [...document.querySelectorAll(".table__body>.table__row")]
+    for (let i = 0; i < childNodes.length; i++) {
+        if (domTableBody.hasChildNodes(childNodes[i])) {
+            domTableBody.removeChild(childNodes[i])
+        }
+    }
+
+    files.forEach((file, idx) => {
+        const rowNode = document.createElement("div")
+        const idxNode = document.createElement("div")
+        const fileNode = document.createElement("div")
+
+        rowNode.setAttribute("class", "table__row")
+        idxNode.setAttribute("class", "idx")
+        fileNode.setAttribute("class", "file-name")
+        idxNode.appendChild(document.createTextNode(`${idx + 1}`))
+        fileNode.appendChild(document.createTextNode(file))
+        rowNode.appendChild(idxNode)
+        rowNode.appendChild(fileNode)
+        domTableBody.prepend(rowNode)
+    })
+}
+
+// end of helper function
+
 
 // get ports once the dom content is loaded
 window.addEventListener("DOMContentLoaded", () => {
@@ -291,7 +320,7 @@ window.api.receive("listFiles", ({ files, tmpDir, error }) => {
     if (files && files.length) {
         const lastFile = [...files].pop() || "..."
         domFilePath.innerText = `${tmpDir}\\${lastFile}`
-        console.log(files)
+        listFilesInTable(files)
     } else if (error) {
         console.log(error)
     }
