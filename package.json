@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "description": "A GUI app for arduino-based potentiiostat",
   "main": "./src/main.js",
+  "build": {
+    "win": {
+    "icon": "./app/assets/electrostat.png"
+    }
+  },
   "scripts": {
     "build-css": "node-sass --output-style expanded --include-path sass sass/main.scss app/css/style.css",
     "dev-css": "npm run build-css -- --watch",
