@@ -177,6 +177,67 @@ table {
   display: grid;
 }
 
+.temporary-files__table {
+  font-size: 0.7em;
+  display: grid;
+  grid-template-rows: 40px 100%;
+  height: 100%;
+}
+
+.temporary-files__table .table__head {
+  margin: 0;
+  padding: 0;
+  background-color: #fdfdfd;
+  font-weight: 600;
+}
+
+.temporary-files__table .table__head .table__row {
+  height: 40px;
+}
+
+.temporary-files__table .table__body {
+  background-color: #fdfdfd;
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: calc((100vh - 100px) / 8);
+}
+
+@media only screen and (min-width: 992px) {
+  .temporary-files__table .table__body {
+    max-height: calc((100vh - 105px) / 6);
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .temporary-files__table .table__body {
+    max-height: calc((100vh - 110px) / 4);
+  }
+}
+
+.temporary-files__table .table__row {
+  border-bottom: 3px solid #b9bbbb;
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  height: 30px;
+}
+
+.temporary-files__table .table__row > div {
+  align-self: center;
+  text-align: center;
+}
+
+.meta-data__content {
+  margin: 10px;
+  font-size: 0.8em;
+}
+
+.footer {
+  background-color: #053a6b;
+  color: #fdfdfd;
+  font-size: 0.7em;
+  padding: 0 10px;
+}
+
 .btn {
   font-weight: 600;
   padding: 5px;
@@ -236,13 +297,6 @@ table {
   text-shadow: 1px 1px 1px #0fa13b;
 }
 
-.footer {
-  background-color: #053a6b;
-  color: #fdfdfd;
-  font-size: 0.7em;
-  padding: 0 10px;
-}
-
 .sweep {
   font-size: medium;
   height: 50px;
@@ -277,58 +331,12 @@ table {
   font-weight: 600;
 }
 
-.meta-data__content {
-  margin: 10px;
-  font-size: 0.8em;
-}
-
-.temporary-files__table {
-  font-size: 0.7em;
+.active {
   display: grid;
-  grid-template-rows: 40px 100%;
-  height: 100%;
 }
 
-.temporary-files__table .table__head {
-  margin: 0;
-  padding: 0;
-  background-color: #fdfdfd;
-  font-weight: 600;
-}
-
-.temporary-files__table .table__head .table__row {
-  height: 40px;
-}
-
-.temporary-files__table .table__body {
-  background-color: #fdfdfd;
-  overflow-x: hidden;
-  overflow-y: auto;
-  max-height: calc((100vh - 100px) / 8);
-}
-
-@media only screen and (min-width: 992px) {
-  .temporary-files__table .table__body {
-    max-height: calc((100vh - 105px) / 6);
-  }
-}
-
-@media only screen and (min-width: 1200px) {
-  .temporary-files__table .table__body {
-    max-height: calc((100vh - 110px) / 4);
-  }
-}
-
-.temporary-files__table .table__row {
-  border-bottom: 3px solid #b9bbbb;
-  display: grid;
-  grid-template-columns: 1fr 3fr;
-  height: 30px;
-}
-
-.temporary-files__table .table__row > div {
-  align-self: center;
-  text-align: center;
+.inactive {
+  display: none;
 }
 
 /* style for d3js chart */
