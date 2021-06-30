@@ -134,7 +134,7 @@ const updateDomain = (event) => {
 }
 
 
-const listFilesInTable = (files) => {
+const listFilesInTable = (files, tmpDir) => {
     const childNodes = [...document.querySelectorAll(".table__body>.table__row")]
     for (let i = 0; i < childNodes.length; i++) {
         if (domTableBody.hasChildNodes(childNodes[i])) {
@@ -145,15 +145,21 @@ const listFilesInTable = (files) => {
     files.forEach((file, idx) => {
         const rowNode = document.createElement("div")
         const idxNode = document.createElement("div")
-        const fileNode = document.createElement("div")
+        const fileDirNode = document.createElement("div")
+        const fileNameNode = document.createElement("div")
 
         rowNode.setAttribute("class", "table__row")
         idxNode.setAttribute("class", "idx")
-        fileNode.setAttribute("class", "file-name")
+        fileDirNode.setAttribute("class", "file-dir")
+        fileNameNode.setAttribute("class", "file-name")
+        fileDirNode.setAttribute("data", tmpDir)
+        fileNameNode.setAttribute("data", file)
         idxNode.appendChild(document.createTextNode(`${idx + 1}`))
-        fileNode.appendChild(document.createTextNode(file))
+        fileDirNode.appendChild(document.createTextNode(tmpDir))
+        fileNameNode.appendChild(document.createTextNode(file))
         rowNode.appendChild(idxNode)
-        rowNode.appendChild(fileNode)
+        rowNode.appendChild(fileDirNode)
+        rowNode.appendChild(fileNameNode)
         domTableBody.prepend(rowNode)
     })
 }
@@ -327,7 +333,7 @@ window.api.receive("listFiles", ({ files, tmpDir, error }) => {
     if (files && files.length) {
         const lastFile = [...files].pop() || "..."
         domFilePath.innerText = `${tmpDir}\\${lastFile}`
-        listFilesInTable(files)
+        listFilesInTable(files, tmpDir)
     } else if (error) {
         console.log(error)
     }

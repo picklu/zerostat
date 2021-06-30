@@ -214,21 +214,21 @@ table {
   }
 }
 
+.temporary-files__table .table__body .table__row:hover {
+  background-color: #dcdfe0;
+  font-size: 1.1em;
+}
+
 .temporary-files__table .table__row {
   border-bottom: 3px solid #b9bbbb;
   display: grid;
-  grid-template-columns: 1fr 3fr;
+  grid-template-columns: 1fr 2fr 5fr;
   height: 30px;
 }
 
 .temporary-files__table .table__row > div {
   align-self: center;
   text-align: center;
-}
-
-.temporary-files__table .table__row:hover {
-  background-color: #dcdfe0;
-  font-size: 1.1em;
 }
 
 .meta-data__content {

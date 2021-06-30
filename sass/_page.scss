@@ -88,22 +88,22 @@
             @media only screen and (min-width: 1200px) {
                 max-height: calc((100vh - 110px) / 4);
             }
+
+            .table__row:hover {
+                    background-color: $white-secondary;
+                    font-size: 1.1em;
+            }
         }
 
         .table__row {
             border-bottom: $border-width-secondary solid $grey-secondary;
             display: grid;
-            grid-template-columns: 1fr 3fr;
+            grid-template-columns: 1fr 2fr 5fr;
             height: 30px;
             
             & > div {
                 align-self: center;
                 text-align: center;
-            }
-
-            &:hover {
-                background-color: $white-secondary;
-                font-size: 1.1em;
             }
         }
     }   
