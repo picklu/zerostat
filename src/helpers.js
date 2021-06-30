@@ -21,6 +21,24 @@ const timeString = (time = null) => {
     return `${year}${month}${date}_${hours}${minutes}${seconds}${milliSeconds}`
 };
 
+helpers.readFile = (func, offset = 8) => {
+    fs.readFile(fname, 'utf-8', (err, data) => {
+        if (err) {
+            func({ error: err })
+        } else {
+            try {
+                data = data.toString().split('\n').slice(offset, -1).map(d => {
+                    const rd = d.split(',')
+                    return [Number(rd[0]), Number(rd[1])]
+                })
+                func({ data })
+            } catch (error) {
+                func({ error })
+            }
+        }
+    })
+}
+
 helpers.listTmpDir = (func) => {
     fs.readdir(tmpDir, (error, files) => {
         if (error) {
