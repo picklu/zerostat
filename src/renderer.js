@@ -8,6 +8,7 @@ const domSweep = document.getElementById("sweep")
 const domStatusMessage = document.querySelector(".status-message")
 const domFilePath = document.querySelector(".fpath")
 const domTableBody = document.querySelector(".table__body")
+const domMetaData = document.querySelector(".mdata");
 
 
 // spec of the microcontroller io and amplifier

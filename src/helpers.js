@@ -21,14 +21,16 @@ const timeString = (time = null) => {
     return `${year}${month}${date}_${hours}${minutes}${seconds}${milliSeconds}`
 };
 
-helpers.readFile = (func, offset = 8) => {
+helpers.readFile = (func, meta = false) => {
     fs.readFile(fname, 'utf-8', (err, data) => {
         if (err) {
             func({ error: err })
         } else {
             try {
+                const start = meta ? 0 : 8
+                const end = meta ? 8 : -1
                 func({
-                    data: data.toString().split('\n').slice(offset, -1).map(rd => {
+                    data: data.toString().split('\n').slice(start, end).map(rd => {
                         return rd.split(',').map(d => {
                             return Number(d)
                         })
