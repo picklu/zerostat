@@ -226,6 +226,11 @@ table {
   text-align: center;
 }
 
+.temporary-files__table .table__row:hover {
+  background-color: #dcdfe0;
+  font-size: 1.1em;
+}
+
 .meta-data__content {
   margin: 10px;
   font-size: 0.8em;
