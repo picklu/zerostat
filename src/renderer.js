@@ -276,6 +276,23 @@ domFormParams.addEventListener("submit", (event) => {
     window.api.send("sweep", state)
 })
 
+
+domTableBody.addEventListener("click", (event) => {
+    event.preventDefault()
+
+    const className = event.target.classList.value
+
+    if (className === 'idx' || className === 'file-dir' || className === 'file-name') {
+        const domTableRow = event.target.parentElement
+        const domFileDir = domTableRow.querySelector('.file-dir')
+        const domFileName = domTableRow.querySelector('.file-name')
+        const fileDir = domFileDir.getAttribute('data')
+        const fileName = domFileName.getAttribute('data')
+        console.log('Dir', fileDir, 'File', fileName)
+        domFilePath.innerText = `${fileDir}\\${fileName}`
+    }
+})
+
 // On receiving data act accordingly
 window.api.receive("data", (raw_data) => {
     const text_data = raw_data.split(",")
