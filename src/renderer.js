@@ -155,7 +155,7 @@ const listFilesInTable = (files, tmpDir) => {
         fileDirNode.setAttribute("data", tmpDir)
         fileNameNode.setAttribute("data", file)
         idxNode.appendChild(document.createTextNode(`${idx + 1}`))
-        fileDirNode.appendChild(document.createTextNode(tmpDir))
+        fileDirNode.appendChild(document.createTextNode(`...${tmpDir.slice(-9)}`))
         fileNameNode.appendChild(document.createTextNode(file))
         rowNode.appendChild(idxNode)
         rowNode.appendChild(fileDirNode)
