@@ -289,7 +289,6 @@ domTableBody.addEventListener("click", (event) => {
         const domFileName = domTableRow.querySelector('.file-name')
         const fileDir = domFileDir.getAttribute('data')
         const fileName = domFileName.getAttribute('data')
-        console.log('Dir', fileDir, 'File', fileName)
         domFilePath.innerText = `${fileDir}\\${fileName}`
     }
 })
