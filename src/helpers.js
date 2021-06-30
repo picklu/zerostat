@@ -27,11 +27,13 @@ helpers.readFile = (func, offset = 8) => {
             func({ error: err })
         } else {
             try {
-                data = data.toString().split('\n').slice(offset, -1).map(d => {
-                    const rd = d.split(',')
-                    return [Number(rd[0]), Number(rd[1])]
+                func({
+                    data: data.toString().split('\n').slice(offset, -1).map(rd => {
+                        return rd.split(',').map(d => {
+                            return Number(d)
+                        })
+                    })
                 })
-                func({ data })
             } catch (error) {
                 func({ error })
             }
