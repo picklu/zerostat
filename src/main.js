@@ -4,7 +4,7 @@ const SerialPort = require("serialport")
 const Readline = require("@serialport/parser-readline")
 const { send } = require("process")
 const { stat } = require('fs')
-const { listTmpDir, writeToCSV } = require("./helpers")
+const { listTmpDir, readFile, writeToCSV } = require("./helpers")
 
 const windows = new Set()
 
@@ -170,14 +170,29 @@ ipcMain.on("save", (event, state) => {
 ipcMain.on("listFiles", (event) => {
     const senderWindow = event.sender
 
-    listTmpDir((result) => {
-        if (result.error && result.error.path) {
+    listTmpDir(({ error, files, tmpDir }) => {
+        if (error && error.path) {
             senderWindow.send("listFiles", { error });
-        } else if (result.files) {
-            senderWindow.send("listFiles", { ...result });
+        } else if (files) {
+            senderWindow.send("listFiles", { files, tmpDir });
+        } else {
+            senderWindow.send("listFiles", { error: "Something went wrong!" });
+        }
+    })
+})
+
+
+ipcMain.on("load", (event, fname) => {
+    const senderWindow = event.sender
+
+    readFile(fname, ({ error, data }) => {
+        if (error) {
+            senderWindow.send("loaded", { error });
+        } else if (data) {
+            senderWindow.send("loaded", { data });
         } else {
             console.log(result)
-            senderWindow.send("listFiles", { error: "Something went wrong!" });
+            senderWindow.send("loaded", { error: "Something went wrong!" });
         }
     })
 })

@@ -169,6 +169,30 @@ const listFilesInTable = (files, tmpDir) => {
     })
 }
 
+
+const extractData = (data) => {
+    const startMeta = 0
+    const endMeta = 6
+    const startData = 8
+    const endData = -1
+    const result = {}
+
+    try {
+        const metadData = data.toString().split('\n').slice(startMeta, endMeta)
+        const ivData = data.toString().split('\n').slice(startData, endData).map(rd => {
+            return rd.split(',').map(d => {
+                return Number(d)
+            })
+        })
+        result.metaData = metadData.join('\n')
+        result.ivData = ivData
+    } catch (err) {
+        result.error = err
+    }
+
+    return result
+}
+
 // end of helper function
 
 
@@ -293,7 +317,9 @@ domTableBody.addEventListener("click", (event) => {
         const domFileName = domTableRow.querySelector('.file-name')
         const fileDir = domFileDate.getAttribute('data')
         const fileName = domFileName.getAttribute('data')
-        domFilePath.innerText = `${fileDir}\\${fileName}`
+        const filePath = `${fileDir}\\${fileName}`
+        domFilePath.innerText = filePath
+        window.api.send("load", filePath)
     }
 })
 
@@ -353,10 +379,32 @@ window.api.receive("saved", ({ filePath, error }) => {
 window.api.receive("listFiles", ({ files, tmpDir, error }) => {
     if (files && files.length) {
         const lastFile = [...files].pop() || "..."
-        domFilePath.innerText = `${tmpDir}\\${lastFile}`
+        const filePath = `${tmpDir}\\${lastFile}`
+        domFilePath.innerText = lastFile
         listFilesInTable(files, tmpDir)
+        window.api.send("load", filePath)
     } else if (error) {
         console.log(error)
+    }
+    else {
+        console.log("Something went wrong!")
+    }
+})
+
+// On receiving data of the selected file
+window.api.receive("loaded", ({ data, error }) => {
+    if (error) {
+        console.log(error)
+    }
+    else if (data) {
+        const { error, ivData, metaData } = extractData(data)
+        if (error) {
+            console.log(error)
+        }
+        else if (ivData && metaData) {
+            console.log(ivData)
+            domMetaData.innerText = metaData
+        }
     }
     else {
         console.log("Something went wrong!")
