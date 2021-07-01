@@ -146,20 +146,24 @@ const listFilesInTable = (files, tmpDir) => {
     files.forEach((file, idx) => {
         const rowNode = document.createElement("div")
         const idxNode = document.createElement("div")
-        const fileDirNode = document.createElement("div")
+        const fileDateNode = document.createElement("div")
         const fileNameNode = document.createElement("div")
+        const regX = /^(\d{4})(\d{2})(\d{2})_(\d{2})(\d{2})(\d{2})/
+        const match = regX.exec(file)
+        const [__, year, month, day, hour, minute, second] = match
+        const date = new Date(year, month - 1, day, hour, minute, second)
 
         rowNode.setAttribute("class", "table__row")
         idxNode.setAttribute("class", "idx")
-        fileDirNode.setAttribute("class", "file-dir")
+        fileDateNode.setAttribute("class", "file-date")
         fileNameNode.setAttribute("class", "file-name")
-        fileDirNode.setAttribute("data", tmpDir)
+        fileDateNode.setAttribute("data", tmpDir)
         fileNameNode.setAttribute("data", file)
         idxNode.appendChild(document.createTextNode(`${idx + 1}`))
-        fileDirNode.appendChild(document.createTextNode(`...${tmpDir.slice(-9)}`))
+        fileDateNode.appendChild(document.createTextNode(date.toISOString()))
         fileNameNode.appendChild(document.createTextNode(file))
         rowNode.appendChild(idxNode)
-        rowNode.appendChild(fileDirNode)
+        rowNode.appendChild(fileDateNode)
         rowNode.appendChild(fileNameNode)
         domTableBody.prepend(rowNode)
     })
@@ -283,11 +287,11 @@ domTableBody.addEventListener("click", (event) => {
 
     const className = event.target.classList.value
 
-    if (className === 'idx' || className === 'file-dir' || className === 'file-name') {
+    if (className === 'idx' || className === 'file-date' || className === 'file-name') {
         const domTableRow = event.target.parentElement
-        const domFileDir = domTableRow.querySelector('.file-dir')
+        const domFileDate = domTableRow.querySelector('.file-date')
         const domFileName = domTableRow.querySelector('.file-name')
-        const fileDir = domFileDir.getAttribute('data')
+        const fileDir = domFileDate.getAttribute('data')
         const fileName = domFileName.getAttribute('data')
         domFilePath.innerText = `${fileDir}\\${fileName}`
     }
