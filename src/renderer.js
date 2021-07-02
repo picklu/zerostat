@@ -318,7 +318,7 @@ domTableBody.addEventListener("click", (event) => {
         const fileDir = domFileDate.getAttribute('data')
         const fileName = domFileName.getAttribute('data')
         const filePath = `${fileDir}\\${fileName}`
-        domFilePath.innerText = filePath
+        domFilePath.innerText = fileName
         window.api.send("load", filePath)
     }
 })
