@@ -305,7 +305,7 @@ domFormParams.addEventListener("submit", (event) => {
     window.api.send("sweep", state)
 })
 
-
+// Handle click event on data table 
 domTableBody.addEventListener("click", (event) => {
     event.preventDefault()
 
