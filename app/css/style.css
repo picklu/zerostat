@@ -233,6 +233,7 @@ table {
 .temporary-files__table .table__body .table__row:hover {
   background-color: rgba(220, 223, 224, 0.3);
   font-size: 1.1em;
+  cursor: pointer;
 }
 
 .temporary-files__table .table__row {
