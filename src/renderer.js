@@ -8,6 +8,7 @@ const domStatusMessage = document.querySelector(".status-message")
 const domFilePath = document.querySelector(".fpath")
 const domTableBody = document.querySelector(".table__body")
 const domMetaData = document.querySelector(".meta-data");
+const domMainData = document.querySelector(".main-data");
 const domLoadData = document.getElementById("load-data")
 
 
@@ -402,7 +403,7 @@ window.api.receive("loaded", ({ data, error }) => {
             console.log(error)
         }
         else if (ivData && metaData) {
-            console.log(ivData)
+            domMainData.innerText = ivData.join('\n')
             domMetaData.innerText = metaData
         }
     }
