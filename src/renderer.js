@@ -166,6 +166,7 @@ const listFilesInTable = (files, tmpDir) => {
         rowNode.appendChild(idxNode)
         rowNode.appendChild(fileDateNode)
         rowNode.appendChild(fileNameNode)
+        if (idx == files.length - 1) { rowNode.classList.add('active-row') }
         domTableBody.prepend(rowNode)
     })
 }
