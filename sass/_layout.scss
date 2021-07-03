@@ -63,24 +63,17 @@
     grid-area: rdt;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto;
-    grid-template-areas: "mtdr mndr";
+    grid-template-rows: 100%;
     grid-gap: $padding-secondary;
     
+    @media screen and (min-width: 992px) {
+        grid-template-rows: 100%;
+        grid-template-columns: 2fr 1fr;
+    }
+
     @media screen and (min-width: 1200px) {
         grid-template-rows: auto 1fr;
         grid-template-columns: 100%;
-        grid-template-areas: 
-        "mtdr"
-        "mndr";
-    }
-
-    &__main {
-        grid-area: mndr;
-    }
-
-    &__meta {
-        grid-area: mtdr;
     }
 }
 

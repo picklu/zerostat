@@ -403,7 +403,7 @@ window.api.receive("loaded", ({ data, error }) => {
             console.log(error)
         }
         else if (ivData && metaData) {
-            domMainData.innerText = ivData.join('\n')
+            domMainData.innerText = ivData.slice(0, -1).join('\n')
             domMetaData.innerText = metaData
         }
     }
