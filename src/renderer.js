@@ -181,13 +181,14 @@ const extractData = (data) => {
 
     try {
         const metadData = data.toString().split('\n').slice(startMeta, endMeta)
-        const ivData = data.toString().split('\n').slice(startData, endData).map(rd => {
-            return rd.split(',').map(d => {
-                return Number(d)
+        const mainData = data.toString().split('\n').slice(startData, endData).map(rd => {
+            const d = rd.split(',').map(xy => {
+                return Number(xy)
             })
+            return { x: d[0], y: d[1] }
         })
         result.metaData = metadData.join('\n')
-        result.ivData = ivData
+        result.mainData = mainData
     } catch (err) {
         result.error = err
     }
@@ -403,12 +404,16 @@ window.api.receive("loaded", ({ data, error }) => {
         console.log(error)
     }
     else if (data) {
-        const { error, ivData, metaData } = extractData(data)
+        const { error, mainData, metaData } = extractData(data)
         if (error) {
             console.log(error)
         }
-        else if (ivData && metaData) {
-            domMainData.innerText = ivData.slice(0, -1).join('\n')
+        else if (mainData && metaData) {
+            state.data = mainData
+            draw(state)
+            domMainData.innerText = mainData.map(d => {
+                return [d.x, d.y]
+            }).join('\n')
             domMetaData.innerText = metaData
         }
     }
