@@ -169,34 +169,7 @@ const listFilesInTable = (files, tmpDir) => {
         if (idx == files.length - 1) { rowNode.classList.add('active-row') }
         domTableBody.prepend(rowNode)
     })
-}
-
-
-const extractData = (data) => {
-    const startMeta = 0
-    const endMeta = 6
-    const startData = 8
-    const endData = -1
-    const result = {}
-
-    try {
-        const metadData = data.toString().split('\n').slice(startMeta, endMeta)
-        const mainData = data.toString().split('\n').slice(startData, endData).map(rd => {
-            const d = rd.split(',').map(xy => {
-                return Number(xy)
-            })
-            return { x: d[0], y: d[1] }
-        })
-        result.metaData = metadData.join('\n')
-        result.mainData = mainData
-    } catch (err) {
-        result.error = err
-    }
-
-    return result
-}
-
-// end of helper function
+}// end of helper function
 
 
 // get ports once the dom content is loaded
@@ -399,23 +372,15 @@ window.api.receive("listFiles", ({ files, tmpDir, error }) => {
 })
 
 // On receiving data of the selected file
-window.api.receive("loaded", ({ data, error }) => {
+window.api.receive("loaded", ({ error, mainDataText, mainDataObj, metaData }) => {
     if (error) {
         console.log(error)
     }
-    else if (data) {
-        const { error, mainData, metaData } = extractData(data)
-        if (error) {
-            console.log(error)
-        }
-        else if (mainData && metaData) {
-            state.data = mainData
-            draw(state)
-            domMainData.innerText = mainData.map(d => {
-                return [d.x, d.y]
-            }).join('\n')
-            domMetaData.innerText = metaData
-        }
+    else if (mainDataText && mainDataObj && metaData) {
+        state.data = mainDataObj
+        draw(state)
+        domMainData.innerText = mainDataText
+        domMetaData.innerText = metaData
     }
     else {
         console.log("Something went wrong!")

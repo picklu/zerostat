@@ -21,6 +21,33 @@ const timeString = (time = null) => {
     return `${year}${month}${date}_${hours}${minutes}${seconds}${milliSeconds}`
 };
 
+helpers.extractData = (data) => {
+    const startMeta = 0
+    const endMeta = 6
+    const startData = 8
+    const endData = -1
+    const result = {}
+
+    try {
+        const metadData = data.toString().split('\n').slice(startMeta, endMeta).join('\n')
+        const mainData = data.toString().split('\n').slice(startData, endData)
+        const mainDataText = mainData.join('\n')
+        const mainDataObj = mainData.map(rd => {
+            const d = rd.split(',').map(xy => {
+                return Number(xy)
+            })
+            return { x: d[0], y: d[1] }
+        })
+        result.metaData = metadData
+        result.mainDataText = mainDataText
+        result.mainDataObj = mainDataObj
+    } catch (err) {
+        result.error = err
+    }
+
+    return result
+}
+
 helpers.readFile = (fname, func) => {
     fs.readFile(fname, 'utf-8', (error, data) => {
         if (error) {

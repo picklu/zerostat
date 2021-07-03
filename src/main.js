@@ -4,7 +4,7 @@ const SerialPort = require("serialport")
 const Readline = require("@serialport/parser-readline")
 const { send } = require("process")
 const { stat } = require('fs')
-const { listTmpDir, readFile, writeToCSV } = require("./helpers")
+const { extractData, listTmpDir, readFile, writeToCSV } = require("./helpers")
 
 const windows = new Set()
 
@@ -189,7 +189,7 @@ ipcMain.on("load", (event, fname) => {
         if (error) {
             senderWindow.send("loaded", { error });
         } else if (data) {
-            senderWindow.send("loaded", { data });
+            senderWindow.send("loaded", extractData(data));
         } else {
             console.log(result)
             senderWindow.send("loaded", { error: "Something went wrong!" });
