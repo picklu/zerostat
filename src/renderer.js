@@ -299,14 +299,21 @@ domTableBody.addEventListener("click", (event) => {
             row.classList.remove('active-row')
         })
         domTableRow.classList.add('active-row')
-        window.api.send("load", filePath)
+        window.api.send('load', filePath)
     }
 })
 
+// Handle click event on Open File
+domLoadData.addEventListener('click', (event) => {
+    event.preventDefault()
+    const filePath = domFilePath.getAttribute('data')
+    window.api.send('open', filePath)
+})
+
 // On receiving data act accordingly
-window.api.receive("data", (raw_data) => {
+window.api.receive('data', (raw_data) => {
     const text_data = raw_data.split(",")
-    if (text_data[2] == "READY") {
+    if (text_data[2] == 'READY') {
         state.deviceModel = text_data[0]
         state.firmwareVersion = text_data[1]
         state.isReady = true
@@ -360,6 +367,7 @@ window.api.receive("listFiles", ({ files, tmpDir, error }) => {
     if (files && files.length) {
         const lastFile = [...files].pop() || "..."
         const filePath = `${tmpDir}\\${lastFile}`
+        domFilePath.setAttribute('data', filePath)
         domFilePath.innerText = lastFile
         listFilesInTable(files, tmpDir)
         window.api.send("load", filePath)

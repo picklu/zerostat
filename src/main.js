@@ -2,8 +2,9 @@ const { app, BrowserWindow, ipcMain } = require("electron")
 const path = require("path")
 const SerialPort = require("serialport")
 const Readline = require("@serialport/parser-readline")
+const { stat } = require("fs")
 const { send } = require("process")
-const { stat } = require('fs')
+const spawn = require("child_process").spawn
 const { extractData, listTmpDir, readFile, writeToCSV } = require("./helpers")
 
 const windows = new Set()
@@ -195,4 +196,10 @@ ipcMain.on("load", (event, fname) => {
             senderWindow.send("loaded", { error: "Something went wrong!" });
         }
     })
+})
+
+ipcMain.on("open", (event, fname) => {
+    if (fname) {
+        spawn('notepad', [fname])
+    }
 })
