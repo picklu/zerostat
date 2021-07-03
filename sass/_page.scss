@@ -88,7 +88,7 @@
             }
 
             .table__row:hover {
-                    background-color: $white-secondary;
+                    background-color: rgba($white-secondary, 0.3);
                     font-size: 1.1em;
             }
         }
@@ -234,4 +234,9 @@
 
 .inactive {
     display: none;
+}
+
+.active-row {
+    background-color: $white-secondary;
+    font-size: 1.1em;
 }

@@ -231,7 +231,7 @@ table {
 }
 
 .temporary-files__table .table__body .table__row:hover {
-  background-color: #dcdfe0;
+  background-color: rgba(220, 223, 224, 0.3);
   font-size: 1.1em;
 }
 
@@ -381,6 +381,11 @@ table {
 
 .inactive {
   display: none;
+}
+
+.active-row {
+  background-color: #dcdfe0;
+  font-size: 1.1em;
 }
 
 /* style for d3js chart */

@@ -320,6 +320,10 @@ domTableBody.addEventListener("click", (event) => {
         const fileName = domFileName.getAttribute('data')
         const filePath = `${fileDir}\\${fileName}`
         domFilePath.innerText = fileName
+        domTableRow.parentElement.querySelectorAll('.table__row').forEach(row => {
+            row.classList.remove('active-row')
+        })
+        domTableRow.classList.add('active-row')
         window.api.send("load", filePath)
     }
 })
