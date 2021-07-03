@@ -66,14 +66,14 @@ table {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: 50px repeat(4, 1fr) 50px;
-  grid-template-areas: "hcn dtl flp flp" "chr chr chr chr" "chr chr chr chr" "mar mar mdt mdt" "tfl tfl tfl tfl" "ftr ftr ftr ftr";
+  grid-template-areas: "hcn dtl flp flp" "chr chr chr chr" "chr chr chr chr" "mar mar rdt rdt" "tfl tfl tfl tfl" "ftr ftr ftr ftr";
 }
 
 @media only screen and (min-width: 992px) {
   .grid {
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: 55px repeat(4, 1fr) 50px;
-    grid-template-areas: "hcn flp flp dtl" "mar chr chr chr" "mar chr chr chr" "mar mdt mdt mdt" "mar tfl tfl tfl" "ftr ftr ftr ftr";
+    grid-template-areas: "hcn flp flp dtl" "mar chr chr chr" "mar chr chr chr" "mar rdt rdt rdt" "mar tfl tfl tfl" "ftr ftr ftr ftr";
   }
 }
 
@@ -81,7 +81,7 @@ table {
   .grid {
     grid-template-columns: 3fr 7fr 2fr;
     grid-template-rows: 60px repeat(3, 1fr) 50px;
-    grid-template-areas: "hcn flp dtl" "mar chr mdt" "mar chr mdt" "mar tfl mdt" "ftr ftr ftr";
+    grid-template-areas: "hcn flp dtl" "mar chr rdt" "mar chr rdt" "mar tfl rdt" "ftr ftr ftr";
   }
 }
 
@@ -105,8 +105,29 @@ table {
   grid-area: chr;
 }
 
-.meta-data {
-  grid-area: mdt;
+.raw-data {
+  grid-area: rdt;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  grid-template-areas: "mtdr mndr";
+  grid-gap: 5px;
+}
+
+@media screen and (min-width: 1200px) {
+  .raw-data {
+    grid-template-rows: auto 1fr;
+    grid-template-columns: 100%;
+    grid-template-areas: "mtdr" "mndr";
+  }
+}
+
+.raw-data__main {
+  grid-area: mndr;
+}
+
+.raw-data__meta {
+  grid-area: mtdr;
 }
 
 .temporary-files {
@@ -231,9 +252,16 @@ table {
   text-align: center;
 }
 
-.meta-data__content {
-  margin: 10px;
-  font-size: 0.8em;
+.raw-data {
+  font-size: 0.7em;
+}
+
+.raw-data__main, .raw-data__meta {
+  background-color: #fdfdfd;
+  border: 1px solid #b9bbbb;
+  padding: 5px;
+  overflow: auto;
+  width: 100%;
 }
 
 .footer {

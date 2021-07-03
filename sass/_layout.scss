@@ -11,7 +11,7 @@
         "hcn dtl flp flp"
         "chr chr chr chr"
         "chr chr chr chr"
-        "mar mar mdt mdt"
+        "mar mar rdt rdt"
         "tfl tfl tfl tfl"
         "ftr ftr ftr ftr";
 
@@ -22,7 +22,7 @@
                 "hcn flp flp dtl"
                 "mar chr chr chr"
                 "mar chr chr chr"
-                "mar mdt mdt mdt"
+                "mar rdt rdt rdt"
                 "mar tfl tfl tfl"
                 "ftr ftr ftr ftr";
         }
@@ -32,9 +32,9 @@
             grid-template-rows: 60px repeat(3, 1fr) 50px;
             grid-template-areas:
                 "hcn flp dtl"
-                "mar chr mdt"
-                "mar chr mdt"
-                "mar tfl mdt"
+                "mar chr rdt"
+                "mar chr rdt"
+                "mar tfl rdt"
                 "ftr ftr ftr";
         }    
 }
@@ -59,8 +59,29 @@
     grid-area: chr;
 }
 
-.meta-data {
-    grid-area: mdt;
+.raw-data {
+    grid-area: rdt;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    grid-template-areas: "mtdr mndr";
+    grid-gap: $padding-secondary;
+    
+    @media screen and (min-width: 1200px) {
+        grid-template-rows: auto 1fr;
+        grid-template-columns: 100%;
+        grid-template-areas: 
+        "mtdr"
+        "mndr";
+    }
+
+    &__main {
+        grid-area: mndr;
+    }
+
+    &__meta {
+        grid-area: mtdr;
+    }
 }
 
 .temporary-files {

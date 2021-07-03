@@ -109,11 +109,16 @@
     }   
 }
 
-.meta-data {
+.raw-data {
+    font-size: 0.7em;
 
-    &__content {
-        margin: $margin-secondary;
-        font-size: 0.8em;
+    &__main,
+    &__meta {
+        background-color: $white-primary;
+        border: $padding-tertiary solid $grey-secondary;
+        padding: $padding-secondary;
+        overflow: auto;
+        width: 100%;
     }
 }
 

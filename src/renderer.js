@@ -1,4 +1,3 @@
-
 const domSerialPorts = document.getElementById("ports")
 const domConnect = document.getElementById("connect")
 const domMethod = document.getElementById("method")
@@ -8,7 +7,8 @@ const domSweep = document.getElementById("sweep")
 const domStatusMessage = document.querySelector(".status-message")
 const domFilePath = document.querySelector(".fpath")
 const domTableBody = document.querySelector(".table__body")
-const domMetaData = document.querySelector(".mdata");
+const domMetaData = document.querySelector(".meta-data");
+const domLoadData = document.getElementById("load-data")
 
 
 // spec of the microcontroller io and amplifier
