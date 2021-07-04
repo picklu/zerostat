@@ -64,23 +64,23 @@ table {
   height: 100vh;
   width: 100vw;
   display: grid;
+  grid-template-rows: 50px repeat(4, calc((100vh - 100px - 3px * 2)/4)) 50px;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: 50px repeat(4, 1fr) 50px;
   grid-template-areas: "hcn dtl flp flp" "chr chr chr chr" "chr chr chr chr" "mar mar rdt rdt" "tfl tfl tfl tfl" "ftr ftr ftr ftr";
 }
 
 @media only screen and (min-width: 992px) {
   .grid {
+    grid-template-rows: 55px repeat(4, calc((100vh - 105px - 3px * 2)/4)) 50px;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: 55px repeat(4, 1fr) 50px;
     grid-template-areas: "hcn flp flp dtl" "mar chr chr chr" "mar chr chr chr" "mar rdt rdt rdt" "mar tfl tfl tfl" "ftr ftr ftr ftr";
   }
 }
 
 @media only screen and (min-width: 1200px) {
   .grid {
+    grid-template-rows: 60px repeat(3, calc((100vh - 110px - 3px * 2)/3)) auto;
     grid-template-columns: 3fr 7fr 2fr;
-    grid-template-rows: 60px repeat(3, 1fr) 50px;
     grid-template-areas: "hcn flp dtl" "mar chr rdt" "mar chr rdt" "mar tfl rdt" "ftr ftr ftr";
   }
 }
@@ -108,15 +108,15 @@ table {
 .raw-data {
   grid-area: rdt;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 50% 50%;
   grid-template-rows: 100%;
   grid-gap: 5px;
 }
 
 @media screen and (min-width: 992px) {
   .raw-data {
-    grid-template-rows: 100%;
     grid-template-columns: 2fr 1fr;
+    grid-template-rows: 100%;
   }
 }
 
@@ -174,6 +174,7 @@ table {
   width: 100%;
   display: flex;
   flex-direction: column;
+  overflow: auto;
 }
 
 .method-params__input {
@@ -195,15 +196,12 @@ table {
   display: grid;
 }
 
-.temporary-files {
-  max-height: 100%;
-}
-
 .temporary-files__table {
+  height: 100%;
   font-size: 0.7em;
   display: grid;
-  grid-template-rows: 40px 100%;
-  max-height: 100%;
+  grid-template-rows: 40px auto;
+  grid-template-columns: 1fr;
 }
 
 .temporary-files__table .table__head {
@@ -217,20 +215,7 @@ table {
 
 .temporary-files__table .table__body {
   background-color: #fdfdfd;
-  overflow-x: hidden;
-  max-height: calc((100vh - 100px) / 8);
-}
-
-@media only screen and (min-width: 992px) {
-  .temporary-files__table .table__body {
-    max-height: calc((100vh - 105px) / 6);
-  }
-}
-
-@media only screen and (min-width: 1200px) {
-  .temporary-files__table .table__body {
-    max-height: calc((100vh - 110px) / 4);
-  }
+  overflow-y: auto;
 }
 
 .temporary-files__table .table__body .table__row:hover {

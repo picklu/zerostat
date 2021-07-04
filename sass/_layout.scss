@@ -5,8 +5,8 @@
     height: 100vh;
     width: 100vw;
     display: grid;
+    grid-template-rows: 50px repeat(4, calc((100vh - 100px - #{$border-width-secondary} * 2)/4)) 50px;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: 50px repeat(4, 1fr) 50px;
     grid-template-areas:
         "hcn dtl flp flp"
         "chr chr chr chr"
@@ -16,8 +16,8 @@
         "ftr ftr ftr ftr";
 
         @media only screen and (min-width: 992px) {
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: 55px repeat(4, 1fr) 50px;
+            grid-template-rows: 55px repeat(4, calc((100vh - 105px - #{$border-width-secondary} * 2)/4)) 50px;
+            grid-template-columns:  repeat(4, 1fr);
             grid-template-areas:
                 "hcn flp flp dtl"
                 "mar chr chr chr"
@@ -28,8 +28,8 @@
         }
 
         @media only screen and (min-width: 1200px) {
+            grid-template-rows: 60px repeat(3, calc((100vh - 110px - #{$border-width-secondary} * 2)/3)) auto;
             grid-template-columns: 3fr 7fr 2fr;
-            grid-template-rows: 60px repeat(3, 1fr) 50px;
             grid-template-areas:
                 "hcn flp dtl"
                 "mar chr rdt"
@@ -62,13 +62,13 @@
 .raw-data {
     grid-area: rdt;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 50% 50%;
     grid-template-rows: 100%;
     grid-gap: $padding-secondary;
     
     @media screen and (min-width: 992px) {
-        grid-template-rows: 100%;
         grid-template-columns: 2fr 1fr;
+        grid-template-rows: 100%;
     }
 
     @media screen and (min-width: 1200px) {
