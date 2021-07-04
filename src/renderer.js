@@ -161,7 +161,7 @@ const listFilesInTable = (files, tmpDir) => {
         fileDateNode.setAttribute("data", tmpDir)
         fileNameNode.setAttribute("data", file)
         idxNode.appendChild(document.createTextNode(`${idx + 1}`))
-        fileDateNode.appendChild(document.createTextNode(date.toISOString()))
+        fileDateNode.appendChild(document.createTextNode(date.toLocaleString()))
         fileNameNode.appendChild(document.createTextNode(file))
         rowNode.appendChild(idxNode)
         rowNode.appendChild(fileDateNode)

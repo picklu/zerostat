@@ -65,15 +65,25 @@ table {
   width: 100vw;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: 50px repeat(4, 1fr) 50px;
-  grid-template-areas: "hcn dtl flp flp" "chr chr chr chr" "chr chr chr chr" "mar mar rdt rdt" "tfl tfl tfl tfl" "ftr ftr ftr ftr";
+  /* grid-template-rows: 50px repeat(4, 1fr) 50px; */
+  grid-template-areas: "hcn dtl flp flp"
+ "chr chr chr chr"
+ "chr chr chr chr"
+ "mar mar rdt rdt"
+ "tfl tfl tfl tfl"
+ "ftr ftr ftr ftr";
 }
 
 @media only screen and (min-width: 992px) {
   .grid {
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: 55px repeat(4, 1fr) 50px;
-    grid-template-areas: "hcn flp flp dtl" "mar chr chr chr" "mar chr chr chr" "mar rdt rdt rdt" "mar tfl tfl tfl" "ftr ftr ftr ftr";
+    grid-template-areas: "hcn flp flp dtl"
+ "mar chr chr chr"
+ "mar chr chr chr"
+ "mar rdt rdt rdt"
+ "mar tfl tfl tfl"
+ "ftr ftr ftr ftr";
   }
 }
 
@@ -81,7 +91,11 @@ table {
   .grid {
     grid-template-columns: 3fr 7fr 2fr;
     grid-template-rows: 60px repeat(3, 1fr) 50px;
-    grid-template-areas: "hcn flp dtl" "mar chr rdt" "mar chr rdt" "mar tfl rdt" "ftr ftr ftr";
+    grid-template-areas: "hcn flp dtl"
+ "mar chr rdt"
+ "mar chr rdt"
+ "mar tfl rdt"
+ "ftr ftr ftr";
   }
 }
 

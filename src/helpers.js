@@ -87,7 +87,7 @@ helpers.writeToCSV = (() => {
             [`Device Model: ${deviceModel}-${firmwareVersion}`],
             [`E start: ${estart} V; E Stop: ${estop} V; E Step: ${estep} mV`],
             [`Scan rate: ${scanrate}`],
-            [`Measured time: ${new Date().toISOString()}`],
+            [`Time of measurement: ${new Date().toISOString()}`],
             ['======= start ======='],
             ['Voltage (V)', 'Current (uA)'],
         ];
