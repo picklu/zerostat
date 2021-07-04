@@ -79,7 +79,7 @@ table {
 
 @media only screen and (min-width: 1200px) {
   .grid {
-    grid-template-rows: 60px repeat(3, calc((100vh - 110px - 3px * 2)/3)) auto;
+    grid-template-rows: 60px repeat(3, calc((100vh - 110px - 3px * 2)/3)) 50px;
     grid-template-columns: 3fr 7fr 2fr;
     grid-template-areas: "hcn flp dtl" "mar chr rdt" "mar chr rdt" "mar tfl rdt" "ftr ftr ftr";
   }
