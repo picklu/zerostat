@@ -1,10 +1,11 @@
-const { app, BrowserWindow, ipcMain } = require("electron")
+const { app, BrowserWindow, ipcMain, Menu } = require("electron")
 const path = require("path")
 const SerialPort = require("serialport")
 const Readline = require("@serialport/parser-readline")
 const { stat } = require("fs")
 const { send } = require("process")
 const spawn = require("child_process").spawn
+const menu = require('./menu')
 const { extractData, listTmpDir, readFile, writeToCSV } = require("./helpers")
 
 const windows = new Set()
@@ -17,7 +18,7 @@ app.on("ready", () => {
 })
 
 app.on("window-all-closed", () => {
-    if (process.platform === "darwin") {
+    if (process.platform === "darwin" || process.platform === 'win32') {
         return false
     }
     app.quit()
@@ -65,6 +66,9 @@ const createWindow = exports.createWindow = () => {
     windows.add(newWindow)
     return newWindow
 }
+
+Menu.setApplicationMenu(menu)
+
 
 app.allowRendererProcessReuse = false
 
