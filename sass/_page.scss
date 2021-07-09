@@ -4,8 +4,8 @@
 .main {
     font-size: 2em;
     background-color: $grey-secondary ;
-    border: $border-width-secondary groove $grey-tertiary;
-    border-radius: $border-radius-primary;
+    border: $border-width-tertiary dolid $grey-secondary;
+    // border-radius: $border-radius-primary;
 
     @media only screen and (min-width: 1200px) {
         font-size: 2.2em;
@@ -13,8 +13,8 @@
     
     &__cell {
         background-color: $white-tertiary;
-        border: $border-width-secondary groove $grey-tertiary;
-        border-radius: 5px;
+        border: $border-width-tertiary solid $grey-secondary;
+        border-radius: 2px;
         padding: $padding-secondary;
     }
     
