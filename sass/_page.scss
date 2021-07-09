@@ -85,7 +85,7 @@
         }
 
         .table__row {
-            border-bottom: $border-width-secondary solid $grey-secondary;
+            border-bottom: $border-width-tertiary solid $grey-secondary;
             display: grid;
             grid-template-columns: 1fr 2fr 3fr;
             padding: $padding-secondary 0;

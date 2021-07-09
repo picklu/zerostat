@@ -224,7 +224,7 @@ table {
 }
 
 .temporary-files__table .table__row {
-  border-bottom: 3px solid #b9bbbb;
+  border-bottom: 1px solid #b9bbbb;
   display: grid;
   grid-template-columns: 1fr 2fr 3fr;
   padding: 5px 0;
