@@ -1,3 +1,4 @@
+require('dotenv').config()
 const { app, BrowserWindow, ipcMain, Menu } = require("electron")
 const path = require("path")
 const SerialPort = require("serialport")
@@ -207,3 +208,5 @@ ipcMain.on("open", (event, fname) => {
         spawn('notepad', [fname])
     }
 })
+
+console.log(typeof (process.env.DEBUG))

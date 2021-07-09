@@ -5,7 +5,7 @@
   "main": "./src/main.js",
   "build": {
     "win": {
-    "icon": "./app/assets/electrostat.png"
+      "icon": "./app/assets/electrostat.png"
     }
   },
   "scripts": {
@@ -46,6 +46,7 @@
   },
   "dependencies": {
     "d3": "^6.7.0",
+    "dotenv": "^9.0.2",
     "fast-csv": "^4.3.6",
     "serialport": "^9.1.0"
   }

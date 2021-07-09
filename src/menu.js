@@ -33,6 +33,18 @@ if (process.platform === 'darwin' || process.platform === 'win32') {
         })
 }
 
+if (process.env.DEBUG === 'true') {
+    template.push({
+        label: 'Debugging',
+        submenu: [
+            { label: 'Dev Tools', role: 'toggleDevTools' },
+            { type: 'separator' },
+            { role: 'reload', accelerator: 'Alt+R' }
+        ]
+    })
+}
+
+
 const menu = Menu.buildFromTemplate(template)
 
 module.exports = menu
