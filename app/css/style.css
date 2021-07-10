@@ -226,9 +226,9 @@ table {
 }
 
 .temporary-files__table .table__body .table__row:hover {
-  background-color: rgba(220, 223, 224, 0.3);
-  font-size: 1.1em;
+  background-color: rgba(20, 218, 79, 0.1);
   cursor: pointer;
+  font-size: 1.1em;
 }
 
 .temporary-files__table .table__row {
@@ -320,7 +320,7 @@ table {
 
 .btn:disabled {
   color: #d3340c;
-  text-shadow: 1px 1px 1px #0fa13b;
+  text-shadow: 1px 1px 1px #14da4f;
 }
 
 .sweep {
@@ -366,8 +366,8 @@ table {
 }
 
 .active-row {
-  background-color: #dcdfe0;
-  font-size: 1.1em;
+  color: #096bc7;
+  font-weight: 600;
 }
 
 /* style for d3js chart */

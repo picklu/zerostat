@@ -77,9 +77,9 @@
             overflow-y: auto;
 
             .table__row:hover {
-                    background-color: rgba($white-secondary, 0.3);
-                    font-size: 1.1em;
-                    cursor: pointer;
+                background-color: rgba($green-primary, 0.1);
+                cursor: pointer;
+                font-size: 1.1em;
             }
         }
 
@@ -216,6 +216,6 @@
 }
 
 .active-row {
-    background-color: $white-secondary;
-    font-size: 1.1em;
+    color: $blue-secondary;
+    font-weight: 600;
 }
