@@ -5,7 +5,7 @@
     height: 100vh;
     width: 100vw;
     display: grid;
-    grid-template-rows: 50px repeat(4, calc((100vh - 100px - #{$border-width-tertiary})/4)) 50px;
+    grid-template-rows: 50px repeat(4, calc((100vh - 100px)/4)) 50px;
     grid-template-columns: repeat(4, 1fr);
     grid-template-areas:
         "hcn dtl flp flp"
@@ -16,7 +16,7 @@
         "ftr ftr ftr ftr";
 
         @media only screen and (min-width: 992px) {
-            grid-template-rows: 55px repeat(4, calc((100vh - 105px - #{$border-width-tertiary})/4)) 50px;
+            grid-template-rows: 55px repeat(4, calc((100vh - 105px)/4)) 50px;
             grid-template-columns:  repeat(4, 1fr);
             grid-template-areas:
                 "hcn flp flp dtl"
@@ -28,7 +28,7 @@
         }
 
         @media only screen and (min-width: 1200px) {
-            grid-template-rows: 60px repeat(3, calc((100vh - 110px - #{$border-width-tertiary})/3)) 50px;
+            grid-template-rows: 60px repeat(3, calc((100vh - 110px)/3)) 50px;
             grid-template-columns: 3fr 7fr 2fr;
             grid-template-areas:
                 "hcn flp dtl"
