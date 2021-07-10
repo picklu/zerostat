@@ -83,6 +83,16 @@ table {
   }
 }
 
+.raw-data {
+  max-height: calc((100vh - 4.2em) / 4);
+}
+
+@media only screen and (min-width: 1200px) {
+  .raw-data {
+    max-height: 100%;
+  }
+}
+
 .serial-comm {
   grid-area: hcn;
 }
@@ -234,19 +244,6 @@ table {
 
 .raw-data {
   font-size: 0.7em;
-  max-height: calc((100vh - 110px) / 2);
-}
-
-@media only screen and (min-width: 992px) {
-  .raw-data {
-    max-height: calc((100vh - 115px) / 4);
-  }
-}
-
-@media only screen and (min-width: 1200px) {
-  .raw-data {
-    max-height: 100%;
-  }
 }
 
 .raw-data__main, .raw-data__meta {

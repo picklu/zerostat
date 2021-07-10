@@ -98,20 +98,11 @@
 
 .raw-data {
     font-size: 0.7em;
-    max-height: calc((100vh - 110px) / 2);
-            
-    @media only screen and (min-width: 992px) {
-        max-height: calc((100vh - 115px) / 4);
-    } 
-
-    @media only screen and (min-width: 1200px) {
-        max-height: 100%;
-    } 
 
     &__main,
     &__meta {
         background-color: $white-primary;
-        border: $padding-tertiary solid $grey-secondary;
+        border: $border-width-tertiary solid $grey-secondary;
         border-radius: $border-radius-secondary;
         padding: $padding-secondary;
         overflow-x: hidden;

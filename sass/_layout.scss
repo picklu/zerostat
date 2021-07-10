@@ -37,6 +37,14 @@
         }    
 }
 
+.raw-data {
+    max-height: calc((100vh - 4.2em) / 4);
+
+    @media only screen and (min-width: 1200px) {
+        max-height: 100%;
+    } 
+}
+
 .serial-comm {
     grid-area: hcn;
 }
