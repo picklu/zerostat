@@ -21,6 +21,14 @@ const timeString = (time = null) => {
     return `${year}${month}${date}_${hours}${minutes}${seconds}${milliSeconds}`
 };
 
+helpers.toTitleCase = (str) => {
+    if (str.length > 1) {
+        return `${str[0].toUpperCase()}${str.slice(1).toLowerCase()}`
+    }
+
+    return str.toUpperCase()
+}
+
 helpers.extractData = (data) => {
     const startMeta = 0
     const endMeta = 6

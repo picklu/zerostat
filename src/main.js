@@ -7,7 +7,7 @@ const { stat } = require("fs")
 const { send } = require("process")
 const spawn = require("child_process").spawn
 const menu = require('./menu')
-const { extractData, listTmpDir, readFile, writeToCSV } = require("./helpers")
+const { extractData, listTmpDir, readFile, toTitleCase, writeToCSV } = require("./helpers")
 
 const windows = new Set()
 
@@ -27,7 +27,7 @@ app.on("window-all-closed", () => {
 
 const createWindow = exports.createWindow = () => {
     let x, y
-    const windowTitle = `${app.getName()} | v${app.getVersion()}`
+    const windowTitle = `${toTitleCase(app.getName())} | V-${app.getVersion()}`
     const currentWindow = BrowserWindow.getFocusedWindow()
     if (currentWindow) {
         const [currentWindowX, currentWindowY] = currentWindow.getPosition()
