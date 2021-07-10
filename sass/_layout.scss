@@ -5,7 +5,7 @@
     height: 100vh;
     width: 100vw;
     display: grid;
-    grid-template-rows: 2.2em repeat(4, calc((100vh - 4.2em)/4)) 2em;
+    grid-template-rows: 2.2em repeat(4, calc((100vh - 4.2em) / 4)) 2em;
     grid-template-columns: repeat(4, 1fr);
     grid-template-areas:
         "hcn dtl flp flp"
@@ -26,7 +26,7 @@
         }
 
         @media only screen and (min-width: 1200px) {
-            grid-template-rows: 2.2em repeat(3, calc((100vh - 4.2em)/3)) 2em;
+            grid-template-rows: 2.2em repeat(3, calc((100vh - 4.2em) / 3)) 2em;
             grid-template-columns: 3fr 7fr 2fr;
             grid-template-areas:
                 "hcn flp dtl"
