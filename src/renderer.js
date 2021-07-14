@@ -7,10 +7,10 @@ const domSweep = document.getElementById("sweep")
 const domStatusMessage = document.querySelector(".status-message")
 const domFilePath = document.querySelector(".fpath")
 const domTableBody = document.querySelector(".table__body")
-const domMetaData = document.querySelector(".meta-data");
-const domMainData = document.querySelector(".main-data");
+const domMetaData = document.querySelector(".meta-data")
+const domMainData = document.querySelector(".main-data")
 const domLoadData = document.getElementById("load-data")
-
+const domVoltageLimitInputs = document.querySelectorAll(".voltage-limit")
 
 // spec of the microcontroller io and amplifier
 const DAC_BIT = 12
@@ -209,6 +209,13 @@ window.api.receive("ports", (ports) => {
 
         domSerialPorts.innerHTML = items.join("")
     }
+})
+
+// Update input values of the voltage limits  in two decimal points
+domVoltageLimitInputs.forEach(input => {
+    input.addEventListener("input", () => {
+        input.value = (+input.value).toFixed(2)
+    })
 })
 
 // call main process to open/close serial
