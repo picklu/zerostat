@@ -114,9 +114,8 @@ const updateDomain = (event) => {
     event.stopPropagation()
     domDOMAIN.forEach(input => {
         const key = input.getAttribute("name")
-        const value = input.value
         if (input.parentElement.classList.contains("active")) {
-            state.method.params[key] = Number(value)
+            state.method.params[key] = +input.value
         }
         else {
             state.method.params[key] = null
