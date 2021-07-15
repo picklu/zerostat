@@ -166,7 +166,6 @@ table {
 .main__cell {
   background-color: #edf1f5;
   border: 1px solid #b9bbbb;
-  border-radius: 3px;
   padding: 5px;
 }
 
@@ -277,7 +276,7 @@ table {
 
 .btn,
 .label {
-  background-color: #e6e7e9;
+  background-color: #e0e1e2;
   color: #080808;
   font-size: 0.8em;
   outline: none;
@@ -289,9 +288,8 @@ table {
 .options {
   border: 1px solid #6b6767;
   box-shadow: 1px 1px 1px #b9bbbb;
-  border-radius: 2px;
   padding: 5px;
-  text-shadow: 1px 1px #e6e7e9;
+  text-shadow: 1px 1px #e0e1e2;
   width: 100%;
 }
 
@@ -315,7 +313,7 @@ table {
 }
 
 .btn:active {
-  box-shadow: 1px 1px 1px #e6e7e9;
+  box-shadow: 1px 1px 1px #e0e1e2;
 }
 
 .btn:disabled {
