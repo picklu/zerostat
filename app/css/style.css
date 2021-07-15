@@ -163,7 +163,7 @@ table {
 }
 
 .main__cell {
-  background-color: #edf1f5;
+  background-color: #eff2f3;
   border: 1px solid #b9bbbb;
   padding: 5px;
 }
@@ -274,7 +274,7 @@ table {
 
 .btn,
 .label {
-  background-color: #e0e1e2;
+  background-color: #edf1f5;
   color: #080808;
   font-size: 0.8em;
   outline: none;
@@ -285,7 +285,7 @@ table {
 .label,
 .options {
   border: 1px solid #6b6767;
-  box-shadow: 1px 1px 1px #b9bbbb;
+  box-shadow: 1px 1px 1px #eff2f3;
   padding: 5px;
   text-shadow: 1px 1px #e0e1e2;
   width: 100%;

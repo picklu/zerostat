@@ -4,13 +4,13 @@
 .main {
     font-size: 2em;
     background-color: $grey-secondary ;
-
+    
     @media only screen and (min-width: 1200px) {
         font-size: 2.2em;
     }
     
     &__cell {
-        background-color: $white-tertiary;
+        background-color: $white-secondary;
         border: $border-width-tertiary solid $grey-secondary;
         padding: $padding-secondary;
     }
@@ -127,7 +127,7 @@
 
 .btn,
 .label {
-    background-color: $grey-tertiary;
+    background-color: $white-tertiary;
     color: $black-primary;
     font-size: 0.8em;
     outline: none;
@@ -138,7 +138,7 @@
 .label,
 .options {
     border: $border-width-tertiary solid  $grey-primary;
-    box-shadow: 1px 1px 1px $grey-secondary;
+    box-shadow: 1px 1px 1px $white-secondary;
     padding: $padding-secondary;
     text-shadow: 1px 1px $grey-tertiary;
     width: 100%;
