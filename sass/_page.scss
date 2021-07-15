@@ -119,6 +119,10 @@
 .btn {
     font-weight: 600;
     padding: $padding-secondary;
+
+    &-inactive {
+        color: $grey-secondary !important;
+    }
                 
     @media only screen and (min-width: 992px) {
         padding: $padding-primary;

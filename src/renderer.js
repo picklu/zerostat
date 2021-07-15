@@ -191,6 +191,8 @@ window.addEventListener("DOMContentLoaded", () => {
                 state.isWritingData = true
                 state.isDataReady = false
                 window.api.send("save", state)
+                domConnect.classList.remove("btn-inactive")
+                domLoadData.classList.remove("btn-inactive")
             }
         }
     }, 50)
@@ -219,10 +221,11 @@ domVoltageLimitInputs.forEach(input => {
 
 // call main process to open/close serial
 domConnect.addEventListener("click", (event) => {
-    const port = domSerialPorts.value
-    state.isReady = false
-    state.isRunning = false
-    window.api.send("connection", port)
+    if (!state.isRunning) {
+        const port = domSerialPorts.value
+        state.isReady = false
+        window.api.send("connection", port)
+    }
 })
 
 // update ui on receiving connection status
@@ -269,6 +272,11 @@ domFormParams.addEventListener("submit", (event) => {
     event.preventDefault()
     state.isRunning = !state.isRunning
     if (state.isRunning) {
+
+        domConnect.classList.add("btn-inactive")
+        domLoadData.classList.add("btn-inactive")
+
+
         state.data = []
         Array.from(event.target).forEach(input => {
             if (input.tagName === "INPUT") {
@@ -283,17 +291,20 @@ domFormParams.addEventListener("submit", (event) => {
             }
             // else do nothing
         })
+    } else {
+        domConnect.classList.remove("btn-inactive")
+        domLoadData.classList.remove("btn-inactive")
     }
     window.api.send("sweep", state)
 })
 
 // Handle click event on data table 
 domTableBody.addEventListener("click", (event) => {
-    event.preventDefault()
 
     const className = event.target.classList.value
+    event.stopPropagation()
 
-    if (className === 'idx' || className === 'file-date' || className === 'file-name') {
+    if (!state.isRunning && (className === 'idx' || className === 'file-date' || className === 'file-name')) {
         const domTableRow = event.target.parentElement
         const domFileDate = domTableRow.querySelector('.file-date')
         const domFileName = domTableRow.querySelector('.file-name')
@@ -311,9 +322,10 @@ domTableBody.addEventListener("click", (event) => {
 
 // Handle click event on Open File
 domLoadData.addEventListener('click', (event) => {
-    event.preventDefault()
-    const filePath = domFilePath.getAttribute('data')
-    window.api.send('open', filePath)
+    if (!state.isRunning) {
+        const filePath = domFilePath.getAttribute('data')
+        window.api.send('open', filePath)
+    }
 })
 
 // On receiving data act accordingly
