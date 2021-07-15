@@ -339,15 +339,10 @@ table {
   font-weight: 600;
 }
 
-.file-path {
-  display: flex;
-  align-items: center;
-}
-
 .file-path__text {
-  margin: 0 15px;
   font-size: 0.8em;
-  overflow-x: auto;
+  text-align: left;
+  height: 100%;
 }
 
 .bold {

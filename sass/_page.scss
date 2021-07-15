@@ -191,13 +191,10 @@
 
 .file-path {
 
-    display: flex;
-    align-items: center;
-    
     &__text {
-        margin: 0 $margin-primary;
         font-size: 0.8em;
-        overflow-x: auto;
+        text-align: left;
+        height: 100%;
     }
 }
 

@@ -5,7 +5,7 @@ const domDOMAIN = document.querySelectorAll(".xydomain")
 const domFormParams = document.getElementById("params")
 const domSweep = document.getElementById("sweep")
 const domStatusMessage = document.querySelector(".status-message")
-const domFilePath = document.querySelector(".fpath")
+const domFilePath = document.querySelector(".file-path__text")
 const domTableBody = document.querySelector(".table__body")
 const domMetaData = document.querySelector(".meta-data")
 const domMainData = document.querySelector(".main-data")
@@ -300,7 +300,7 @@ domTableBody.addEventListener("click", (event) => {
         const fileDir = domFileDate.getAttribute('data')
         const fileName = domFileName.getAttribute('data')
         const filePath = `${fileDir}\\${fileName}`
-        domFilePath.innerText = fileName
+        domFilePath.value = `Current File: ${fileName}`
         domTableRow.parentElement.querySelectorAll('.table__row').forEach(row => {
             row.classList.remove('active-row')
         })
@@ -374,7 +374,7 @@ window.api.receive("listFiles", ({ files, tmpDir, error }) => {
         const lastFile = [...files].pop() || "..."
         const filePath = `${tmpDir}\\${lastFile}`
         domFilePath.setAttribute('data', filePath)
-        domFilePath.innerText = lastFile
+        domFilePath.value = `Current File: ${lastFile}`
         listFilesInTable(files, tmpDir)
         window.api.send("load", filePath)
     } else if (error) {
