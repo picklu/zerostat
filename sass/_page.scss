@@ -192,7 +192,7 @@
 .file-path {
 
     &__text {
-        font-size: 0.8em;
+        color: $blue-primary;
         text-align: left;
         height: 100%;
     }
@@ -211,6 +211,6 @@
 }
 
 .active-row {
-    color: $blue-secondary;
+    color: $blue-primary;
     font-weight: 600;
 }

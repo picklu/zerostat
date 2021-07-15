@@ -340,7 +340,7 @@ table {
 }
 
 .file-path__text {
-  font-size: 0.8em;
+  color: #053a6b;
   text-align: left;
   height: 100%;
 }
@@ -358,7 +358,7 @@ table {
 }
 
 .active-row {
-  color: #096bc7;
+  color: #053a6b;
   font-weight: 600;
 }
 
