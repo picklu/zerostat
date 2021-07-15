@@ -13,7 +13,6 @@
     &__cell {
         background-color: $white-tertiary;
         border: $border-width-tertiary solid $grey-secondary;
-        border-radius: $border-radius-secondary;
         padding: $padding-secondary;
     }
     
@@ -142,7 +141,7 @@
 .options {
     border: $border-width-tertiary solid  $grey-primary;
     box-shadow: 1px 1px 1px $grey-secondary;
-    border-radius: $border-radius-tertiary;
+    // border-radius: $border-radius-tertiary;
     padding: $padding-secondary;
     text-shadow: 1px 1px $grey-tertiary;
     width: 100%;
