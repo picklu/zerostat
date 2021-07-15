@@ -102,7 +102,6 @@
     &__meta {
         background-color: $white-primary;
         border: $border-width-tertiary solid $grey-secondary;
-        border-radius: $border-radius-secondary;
         padding: $padding-secondary;
         overflow-x: hidden;
         overflow-y: auto;
@@ -141,7 +140,6 @@
 .options {
     border: $border-width-tertiary solid  $grey-primary;
     box-shadow: 1px 1px 1px $grey-secondary;
-    // border-radius: $border-radius-tertiary;
     padding: $padding-secondary;
     text-shadow: 1px 1px $grey-tertiary;
     width: 100%;
@@ -192,6 +190,7 @@
 }
 
 .file-path {
+
     display: flex;
     align-items: center;
     

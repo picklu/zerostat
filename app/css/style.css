@@ -248,7 +248,6 @@ table {
 .raw-data__main, .raw-data__meta {
   background-color: #fdfdfd;
   border: 1px solid #b9bbbb;
-  border-radius: 3px;
   padding: 5px;
   overflow-x: hidden;
   overflow-y: auto;
