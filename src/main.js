@@ -208,5 +208,3 @@ ipcMain.on("open", (event, fname) => {
         spawn('notepad', [fname])
     }
 })
-
-console.log(typeof (process.env.DEBUG))
