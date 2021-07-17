@@ -313,10 +313,10 @@ domTableBody.addEventListener("click", (event) => {
 
     if (!state.isRunning && (className === 'idx' || className === 'file-date' || className === 'file-name')) {
         const domTableRow = event.target.parentElement
-        const domFileDate = domTableRow.querySelector('.file-date')
-        const domFileName = domTableRow.querySelector('.file-name')
-        const folder = domFileDate.getAttribute('data')
-        const fileName = domFileName.getAttribute('data')
+        const domTableRowDate = domTableRow.querySelector('.file-date')
+        const domTableRowFileName = domTableRow.querySelector('.file-name')
+        const folder = domTableRowDate.getAttribute('data')
+        const fileName = domTableRowFileName.getAttribute('data')
         domFolderPath.setAttribute('data', folder)
         domFileName.setAttribute('data', fileName)
         domFolderPath.value = folder
