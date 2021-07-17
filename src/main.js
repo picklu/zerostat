@@ -1,5 +1,5 @@
 require('dotenv').config()
-const { app, BrowserWindow, ipcMain, Menu } = require("electron")
+const { app, BrowserWindow, dialog, getFocusedWindow, ipcMain, Menu } = require("electron")
 const path = require("path")
 const SerialPort = require("serialport")
 const Readline = require("@serialport/parser-readline")
@@ -7,7 +7,7 @@ const { stat } = require("fs")
 const { send } = require("process")
 const spawn = require("child_process").spawn
 const menu = require('./menu')
-const { extractData, listTmpDir, readFile, toTitleCase, writeToCSV } = require("./helpers")
+const helpers = require("./helpers")
 
 const windows = new Set()
 
@@ -27,7 +27,7 @@ app.on("window-all-closed", () => {
 
 const createWindow = exports.createWindow = () => {
     let x, y
-    const windowTitle = `${toTitleCase(app.getName())} | V-${app.getVersion()}`
+    const windowTitle = `${helpers.toTitleCase(app.getName())} | V-${app.getVersion()}`
     const currentWindow = BrowserWindow.getFocusedWindow()
     if (currentWindow) {
         const [currentWindowX, currentWindowY] = currentWindow.getPosition()
@@ -156,10 +156,24 @@ ipcMain.on("sweep", (event, state) => {
     }
 })
 
+ipcMain.on("path", (event) => {
+    const senderWindow = event.sender
+
+    dialog
+        .showOpenDialog(getFocusedWindow, { properties: ['openDirectory'] })
+        .then(result => {
+            const folderPath = result.filePaths[0]
+            senderWindow.send("path", { folderPath })
+        }).catch(error => {
+            console.log(error)
+            senderWindow.send("path", { error })
+        })
+})
+
 ipcMain.on("save", (event, state) => {
     const senderWindow = event.sender
 
-    writeToCSV(state, ({ filePath, error }) => {
+    helpers.writeToCSV(state, ({ filePath, error }) => {
         if (filePath) {
             senderWindow.send("saved", { filePath })
             console.log('successfully saved')
@@ -173,14 +187,18 @@ ipcMain.on("save", (event, state) => {
     })
 })
 
-ipcMain.on("listFiles", (event) => {
+ipcMain.on("listFiles", (event, folderPath) => {
     const senderWindow = event.sender
 
-    listTmpDir(({ error, files, tmpDir }) => {
+    if (folderPath) {
+        helpers.currentFolder = folderPath
+    }
+
+    helpers.listDataDir(({ error, files, folder }) => {
         if (error && error.path) {
             senderWindow.send("listFiles", { error });
         } else if (files) {
-            senderWindow.send("listFiles", { files, tmpDir });
+            senderWindow.send("listFiles", { files, folder });
         } else {
             senderWindow.send("listFiles", { error: "Something went wrong!" });
         }
@@ -188,23 +206,26 @@ ipcMain.on("listFiles", (event) => {
 })
 
 
-ipcMain.on("load", (event, fname) => {
+ipcMain.on("load", (event, { folder, fileName }) => {
     const senderWindow = event.sender
 
-    readFile(fname, ({ error, data }) => {
-        if (error) {
-            senderWindow.send("loaded", { error });
-        } else if (data) {
-            senderWindow.send("loaded", extractData(data));
-        } else {
-            console.log(result)
-            senderWindow.send("loaded", { error: "Something went wrong!" });
-        }
-    })
+    if (folder && fileName) {
+        const filePath = path.join(folder, fileName)
+        helpers.readFile(filePath, ({ error, data }) => {
+            if (error) {
+                senderWindow.send("loaded", { error });
+            } else if (data) {
+                senderWindow.send("loaded", helpers.extractData(data));
+            } else {
+                senderWindow.send("loaded", { error: "Something went wrong!" });
+            }
+        })
+    }
 })
 
-ipcMain.on("open", (event, fname) => {
-    if (fname) {
-        spawn('notepad', [fname])
+ipcMain.on("open", (event, { filePathBase, fileName }) => {
+    if (filePathBase && fileName) {
+        const filePath = path.join(filePathBase, fileName)
+        spawn('notepad', [filePath])
     }
 })

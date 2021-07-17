@@ -5,7 +5,8 @@ const domDOMAIN = document.querySelectorAll(".xydomain")
 const domFormParams = document.getElementById("params")
 const domSweep = document.getElementById("sweep")
 const domStatusMessage = document.querySelector(".status-message")
-const domFilePath = document.querySelector(".file-path__text")
+const domFilePathBase = document.querySelector(".file-path__base")
+const domFilePathTail = document.querySelector(".file-path__text")
 const domTableBody = document.querySelector(".table__body")
 const domMetaData = document.querySelector(".meta-data")
 const domMainData = document.querySelector(".main-data")
@@ -135,7 +136,7 @@ const updateDomain = (event) => {
 }
 
 
-const listFilesInTable = (files, tmpDir) => {
+const listFilesInTable = (files, folder) => {
     const childNodes = [...document.querySelectorAll(".table__body>.table__row")]
     for (let i = 0; i < childNodes.length; i++) {
         if (domTableBody.hasChildNodes(childNodes[i])) {
@@ -157,7 +158,7 @@ const listFilesInTable = (files, tmpDir) => {
         idxNode.setAttribute("class", "idx")
         fileDateNode.setAttribute("class", "file-date")
         fileNameNode.setAttribute("class", "file-name")
-        fileDateNode.setAttribute("data", tmpDir)
+        fileDateNode.setAttribute("data", folder)
         fileNameNode.setAttribute("data", file)
         idxNode.appendChild(document.createTextNode(`${idx + 1}`))
         fileDateNode.appendChild(document.createTextNode(date.toLocaleString()))
@@ -174,6 +175,7 @@ const listFilesInTable = (files, tmpDir) => {
 // get ports once the dom content is loaded
 window.addEventListener("DOMContentLoaded", () => {
     showStatusMessage()
+
     window.api.send("listFiles")
 
     setInterval(() => { // update port
@@ -298,9 +300,14 @@ domFormParams.addEventListener("submit", (event) => {
     window.api.send("sweep", state)
 })
 
+
+// Handle click event on base file path
+domFilePathBase.addEventListener("click", (event) => {
+    window.api.send("path")
+})
+
 // Handle click event on data table 
 domTableBody.addEventListener("click", (event) => {
-
     const className = event.target.classList.value
     event.stopPropagation()
 
@@ -308,23 +315,40 @@ domTableBody.addEventListener("click", (event) => {
         const domTableRow = event.target.parentElement
         const domFileDate = domTableRow.querySelector('.file-date')
         const domFileName = domTableRow.querySelector('.file-name')
-        const fileDir = domFileDate.getAttribute('data')
+        const folder = domFileDate.getAttribute('data')
         const fileName = domFileName.getAttribute('data')
-        const filePath = `${fileDir}\\${fileName}`
-        domFilePath.value = `Current File: ${fileName}`
+        domFilePathBase.setAttribute('data', folder)
+        domFilePathTail.setAttribute('data', fileName)
+        domFilePathBase.value = folder
+        domFilePathTail.value = fileName
         domTableRow.parentElement.querySelectorAll('.table__row').forEach(row => {
             row.classList.remove('active-row')
         })
         domTableRow.classList.add('active-row')
-        window.api.send('load', filePath)
+        window.api.send('load', { folder, fileName })
     }
 })
 
 // Handle click event on Open File
-domLoadData.addEventListener('click', (event) => {
+domLoadData.addEventListener('click', () => {
     if (!state.isRunning) {
-        const filePath = domFilePath.getAttribute('data')
-        window.api.send('open', filePath)
+        const filePathBase = domFilePathBase.getAttribute('data')
+        const fileName = domFilePathTail.getAttribute('data')
+        console.log({ filePathBase, fileName })
+        window.api.send('open', { filePathBase, fileName })
+    }
+})
+
+// On receiving path update file path
+window.api.receive("path", ({ error, folderPath }) => {
+    if (error) {
+        console.log(error)
+    }
+    else if (folderPath) {
+        domFilePathBase.value = folderPath
+    }
+    else {
+        console.log("No folder was selected!")
     }
 })
 
@@ -376,24 +400,32 @@ window.api.receive("saved", ({ filePath, error }) => {
     } else if (error) {
         console.log(error)
     } else {
-        console.log("Something went wrong!")
+        console.log("Something went wrong in saving file!")
     }
 })
 
 // On receiving list of files update dom
-window.api.receive("listFiles", ({ files, tmpDir, error }) => {
-    if (files && files.length) {
-        const lastFile = [...files].pop() || "..."
-        const filePath = `${tmpDir}\\${lastFile}`
-        domFilePath.setAttribute('data', filePath)
-        domFilePath.value = `Current File: ${lastFile}`
-        listFilesInTable(files, tmpDir)
-        window.api.send("load", filePath)
-    } else if (error) {
+window.api.receive("listFiles", ({ files, folder, error }) => {
+    if (error) {
         console.log(error)
     }
+    else if (folder) {
+        domFilePathBase.value = folder
+        domFilePathBase.setAttribute("data", folder)
+
+        if (files && files.length) {
+            const fileName = [...files].pop() || "..." // Name of the last file
+            domFilePathTail.setAttribute('data', fileName)
+            domFilePathTail.value = fileName
+            listFilesInTable(files, folder)
+            window.api.send("load", { folder, fileName })
+        }
+        else {
+            console.log("There were no files found in the selected folder!")
+        }
+    }
     else {
-        console.log("Something went wrong!")
+        console.log("The data folder was not found!")
     }
 })
 

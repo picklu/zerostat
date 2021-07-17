@@ -3,8 +3,8 @@ const os = require('os')
 const path = require('path')
 const { writeToPath } = require('@fast-csv/format')
 
-const tmpDir = path.join(os.tmpdir(), 'zerostat')
-if (!fs.existsSync(tmpDir)) { fs.mkdirSync(tmpDir) }
+const folder = path.join(os.tmpdir(), 'zerostat')
+if (!fs.existsSync(folder)) { fs.mkdirSync(folder) }
 const helpers = {}
 
 
@@ -20,6 +20,8 @@ const timeString = (time = null) => {
 
     return `${year}${month}${date}_${hours}${minutes}${seconds}${milliSeconds}`
 };
+
+helpers.currentFolder = folder
 
 helpers.toTitleCase = (str) => {
     if (str.length > 1) {
@@ -66,12 +68,12 @@ helpers.readFile = (fname, func) => {
     })
 }
 
-helpers.listTmpDir = (func) => {
-    fs.readdir(tmpDir, (error, files) => {
+helpers.listDataDir = (func) => {
+    fs.readdir(folder, (error, files) => {
         if (error) {
             func({ error });
         } else {
-            func({ files, tmpDir });
+            func({ files, folder });
         }
     })
 }

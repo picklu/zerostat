@@ -342,10 +342,19 @@ table {
   font-weight: 600;
 }
 
-.file-path__text {
+.file-path {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+}
+
+.file-path__base, .file-path__text {
   color: #053a6b;
   text-align: left;
-  height: 100%;
+}
+
+.file-path__base:first-child, .file-path__text:first-child {
+  border-right: none;
+  cursor: pointer;
 }
 
 .bold {

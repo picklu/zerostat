@@ -194,10 +194,19 @@
 
 .file-path {
 
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+
+    
+    &__base,
     &__text {
         color: $blue-primary;
         text-align: left;
-        height: 100%;
+        
+        &:first-child {
+            border-right: none;
+            cursor: pointer;
+        }
     }
 }
 
