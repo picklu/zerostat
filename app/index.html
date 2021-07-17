@@ -21,11 +21,15 @@
                 </select>
             </div>
             <div class="main__cell file-path">
-
-                <input name="file-path__base" id="file-path__base" class="input file-path__base" type="text"
-                    value="Folder: .../temp/zerostat" readonly>
-                <input name="file-path__text" id="file-path__text" class="input file-path__text" type="text"
-                    value="Current File: Current file name will be here" readonly>
+                <div id="file-path__base" class="file-path__base">
+                    <label for="folder" class="label folder__label">Folder</label>
+                    <input name="folder" class="input folder-text" type="text" value="Temporay folder" readonly>
+                </div>
+                <div id="file-path__tail" class="file-path__tail">
+                    <label for="file-name" class="label file-name__label">File Name</label>
+                    <input name="file-name" class="input file-name" type="text" value="Current file name will be here"
+                        readonly>
+                </div>
             </div>
             <div class="main__cell data-load">
                 <button id="load-data" class="btn data-load__btn">Open File</button>

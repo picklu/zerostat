@@ -5,8 +5,8 @@ const domDOMAIN = document.querySelectorAll(".xydomain")
 const domFormParams = document.getElementById("params")
 const domSweep = document.getElementById("sweep")
 const domStatusMessage = document.querySelector(".status-message")
-const domFilePathBase = document.querySelector(".file-path__base")
-const domFilePathTail = document.querySelector(".file-path__text")
+const domFolderPath = document.querySelector(".folder-text")
+const domFileName = document.querySelector(".file-name")
 const domTableBody = document.querySelector(".table__body")
 const domMetaData = document.querySelector(".meta-data")
 const domMainData = document.querySelector(".main-data")
@@ -302,7 +302,7 @@ domFormParams.addEventListener("submit", (event) => {
 
 
 // Handle click event on base file path
-domFilePathBase.addEventListener("click", (event) => {
+domFolderPath.addEventListener("click", (event) => {
     window.api.send("path")
 })
 
@@ -317,10 +317,10 @@ domTableBody.addEventListener("click", (event) => {
         const domFileName = domTableRow.querySelector('.file-name')
         const folder = domFileDate.getAttribute('data')
         const fileName = domFileName.getAttribute('data')
-        domFilePathBase.setAttribute('data', folder)
-        domFilePathTail.setAttribute('data', fileName)
-        domFilePathBase.value = folder
-        domFilePathTail.value = fileName
+        domFolderPath.setAttribute('data', folder)
+        domFileName.setAttribute('data', fileName)
+        domFolderPath.value = folder
+        domFileName.value = fileName
         domTableRow.parentElement.querySelectorAll('.table__row').forEach(row => {
             row.classList.remove('active-row')
         })
@@ -332,8 +332,8 @@ domTableBody.addEventListener("click", (event) => {
 // Handle click event on Open File
 domLoadData.addEventListener('click', () => {
     if (!state.isRunning) {
-        const filePathBase = domFilePathBase.getAttribute('data')
-        const fileName = domFilePathTail.getAttribute('data')
+        const filePathBase = domFolderPath.getAttribute('data')
+        const fileName = domFileName.getAttribute('data')
         console.log({ filePathBase, fileName })
         window.api.send('open', { filePathBase, fileName })
     }
@@ -345,7 +345,7 @@ window.api.receive("path", ({ error, folderPath }) => {
         console.log(error)
     }
     else if (folderPath) {
-        domFilePathBase.value = folderPath
+        domFolderPath.value = folderPath
     }
     else {
         console.log("No folder was selected!")
@@ -410,13 +410,13 @@ window.api.receive("listFiles", ({ files, folder, error }) => {
         console.log(error)
     }
     else if (folder) {
-        domFilePathBase.value = folder
-        domFilePathBase.setAttribute("data", folder)
+        domFolderPath.value = folder
+        domFolderPath.setAttribute("data", folder)
 
         if (files && files.length) {
             const fileName = [...files].pop() || "..." // Name of the last file
-            domFilePathTail.setAttribute('data', fileName)
-            domFilePathTail.value = fileName
+            domFileName.setAttribute('data', fileName)
+            domFileName.value = fileName
             listFilesInTable(files, folder)
             window.api.send("load", { folder, fileName })
         }

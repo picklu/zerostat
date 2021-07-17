@@ -13,8 +13,7 @@
         background-color: $white-secondary;
         border: $border-width-tertiary solid $grey-secondary;
         padding: $padding-secondary;
-    }
-    
+    } 
 }
 
 .serial-comm {
@@ -193,19 +192,25 @@
 }
 
 .file-path {
-
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: $padding-secondary;
 
     
     &__base,
-    &__text {
+    &__tail {
         color: $blue-primary;
         text-align: left;
-        
-        &:first-child {
+        display: grid;
+        grid-template-columns: auto 1fr;
+
+        .input {
+            text-align: left;
+            outline: none;
+        }
+
+        .label {
             border-right: none;
-            cursor: pointer;
         }
     }
 }
