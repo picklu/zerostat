@@ -3,11 +3,6 @@ const os = require('os')
 const path = require('path')
 const { writeToPath } = require('@fast-csv/format')
 
-const folder = path.join(os.tmpdir(), 'zerostat')
-if (!fs.existsSync(folder)) { fs.mkdirSync(folder) }
-const helpers = {}
-
-
 const timeString = (time = null) => {
     time = time ? time : new Date()
     const year = time.getFullYear()
@@ -21,7 +16,52 @@ const timeString = (time = null) => {
     return `${year}${month}${date}_${hours}${minutes}${seconds}${milliSeconds}`
 };
 
-helpers.currentFolder = folder
+
+const helpers = {}
+helpers.data = {
+    folders: [],
+    currentFolder: ''
+}
+const dataFolderName = 'zerostat'
+const dataFoldersFileName = '.zerostat'
+const dataFileExt = '.zst'
+
+
+helpers.updateDataFolders = (dataFolderPath = '') => {
+    const dataFoldersFilePath = path.join(os.homedir(), dataFoldersFileName)
+
+    // if the .zerostat file is present in the home directory then
+    // read the file and update the helpers.data else create a blank 
+    // helpers.data object
+    if (fs.existsSync(dataFoldersFilePath)) {
+        const dataFolders = fs.readFileSync(dataFoldersFilePath, 'utf-8')
+        helpers.data = JSON.parse(dataFolders)
+    }
+
+    // if data folder path is not provided then assign ..temp/zerostat as the path
+    if (!dataFolderPath) {
+        dataFolderPath = path.join(os.tmpdir(), dataFolderName)
+    }
+
+    // set current folder
+    helpers.data.currentFolder = dataFolderPath
+
+    // if data folder path doesn't exist then create the folder
+    if (!fs.existsSync(dataFolderPath)) {
+        fs.mkdirSync(dataFolderPath)
+    }
+
+    // if the data folder path is not available in the helpers.data.folders
+    // then push that to the data.folders
+    if (helpers.data.folders.indexOf(dataFolderPath) === -1) {
+        helpers.data.folders.push(dataFolderPath)
+    }
+
+    // Save the changes to the .zerostat file
+    fs.writeFileSync(dataFoldersFilePath, JSON.stringify(helpers.data))
+}
+
+
 
 helpers.toTitleCase = (str) => {
     if (str.length > 1) {
@@ -69,25 +109,30 @@ helpers.readFile = (fname, func) => {
 }
 
 helpers.listDataDir = (func) => {
-    fs.readdir(folder, (error, files) => {
-        if (error) {
-            func({ error });
-        } else {
-            func({ files, folder });
-        }
-    })
+    const dataFiles = {}
+
+    try {
+        helpers.data.folders.forEach(folder => {
+            let files = fs.readdirSync(folder)
+            dataFiles[folder] = files.filter(file => dataFileExt === path.extname(file))
+        })
+        func({ dataFiles })
+    } catch (error) {
+        func({ error })
+    }
 }
 
 helpers.writeToCSV = (() => {
     let scanNum = 0;
-    return (dataStream, func) => {
+
+    return (dataStream, currentFolder, func) => {
         const {
             deviceModel,
             firmwareVersion,
             method: { type: methodType, params: { estart, estop, estep, scanrate } },
             data } = dataStream;
         const scanId = `${timeString()}_${(++scanNum).toString().padStart(3, '0')}`
-        const filePath = path.join(tmpDir, `${scanId}_${methodType.toLowerCase()}.txt`)
+        const filePath = path.join(currentFolder, `${scanId}_${methodType.toLowerCase()}${dataFileExt}`)
         const newData = data.map(({ x, y }) => {
             return [x, y]
         });

@@ -136,7 +136,7 @@ const updateDomain = (event) => {
 }
 
 
-const listFilesInTable = (files, folder) => {
+const listFilesInTable = (dataFiles) => {
     const childNodes = [...document.querySelectorAll(".table__body>.table__row")]
     for (let i = 0; i < childNodes.length; i++) {
         if (domTableBody.hasChildNodes(childNodes[i])) {
@@ -144,31 +144,38 @@ const listFilesInTable = (files, folder) => {
         }
     }
 
-    files.forEach((file, idx) => {
-        const rowNode = document.createElement("div")
-        const idxNode = document.createElement("div")
-        const fileDateNode = document.createElement("div")
-        const fileNameNode = document.createElement("div")
-        const regX = /^(\d{4})(\d{2})(\d{2})_(\d{2})(\d{2})(\d{2})/
-        const match = regX.exec(file)
-        const [__, year, month, day, hour, minute, second] = match
-        const date = new Date(year, month - 1, day, hour, minute, second)
+    const folders = Object.keys(dataFiles)
 
-        rowNode.setAttribute("class", "table__row")
-        idxNode.setAttribute("class", "idx")
-        fileDateNode.setAttribute("class", "file-date")
-        fileNameNode.setAttribute("class", "file-name")
-        fileDateNode.setAttribute("data", folder)
-        fileNameNode.setAttribute("data", file)
-        idxNode.appendChild(document.createTextNode(`${idx + 1}`))
-        fileDateNode.appendChild(document.createTextNode(date.toLocaleString()))
-        fileNameNode.appendChild(document.createTextNode(file))
-        rowNode.appendChild(idxNode)
-        rowNode.appendChild(fileDateNode)
-        rowNode.appendChild(fileNameNode)
-        if (idx == files.length - 1) { rowNode.classList.add('active-row') }
-        domTableBody.prepend(rowNode)
+    folders.forEach((folder, index) => {
+        let files = dataFiles[folder]
+        files.forEach((file, idx) => {
+            const rowNode = document.createElement("div")
+            const idxNode = document.createElement("div")
+            const fileDateNode = document.createElement("div")
+            const fileNameNode = document.createElement("div")
+            const regX = /^(\d{4})(\d{2})(\d{2})_(\d{2})(\d{2})(\d{2})/
+            const match = regX.exec(file)
+            const [__, year, month, day, hour, minute, second] = match
+            const date = new Date(year, month - 1, day, hour, minute, second)
+
+            rowNode.setAttribute("class", "table__row")
+            idxNode.setAttribute("class", "idx")
+            fileDateNode.setAttribute("class", "file-date")
+            fileNameNode.setAttribute("class", "file-name")
+            fileDateNode.setAttribute("data", folder)
+            fileNameNode.setAttribute("data", file)
+            idxNode.appendChild(document.createTextNode(`${idx + 1}`))
+            fileDateNode.appendChild(document.createTextNode(date.toLocaleString()))
+            fileNameNode.appendChild(document.createTextNode(file))
+            rowNode.appendChild(idxNode)
+            rowNode.appendChild(fileDateNode)
+            rowNode.appendChild(fileNameNode)
+            if (index === folders.length - 1 && idx == files.length - 1) { rowNode.classList.add('active-row') }
+            domTableBody.prepend(rowNode)
+        })
     })
+
+
 }// end of helper function
 
 
@@ -334,7 +341,6 @@ domLoadData.addEventListener('click', () => {
     if (!state.isRunning) {
         const filePathBase = domFolderPath.getAttribute('data')
         const fileName = domFileName.getAttribute('data')
-        console.log({ filePathBase, fileName })
         window.api.send('open', { filePathBase, fileName })
     }
 })
@@ -405,28 +411,27 @@ window.api.receive("saved", ({ filePath, error }) => {
 })
 
 // On receiving list of files update dom
-window.api.receive("listFiles", ({ files, folder, error }) => {
+window.api.receive("listFiles", ({ dataFiles, error }) => {
     if (error) {
         console.log(error)
     }
-    else if (folder) {
+    else if (dataFiles) {
+        const folder = Object.keys(dataFiles)[0]
+        const fileName = folder ? [...dataFiles[folder]].pop() : "..." // Name of the last file
         domFolderPath.value = folder
         domFolderPath.setAttribute("data", folder)
+        domFileName.setAttribute('data', fileName)
+        domFileName.value = fileName
+        listFilesInTable(dataFiles)
 
-        if (files && files.length) {
-            const fileName = [...files].pop() || "..." // Name of the last file
-            domFileName.setAttribute('data', fileName)
-            domFileName.value = fileName
-            listFilesInTable(files, folder)
+        if (folder && fileName) {
             window.api.send("load", { folder, fileName })
         }
         else {
             console.log("There were no files found in the selected folder!")
         }
     }
-    else {
-        console.log("The data folder was not found!")
-    }
+
 })
 
 // On receiving data of the selected file

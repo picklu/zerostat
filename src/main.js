@@ -14,6 +14,8 @@ const windows = new Set()
 let port = null
 let parser = null
 
+helpers.updateDataFolders()
+
 app.on("ready", () => {
     createWindow()
 })
@@ -163,6 +165,7 @@ ipcMain.on("path", (event) => {
         .showOpenDialog(getFocusedWindow, { properties: ['openDirectory'] })
         .then(result => {
             const folderPath = result.filePaths[0]
+            helpers.updateDataFolders(folderPath)
             senderWindow.send("path", { folderPath })
         }).catch(error => {
             console.log(error)
@@ -173,7 +176,7 @@ ipcMain.on("path", (event) => {
 ipcMain.on("save", (event, state) => {
     const senderWindow = event.sender
 
-    helpers.writeToCSV(state, ({ filePath, error }) => {
+    helpers.writeToCSV(state, helpers.data.currentFolder, ({ filePath, error }) => {
         if (filePath) {
             senderWindow.send("saved", { filePath })
             console.log('successfully saved')
@@ -187,18 +190,14 @@ ipcMain.on("save", (event, state) => {
     })
 })
 
-ipcMain.on("listFiles", (event, folderPath) => {
+ipcMain.on("listFiles", (event) => {
     const senderWindow = event.sender
 
-    if (folderPath) {
-        helpers.currentFolder = folderPath
-    }
-
-    helpers.listDataDir(({ error, files, folder }) => {
+    helpers.listDataDir(({ error, dataFiles }) => {
         if (error && error.path) {
             senderWindow.send("listFiles", { error });
-        } else if (files) {
-            senderWindow.send("listFiles", { files, folder });
+        } else if (dataFiles) {
+            senderWindow.send("listFiles", { dataFiles });
         } else {
             senderWindow.send("listFiles", { error: "Something went wrong!" });
         }
@@ -215,6 +214,7 @@ ipcMain.on("load", (event, { folder, fileName }) => {
             if (error) {
                 senderWindow.send("loaded", { error });
             } else if (data) {
+                helpers.updateDataFolders(folder)
                 senderWindow.send("loaded", helpers.extractData(data));
             } else {
                 senderWindow.send("loaded", { error: "Something went wrong!" });
@@ -229,3 +229,4 @@ ipcMain.on("open", (event, { filePathBase, fileName }) => {
         spawn('notepad', [filePath])
     }
 })
+
