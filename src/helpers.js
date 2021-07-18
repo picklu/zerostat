@@ -132,7 +132,8 @@ helpers.writeToCSV = (() => {
             method: { type: methodType, params: { estart, estop, estep, scanrate } },
             data } = dataStream;
         const scanId = `${timeString()}_${(++scanNum).toString().padStart(3, '0')}`
-        const filePath = path.join(currentFolder, `${scanId}_${methodType.toLowerCase()}${dataFileExt}`)
+        const fileName = `${scanId}_${methodType.toLowerCase()}${dataFileExt}`
+        const filePath = path.join(currentFolder, fileName)
         const newData = data.map(({ x, y }) => {
             return [x, y]
         });
@@ -149,7 +150,7 @@ helpers.writeToCSV = (() => {
 
         writeToPath(filePath, [...header, ...newData])
             .on('error', error => func({ error }))
-            .on('finish', () => func({ filePath }))
+            .on('finish', () => func({ folder: currentFolder, fileName }))
     }
 })()
 

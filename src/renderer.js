@@ -136,7 +136,45 @@ const updateDomain = (event) => {
 }
 
 
-const listFilesInTable = (dataFiles) => {
+const updateDataTable = (folder, fileName) => {
+    const childNodes = [...document.querySelectorAll(".table__body>.table__row")]
+    const idx = childNodes.length
+    childNodes.forEach(node => {
+        if (node.classList.contains('active-row')) {
+            node.classList.remove('active-row')
+        }
+    })
+
+    const rowNode = document.createElement("div")
+    const idxNode = document.createElement("div")
+    const fileDateNode = document.createElement("div")
+    const fileNameNode = document.createElement("div")
+    const regX = /^(\d{4})(\d{2})(\d{2})_(\d{2})(\d{2})(\d{2})/
+    const match = regX.exec(fileName)
+    const [__, year, month, day, hour, minute, second] = match
+    const date = new Date(year, month - 1, day, hour, minute, second)
+    rowNode.setAttribute("class", "table__row")
+    idxNode.setAttribute("class", "idx")
+    fileDateNode.setAttribute("class", "file-date")
+    fileNameNode.setAttribute("class", "file-name")
+    fileDateNode.setAttribute("data", folder)
+    domFolderPath.setAttribute("data", folder)
+    domFolderPath.value = folder
+    fileNameNode.setAttribute("data", fileName)
+    domFileName.setAttribute("data", fileName)
+    domFileName.value = fileName
+    idxNode.appendChild(document.createTextNode(`${idx + 1}`))
+    fileDateNode.appendChild(document.createTextNode(date.toLocaleString()))
+    fileNameNode.appendChild(document.createTextNode(fileName))
+    rowNode.appendChild(idxNode)
+    rowNode.appendChild(fileDateNode)
+    rowNode.appendChild(fileNameNode)
+    rowNode.classList.add('active-row')
+    domTableBody.prepend(rowNode)
+    window.api.send('load', { folder, fileName })
+}
+
+const listAllFilesInTable = (dataFiles) => {
     const childNodes = [...document.querySelectorAll(".table__body>.table__row")]
     for (let i = 0; i < childNodes.length; i++) {
         if (domTableBody.hasChildNodes(childNodes[i])) {
@@ -145,6 +183,8 @@ const listFilesInTable = (dataFiles) => {
     }
 
     const folders = Object.keys(dataFiles)
+    const totalFiles = Object.values(dataFiles).flat().length
+    let count = 0
 
     folders.forEach((folder, index) => {
         let files = dataFiles[folder]
@@ -164,16 +204,25 @@ const listFilesInTable = (dataFiles) => {
             fileNameNode.setAttribute("class", "file-name")
             fileDateNode.setAttribute("data", folder)
             fileNameNode.setAttribute("data", file)
-            idxNode.appendChild(document.createTextNode(`${idx + 1}`))
+            idxNode.appendChild(document.createTextNode(`${++count}`))
             fileDateNode.appendChild(document.createTextNode(date.toLocaleString()))
             fileNameNode.appendChild(document.createTextNode(file))
             rowNode.appendChild(idxNode)
             rowNode.appendChild(fileDateNode)
             rowNode.appendChild(fileNameNode)
-            if (index === folders.length - 1 && idx == files.length - 1) { rowNode.classList.add('active-row') }
             domTableBody.prepend(rowNode)
+
+            if (count === totalFiles) {
+                rowNode.classList.add('active-row')
+                domFolderPath.setAttribute("data", folder)
+                domFolderPath.value = folder
+                domFileName.setAttribute("data", file)
+                domFileName.value = file
+                window.api.send('load', { folder, fileName: file })
+            }
         })
     })
+
 
 
 }// end of helper function
@@ -399,10 +448,10 @@ window.api.receive('data', (raw_data) => {
 })
 
 // On saving data query for list of files
-window.api.receive("saved", ({ filePath, error }) => {
-    if (filePath) {
+window.api.receive("saved", ({ folder, fileName, error }) => {
+    if (fileName) {
         state.isWritingData = false
-        window.api.send("listFiles")
+        updateDataTable(folder, fileName)
     } else if (error) {
         console.log(error)
     } else {
@@ -416,20 +465,7 @@ window.api.receive("listFiles", ({ dataFiles, error }) => {
         console.log(error)
     }
     else if (dataFiles) {
-        const folder = Object.keys(dataFiles)[0]
-        const fileName = folder ? [...dataFiles[folder]].pop() : "..." // Name of the last file
-        domFolderPath.value = folder
-        domFolderPath.setAttribute("data", folder)
-        domFileName.setAttribute('data', fileName)
-        domFileName.value = fileName
-        listFilesInTable(dataFiles)
-
-        if (folder && fileName) {
-            window.api.send("load", { folder, fileName })
-        }
-        else {
-            console.log("There were no files found in the selected folder!")
-        }
+        listAllFilesInTable(dataFiles)
     }
 
 })

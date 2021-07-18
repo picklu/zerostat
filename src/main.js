@@ -175,10 +175,11 @@ ipcMain.on("path", (event) => {
 
 ipcMain.on("save", (event, state) => {
     const senderWindow = event.sender
+    const folder = helpers.data.currentFolder
 
-    helpers.writeToCSV(state, helpers.data.currentFolder, ({ filePath, error }) => {
-        if (filePath) {
-            senderWindow.send("saved", { filePath })
+    helpers.writeToCSV(state, folder, ({ folder, fileName, error }) => {
+        if (fileName) {
+            senderWindow.send("saved", { folder, fileName })
             console.log('successfully saved')
         }
         else if (error) {
