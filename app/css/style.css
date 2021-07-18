@@ -349,7 +349,6 @@ table {
 }
 
 .file-path__base, .file-path__tail {
-  color: #053a6b;
   text-align: left;
   display: grid;
   grid-template-columns: auto 1fr;
