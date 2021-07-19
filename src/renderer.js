@@ -43,6 +43,7 @@ const state = {
     errorMessage: "",
     status: "not ready",
     method: {
+        index: 1,
         type: "LSV",
         params: {
             // will be populated on submit
@@ -127,6 +128,7 @@ const updateDomain = (event) => {
     domain.currMin = -1 * state.method.params.maxcurrent
     domain.voltMin = Math.min(state.method.params.estart, state.method.params.estop)
     domain.currMax = state.method.params.maxcurrent
+    state.method.params.currMax = domain.currMax
 
     // rescale the plot
     rescale()
@@ -300,10 +302,13 @@ window.api.receive("connection", (isPortOpen, error) => {
 // Update input param fileds according to the selected method
 domMethod.addEventListener("change", (event) => {
     const methodType = domMethod.value.toUpperCase()
+    const methodIndex = domMethod.selectedIndex
     const domEStart = document.getElementById("estart")
     const domEStop = document.getElementById("estop")
     const domNCycles = document.getElementById("ncycles")
+    state.method.params.ncycles = domNCycles.value ? domNCycles.value : 0
     state.method.type = methodType
+    state.method.index = methodIndex ? methodIndex : 1
     switch (methodType) {
         case "CV":
             domEStart.parentElement.firstElementChild.innerText = "Vertex1 (V)"
@@ -471,15 +476,42 @@ window.api.receive("listFiles", ({ dataFiles, error }) => {
 })
 
 // On receiving data of the selected file
-window.api.receive("loaded", ({ error, mainDataText, mainDataObj, metaData }) => {
+window.api.receive("loaded", ({ error, mainDataText, mainDataObj, metaDataObj }) => {
     if (error) {
         console.log(error)
     }
-    else if (mainDataText && mainDataObj && metaData) {
+    else if (mainDataText && mainDataObj && metaDataObj) {
+        const {
+            scanId,
+            methodType,
+            methodIndex,
+            deviceModel,
+            firmwareVersion,
+            currMax,
+            estart,
+            estop,
+            estep,
+            ncycles,
+            timeOfMeasurement
+        } = metaDataObj
+
         state.data = mainDataObj
-        draw(state)
         domMainData.innerText = mainDataText
-        domMetaData.innerText = metaData
+        domMetaData.innerText = `ScanId: ${scanId}
+        Method Type: ${methodType}
+        Device Model: ${deviceModel}
+        Firmware Version: ${firmwareVersion}
+        Current Max: ${currMax}
+        Start Potential: ${estart}
+        End Potential: ${estop}
+        Potential Step: ${estep}
+        Number of Cycles: ${ncycles}
+        Time of Measurement: ${timeOfMeasurement}`
+
+        domMethod.selectedIndex = methodIndex
+        domMethod.dispatchEvent(new Event('change'))
+
+        draw(state)
     }
     else {
         console.log("Something went wrong!")
