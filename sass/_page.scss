@@ -160,6 +160,11 @@
     text-align-last: center;
 }
 
+.input,
+.options {
+    outline: none;
+}
+
 .btn:hover {
     background-color: $grey-secondary;
   }

@@ -311,6 +311,11 @@ table {
   text-align-last: center;
 }
 
+.input,
+.options {
+  outline: none;
+}
+
 .btn:hover {
   background-color: #b9bbbb;
 }
