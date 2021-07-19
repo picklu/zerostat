@@ -299,7 +299,8 @@ table {
 .input:hover,
 .label:hover,
 .options:hover {
-  box-shadow: 2px 2px 2px #b9bbbb;
+  color: #053a6b;
+  cursor: pointer;
 }
 
 .input {
@@ -323,25 +324,6 @@ table {
   text-shadow: 1px 1px 1px #6b6767;
 }
 
-.sweep {
-  font-size: medium;
-  height: 50px;
-  padding: 5px;
-  width: 100%;
-}
-
-.connected, .stop-sweep {
-  color: #e71717;
-}
-
-.error, .overflow {
-  color: #e71717;
-}
-
-.bold {
-  font-weight: 600;
-}
-
 .file-path {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -361,6 +343,7 @@ table {
 
 .file-path__base .label, .file-path__tail .label {
   border-right: none;
+  font-size: 0.7em;
 }
 
 .bold {
@@ -377,6 +360,25 @@ table {
 
 .active-row {
   color: #053a6b;
+  font-weight: 600;
+}
+
+.sweep {
+  font-size: medium;
+  height: 50px;
+  padding: 5px;
+  width: 100%;
+}
+
+.connected, .stop-sweep {
+  color: #e71717;
+}
+
+.error, .overflow {
+  color: #e71717;
+}
+
+.bold {
   font-weight: 600;
 }
 

@@ -147,7 +147,8 @@
     width: 100%;
     
     &:hover {
-        box-shadow: 2px 2px 2px $grey-secondary;
+        color: $blue-primary;
+        cursor: pointer;
     }
 }
 
@@ -171,6 +172,47 @@
     color: $red-primary;
     text-shadow: 1px 1px 1px $grey-primary;
   }
+  
+  .file-path {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-gap: $padding-secondary;
+      
+      
+      &__base,
+      &__tail {
+          text-align: left;
+          display: grid;
+          grid-template-columns: auto 1fr;
+          
+          .input {
+              text-align: left;
+              outline: none;
+            }
+            
+            .label {
+                border-right: none;
+                font-size: 0.7em;
+            }
+        }
+    }
+    
+    .bold {
+        font-weight: 600;
+    }
+
+    .active {
+        display: grid;
+}
+
+.inactive {
+    display: none;
+}
+
+.active-row {
+    color: $blue-primary;
+    font-weight: 600;
+}
 
 .sweep {
     font-size: medium;
@@ -188,45 +230,5 @@
 }
 
 .bold {
-    font-weight: 600;
-}
-
-.file-path {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: $padding-secondary;
-
-    
-    &__base,
-    &__tail {
-        text-align: left;
-        display: grid;
-        grid-template-columns: auto 1fr;
-
-        .input {
-            text-align: left;
-            outline: none;
-        }
-
-        .label {
-            border-right: none;
-        }
-    }
-}
-
-.bold {
-    font-weight: 600;
-}
-
-.active {
-    display: grid;
-}
-
-.inactive {
-    display: none;
-}
-
-.active-row {
-    color: $blue-primary;
     font-weight: 600;
 }
