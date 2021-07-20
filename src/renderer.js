@@ -234,6 +234,8 @@ const listAllFilesInTable = (dataFiles) => {
 window.addEventListener("DOMContentLoaded", () => {
     showStatusMessage()
 
+    const methodIndex = domMethod.selectedIndex
+    state.method.index = methodIndex ? methodIndex : 1
     window.api.send("listFiles")
 
     setInterval(() => { // update port
