@@ -81,31 +81,35 @@ helpers.extractData = (data) => {
         const metaData = data.toString().split('\n').slice(startMeta, endMeta)
         const scanId = metaData.slice(0, 1)[0].split(': ').pop()
         const methodType = metaData.slice(1, 2)[0].split(': ').pop()
-        const methodIndex = metaData.slice(2, 3)[0].split(': ').pop()
-        const deviceModel = metaData.slice(3, 4)[0].split(': ').pop()
-        const firmwareVersion = metaData.slice(4, 5)[0].split(': ').pop()
-        const currMax = metaData.slice(5, 6)[0].split(': ').pop()
-        const estart = metaData.slice(6, 7)[0].split(': ').pop()
-        const estop = metaData.slice(7, 8)[0].split(': ').pop()
-        const estep = metaData.slice(8, 9)[0].split(': ').pop()
+        const deviceModel = metaData.slice(2, 3)[0].split(': ').pop()
+        const firmwareVersion = metaData.slice(3, 4)[0].split(': ').pop()
+        const currMax = metaData.slice(4, 5)[0].split(': ').pop()
+        const estart = metaData.slice(5, 6)[0].split(': ').pop()
+        const estop = metaData.slice(6, 7)[0].split(': ').pop()
+        const estep = metaData.slice(7, 8)[0].split(': ').pop()
+        const scanrate = metaData.slice(8, 9)[0].split(': ').pop()
         const ncycles = metaData.slice(9, 10)[0].split(': ').pop()
-        const timeOfMeasurement = metaData.slice(10, 11)[0].split(': ').pop()
+        const equilibrationTime = metaData.slice(10, 11)[0].split(': ').pop()
+        console.log(metaData)
+        const timeOfMeasurement = metaData.slice(11, 12)[0].split(': ').pop()
+        console.log("extractData")
 
         const metaDataObj = {
             scanId,
             methodType,
-            methodIndex,
             deviceModel,
             firmwareVersion,
             currMax,
             estart,
             estop,
             estep,
+            scanrate,
             ncycles,
+            equilibrationTime,
             timeOfMeasurement
         }
 
-
+        console.log(metaDataObj)
         const mainData = data.toString().split('\n').slice(startData, endData)
         const mainDataText = mainData.join('\n')
         const mainDataObj = mainData.map(rd => {
@@ -156,8 +160,7 @@ helpers.writeToCSV = (() => {
             deviceModel,
             firmwareVersion,
             method: { type: methodType,
-                index: methodIndex,
-                params: { currMax, ncycles, estart, estop, estep, scanrate } },
+                params: { maxcurrent, ncycles, estart, estop, estep, scanrate, equilibrationtime } },
             data } = dataStream;
         const scanId = `${timeString()}_${(++scanNum).toString().padStart(3, '0')}`
         const fileName = `${scanId}_${methodType.toLowerCase()}${dataFileExt}`
@@ -169,18 +172,21 @@ helpers.writeToCSV = (() => {
         const header = [
             [`ScanId: ${scanId}`],
             [`Method Type: ${methodType}`],
-            [`Method Index: ${methodIndex}`],
             [`Device Model: ${deviceModel}`],
             [`Firmware Version: ${firmwareVersion}`],
-            [`Current Max: ${currMax ? currMax : '200 uA'}`],
+            [`Current Max: ${maxcurrent}`],
             [`Start Potential: ${estart}`],
             [`End Potential: ${estop}`],
             [`Potential Step: ${estep}`],
-            [`Number of Cycles: ${ncycles ? ncycles : 0}`],
+            [`Scan Rate: ${scanrate}`],
+            [`Number of Cycles: ${ncycles}`],
+            [`Equilibration time: ${equilibrationtime}`],
             [`Time of Measurement: ${(new Date()).toISOString()}`],
             ['======= start ======='],
             ['Voltage (V)', 'Current (uA)'],
         ];
+
+        console.log(header)
 
         writeToPath(filePath, [...header, ...newData])
             .on('error', error => func({ error }))

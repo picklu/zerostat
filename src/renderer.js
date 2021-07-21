@@ -43,7 +43,6 @@ const state = {
     errorMessage: "",
     status: "not ready",
     method: {
-        index: 1,
         type: "LSV",
         params: {
             // will be populated on submit
@@ -73,6 +72,36 @@ const showStatusMessage = () => {
             </b> Voltage: ${state.voltage.toFixed(4)} V & Current: ${state.current.toFixed(4)} \xB5A`
     }
     domStatusMessage.innerHTML = message
+}
+
+const updateParams = (params) => {
+    const {
+        scanId,
+        methodType,
+        deviceModel,
+        firmwareVersion,
+        currMax,
+        estart,
+        estop,
+        estep,
+        scanrate,
+        ncycles,
+        equilibrationtime,
+        timeOfMeasurement
+    } = params
+
+    domMethod.dispatchEvent(new Event('change'))
+
+    const domCurrLimit = document.getElementById('maxcurrent')
+    const domCurrOptions = domCurrLimit.children
+    for (option in domCurrOptions) {
+        if (domCurrOptions[option] == currMax) {
+            domCurrLimit.selectedIndex = option
+            domCurrLimit.dispatchEvent(new Event('change'))
+
+        }
+    }
+
 }
 
 const updateUI = () => {
@@ -234,8 +263,6 @@ const listAllFilesInTable = (dataFiles) => {
 window.addEventListener("DOMContentLoaded", () => {
     showStatusMessage()
 
-    const methodIndex = domMethod.selectedIndex
-    state.method.index = methodIndex ? methodIndex : 1
     window.api.send("listFiles")
 
     setInterval(() => { // update port
@@ -304,13 +331,11 @@ window.api.receive("connection", (isPortOpen, error) => {
 // Update input param fileds according to the selected method
 domMethod.addEventListener("change", (event) => {
     const methodType = domMethod.value.toUpperCase()
-    const methodIndex = domMethod.selectedIndex
     const domEStart = document.getElementById("estart")
     const domEStop = document.getElementById("estop")
     const domNCycles = document.getElementById("ncycles")
-    state.method.params.ncycles = domNCycles.value ? domNCycles.value : 0
+    state.method.params.ncycles = domNCycles.value
     state.method.type = methodType
-    state.method.index = methodIndex ? methodIndex : 1
     switch (methodType) {
         case "CV":
             domEStart.parentElement.firstElementChild.innerText = "Vertex1 (V)"
@@ -336,25 +361,18 @@ domDOMAIN.forEach(input => {
 domFormParams.addEventListener("submit", (event) => {
     event.preventDefault()
     state.isRunning = !state.isRunning
+
     if (state.isRunning) {
 
         domConnect.classList.add("btn-inactive")
         domLoadData.classList.add("btn-inactive")
-
-
         state.data = []
-        Array.from(event.target).forEach(input => {
-            if (input.tagName === "INPUT") {
-                const key = input.getAttribute("name")
-                const value = input.value
-                if (input.parentElement.classList.contains("active")) {
-                    state.method.params[key] = Number(value)
-                }
-                else {
-                    state.method.params[key] = null
-                }
-            }
-            // else do nothing
+
+
+        Array.from(new FormData(event.target)).forEach(kv => {
+            const key = kv[0]
+            const value = kv[1]
+            state.method.params[key] = key === 'method' ? value : Number(value)
         })
     } else {
         domConnect.classList.remove("btn-inactive")
@@ -483,17 +501,18 @@ window.api.receive("loaded", ({ error, mainDataText, mainDataObj, metaDataObj })
         console.log(error)
     }
     else if (mainDataText && mainDataObj && metaDataObj) {
-        const {
+        const params = {
             scanId,
             methodType,
-            methodIndex,
             deviceModel,
             firmwareVersion,
             currMax,
             estart,
             estop,
             estep,
+            scanrate,
             ncycles,
+            equilibrationtime,
             timeOfMeasurement
         } = metaDataObj
 
@@ -507,11 +526,13 @@ window.api.receive("loaded", ({ error, mainDataText, mainDataObj, metaDataObj })
         Start Potential: ${estart}
         End Potential: ${estop}
         Potential Step: ${estep}
+        Scan Rate: ${scanrate}
         Number of Cycles: ${ncycles}
+        Equilibration time: ${equilibrationtime}
         Time of Measurement: ${timeOfMeasurement}`
 
-        domMethod.selectedIndex = methodIndex
-        domMethod.dispatchEvent(new Event('change'))
+        updateParams(params)
+
 
         draw(state)
     }
