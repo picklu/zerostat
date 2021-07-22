@@ -322,7 +322,7 @@ window.api.receive("ports", (ports) => {
 
 // Update input values of the voltage limits  in two decimal points
 domVoltageLimitInputs.forEach(input => {
-    input.addEventListener("input", () => {
+    input.addEventListener("change", () => {
         input.value = (+input.value).toFixed(2)
     })
 })
