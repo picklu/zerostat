@@ -12,6 +12,12 @@ const domMetaData = document.querySelector(".meta-data")
 const domMainData = document.querySelector(".main-data")
 const domLoadData = document.getElementById("load-data")
 const domMaxCurrent = document.getElementById('maxcurrent')
+const domEStart = document.getElementById("estart")
+const domEStop = document.getElementById("estop")
+const domEStep = document.getElementById("estep")
+const domScanRate = document.getElementById("scanrate")
+const domNCycles = document.getElementById("ncycles")
+const domEquilibrationTime = document.getElementById("equilibrationtime")
 const domVoltageLimitInputs = document.querySelectorAll(".voltage-limit")
 
 // spec of the microcontroller io and amplifier
@@ -85,6 +91,13 @@ const changeOption = (dom, value) => {
     })
 }
 
+
+const changeInput = (dom, value) => {
+    dom.value = value
+    dom.dispatchEvent(new Event('change'))
+}
+
+
 const updateParams = (params) => {
     const {
         scanId,
@@ -98,20 +111,16 @@ const updateParams = (params) => {
         scanrate,
         ncycles,
         equilibrationTime,
-        timeOfMeasurement
     } = params
 
     changeOption(domMethod, methodType)
     changeOption(domMaxCurrent, currMax)
-
-    const domCurrLimit = document.getElementById('maxcurrent')
-    const domCurrOptions = domCurrLimit.children
-    for (option in domCurrOptions) {
-        if (domCurrOptions[option] == currMax) {
-            domCurrLimit.selectedIndex = option
-            domCurrLimit.dispatchEvent(new Event('change'))
-        }
-    }
+    changeInput(domEStart, estart)
+    changeInput(domEStop, estop)
+    changeInput(domEStep, estep)
+    changeInput(domScanRate, scanrate)
+    changeInput(domNCycles, ncycles)
+    changeInput(domEquilibrationTime, equilibrationTime)
 }
 
 const updateUI = () => {
@@ -341,9 +350,6 @@ window.api.receive("connection", (isPortOpen, error) => {
 // Update input param fileds according to the selected method
 domMethod.addEventListener("change", (event) => {
     const methodType = domMethod.value.toUpperCase()
-    const domEStart = document.getElementById("estart")
-    const domEStop = document.getElementById("estop")
-    const domNCycles = document.getElementById("ncycles")
     state.method.params.ncycles = domNCycles.value
     state.method.type = methodType
     switch (methodType) {
