@@ -11,6 +11,7 @@ const domTableBody = document.querySelector(".table__body")
 const domMetaData = document.querySelector(".meta-data")
 const domMainData = document.querySelector(".main-data")
 const domLoadData = document.getElementById("load-data")
+const domMaxCurrent = document.getElementById('maxcurrent')
 const domVoltageLimitInputs = document.querySelectorAll(".voltage-limit")
 
 // spec of the microcontroller io and amplifier
@@ -74,6 +75,16 @@ const showStatusMessage = () => {
     domStatusMessage.innerHTML = message
 }
 
+const changeOption = (dom, value) => {
+    value = dom.className.includes('method') ? value.toLowerCase() : value.toString()
+    Array.from(dom.options).forEach((opt, idx) => {
+        if (opt.value === value) {
+            dom.options[idx].selected = true
+            dom.dispatchEvent(new Event('change'))
+        }
+    })
+}
+
 const updateParams = (params) => {
     const {
         scanId,
@@ -90,7 +101,8 @@ const updateParams = (params) => {
         timeOfMeasurement
     } = params
 
-    domMethod.dispatchEvent(new Event('change'))
+    changeOption(domMethod, methodType)
+    changeOption(domMaxCurrent, currMax)
 
     const domCurrLimit = document.getElementById('maxcurrent')
     const domCurrOptions = domCurrLimit.children
