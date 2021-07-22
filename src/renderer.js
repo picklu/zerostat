@@ -86,7 +86,7 @@ const updateParams = (params) => {
         estep,
         scanrate,
         ncycles,
-        equilibrationtime,
+        equilibrationTime,
         timeOfMeasurement
     } = params
 
@@ -98,10 +98,8 @@ const updateParams = (params) => {
         if (domCurrOptions[option] == currMax) {
             domCurrLimit.selectedIndex = option
             domCurrLimit.dispatchEvent(new Event('change'))
-
         }
     }
-
 }
 
 const updateUI = () => {
@@ -512,7 +510,7 @@ window.api.receive("loaded", ({ error, mainDataText, mainDataObj, metaDataObj })
             estep,
             scanrate,
             ncycles,
-            equilibrationtime,
+            equilibrationTime,
             timeOfMeasurement
         } = metaDataObj
 
@@ -528,7 +526,7 @@ window.api.receive("loaded", ({ error, mainDataText, mainDataObj, metaDataObj })
         Potential Step: ${estep}
         Scan Rate: ${scanrate}
         Number of Cycles: ${ncycles}
-        Equilibration time: ${equilibrationtime}
+        Equilibration time: ${equilibrationTime}
         Time of Measurement: ${timeOfMeasurement}`
 
         updateParams(params)

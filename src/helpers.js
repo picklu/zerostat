@@ -73,8 +73,8 @@ helpers.toTitleCase = (str) => {
 
 helpers.extractData = (data) => {
     const startMeta = 0
-    const endMeta = 11
-    const startData = 13
+    const endMeta = 12
+    const startData = 15
     const endData = -1
     const result = {}
     try {
@@ -90,9 +90,7 @@ helpers.extractData = (data) => {
         const scanrate = metaData.slice(8, 9)[0].split(': ').pop()
         const ncycles = metaData.slice(9, 10)[0].split(': ').pop()
         const equilibrationTime = metaData.slice(10, 11)[0].split(': ').pop()
-        console.log(metaData)
         const timeOfMeasurement = metaData.slice(11, 12)[0].split(': ').pop()
-        console.log("extractData")
 
         const metaDataObj = {
             scanId,
@@ -109,7 +107,6 @@ helpers.extractData = (data) => {
             timeOfMeasurement
         }
 
-        console.log(metaDataObj)
         const mainData = data.toString().split('\n').slice(startData, endData)
         const mainDataText = mainData.join('\n')
         const mainDataObj = mainData.map(rd => {
@@ -185,8 +182,6 @@ helpers.writeToCSV = (() => {
             ['======= start ======='],
             ['Voltage (V)', 'Current (uA)'],
         ];
-
-        console.log(header)
 
         writeToPath(filePath, [...header, ...newData])
             .on('error', error => func({ error }))
