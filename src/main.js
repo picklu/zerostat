@@ -1,6 +1,6 @@
 require('dotenv').config()
-const { app, BrowserWindow, dialog, getFocusedWindow, ipcMain, Menu } = require("electron")
 const path = require("path")
+const { app, BrowserWindow, dialog, getFocusedWindow, ipcMain, Menu, shell } = require("electron")
 const SerialPort = require("serialport")
 const Readline = require("@serialport/parser-readline")
 const { stat } = require("fs")
@@ -10,22 +10,11 @@ const menu = require('./menu')
 const helpers = require("./helpers")
 
 const windows = new Set()
-
 let port = null
 let parser = null
 
 helpers.updateDataFolders()
 
-app.on("ready", () => {
-    createWindow()
-})
-
-app.on("window-all-closed", () => {
-    if (process.platform === "darwin" || process.platform === 'win32') {
-        return false
-    }
-    app.quit()
-})
 
 const createWindow = exports.createWindow = () => {
     let x, y
@@ -70,11 +59,19 @@ const createWindow = exports.createWindow = () => {
     return newWindow
 }
 
+app.on("ready", () => {
+    createWindow()
+})
+
+app.on("window-all-closed", () => {
+    if (process.platform === "darwin") app.quit()
+})
+
 Menu.setApplicationMenu(menu)
-
-
 app.allowRendererProcessReuse = false
 
+
+// IPC events
 ipcMain.on("ports", (event) => {
     const senderWindow = event.sender
     if (senderWindow) {
@@ -227,7 +224,11 @@ ipcMain.on("load", (event, { folder, fileName }) => {
 ipcMain.on("open", (event, { filePathBase, fileName }) => {
     if (filePathBase && fileName) {
         const filePath = path.join(filePathBase, fileName)
-        spawn('notepad', [filePath])
+
+        if (process.platform === 'win-32') {
+            spawn('notepad', [filePath])
+        }
+        shell.openPath(filePath)
     }
 })
 
