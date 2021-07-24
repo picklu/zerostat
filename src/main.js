@@ -73,18 +73,18 @@ app.allowRendererProcessReuse = false
 
 
 // IPC events
-ipcMain.on("ports", (event) => {
+ipcMain.on("serial:ports", (event) => {
     const senderWindow = event.sender
     if (senderWindow) {
         SerialPort.list()
             .then(ports => {
-                senderWindow.send("ports", ports.map(port => port.path));
+                senderWindow.send("serial:ports", ports.map(port => port.path));
             })
             .catch(error => log.warn(error))
     }
 })
 
-ipcMain.on("connection", (event, portPath) => {
+ipcMain.on("serial:connection", (event, portPath) => {
     const senderWindow = event.sender
     if (port && port.isOpen) {
         port.close()
@@ -102,29 +102,29 @@ ipcMain.on("connection", (event, portPath) => {
                     port = null
                     parser = null
                     log.warn(error.message)
-                    senderWindow.send("connection", false, error.message)
+                    senderWindow.send("serial:connection", false, error.message)
                 }
                 else {
                     log.info("==> connected")
                     port.on("close", () => {
                         port = null
                         parser = null
-                        senderWindow.send("connection", false, "")
+                        senderWindow.send("serial:connection", false, "")
                         log.info("==> disconnected")
                     })
 
                     parser.on("data", (data) => {
-                        senderWindow.send("data", data)
+                        senderWindow.send("current-voltage:data", data)
                     })
 
-                    senderWindow.send("connection", true, "")
+                    senderWindow.send("serial:connection", true, "")
                 }
             })
         }
     }
 })
 
-ipcMain.on("sweep", (event, state) => {
+ipcMain.on("current-voltage:sweep", (event, state) => {
     const halt = state.isRunning ? 0 : 1
     if (halt) {
         port.write(`0,${halt},0,0,${state.refDAC},0,0`)
@@ -156,7 +156,7 @@ ipcMain.on("sweep", (event, state) => {
     }
 })
 
-ipcMain.on("path", (event) => {
+ipcMain.on("file:path", (event) => {
     const senderWindow = event.sender
 
     dialog
@@ -164,24 +164,24 @@ ipcMain.on("path", (event) => {
         .then(result => {
             const folderPath = result.filePaths[0]
             helpers.updateDataFolders(folderPath)
-            senderWindow.send("path", { folderPath })
+            senderWindow.send("file:path", { folderPath })
         }).catch(error => {
             log.warn(error)
-            senderWindow.send("path", { error })
+            senderWindow.send("file:path", { error })
         })
 })
 
-ipcMain.on("save", (event, state) => {
+ipcMain.on("file:save", (event, state) => {
     const senderWindow = event.sender
     const folder = helpers.data.currentFolder
 
     helpers.writeToCSV(state, folder, ({ folder, fileName, error }) => {
         if (fileName) {
-            senderWindow.send("saved", { folder, fileName })
+            senderWindow.send("file:save", { folder, fileName })
             log.info("==> successfully saved")
         }
         else if (error) {
-            senderWindow.send("saved", { error })
+            senderWindow.send("file:save", { error })
             log.warn(error)
         } else {
             log.warn("Something went wrong!")
@@ -189,40 +189,40 @@ ipcMain.on("save", (event, state) => {
     })
 })
 
-ipcMain.on("listFiles", (event) => {
+ipcMain.on("file:list", (event) => {
     const senderWindow = event.sender
 
     helpers.listDataDir(({ error, dataFiles }) => {
         if (error && error.path) {
-            senderWindow.send("listFiles", { error });
+            senderWindow.send("file:list", { error });
         } else if (dataFiles) {
-            senderWindow.send("listFiles", { dataFiles });
+            senderWindow.send("file:list", { dataFiles });
         } else {
-            senderWindow.send("listFiles", { error: "Something went wrong!" });
+            senderWindow.send("file:list", { error: "Something went wrong!" });
         }
     })
 })
 
 
-ipcMain.on("load", (event, { folder, fileName }) => {
+ipcMain.on("file:load", (event, { folder, fileName }) => {
     const senderWindow = event.sender
 
     if (folder && fileName) {
         const filePath = path.join(folder, fileName)
         helpers.readFile(filePath, ({ error, data }) => {
             if (error) {
-                senderWindow.send("loaded", { error });
+                senderWindow.send("file:load", { error });
             } else if (data) {
                 helpers.updateDataFolders(folder)
-                senderWindow.send("loaded", helpers.extractData(data));
+                senderWindow.send("file:load", helpers.extractData(data));
             } else {
-                senderWindow.send("loaded", { error: "Something went wrong!" });
+                senderWindow.send("file:load", { error: "Something went wrong!" });
             }
         })
     }
 })
 
-ipcMain.on("open", (event, { filePathBase, fileName }) => {
+ipcMain.on("file:open", (event, { filePathBase, fileName }) => {
     if (filePathBase && fileName) {
         const filePath = path.join(filePathBase, fileName)
 

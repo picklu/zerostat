@@ -227,7 +227,7 @@ const updateDataTable = (folder, fileName) => {
     const rowNode = createRowNode(idx, folder, fileName)
     rowNode.classList.add('active-row')
     domTableBody.prepend(rowNode)
-    window.api.send('load', { folder, fileName })
+    window.api.send('file:load', { folder, fileName })
 }
 
 const listAllFilesInTable = (dataFiles) => {
@@ -254,7 +254,7 @@ const listAllFilesInTable = (dataFiles) => {
                 domFolderPath.value = folder
                 domFileName.setAttribute("data", file)
                 domFileName.value = file
-                window.api.send('load', { folder, fileName: file })
+                window.api.send('file:load', { folder, fileName: file })
             }
         })
     })
@@ -265,11 +265,11 @@ const listAllFilesInTable = (dataFiles) => {
 window.addEventListener("DOMContentLoaded", () => {
     showStatusMessage()
 
-    window.api.send("listFiles")
+    window.api.send("file:list")
 
     setInterval(() => { // update port
         if (!state.isPortOpen) {
-            window.api.send("ports")
+            window.api.send("serial:ports")
         }
     }, 2 * 1000)
 
@@ -281,7 +281,7 @@ window.addEventListener("DOMContentLoaded", () => {
             if (!state.isWritingData && !state.isRunning && state.isDataReady) {
                 state.isWritingData = true
                 state.isDataReady = false
-                window.api.send("save", state)
+                window.api.send("file:save", state)
                 domConnect.classList.remove("btn-inactive")
                 domLoadData.classList.remove("btn-inactive")
             }
@@ -290,7 +290,7 @@ window.addEventListener("DOMContentLoaded", () => {
 })
 
 // populate options with ports
-window.api.receive("ports", (ports) => {
+window.api.receive("serial:ports", (ports) => {
     const items = []
     if (ports.length === 0) { ports.push("COMX") }
     if (!isEqual(state.portList, ports)) {
@@ -315,12 +315,12 @@ domConnect.addEventListener("click", (event) => {
     if (!state.isRunning) {
         const port = domSerialPorts.value
         state.isReady = false
-        window.api.send("connection", port)
+        window.api.send("serial:connection", port)
     }
 })
 
 // update ui on receiving connection status
-window.api.receive("connection", (isPortOpen, error) => {
+window.api.receive("serial:connection", (isPortOpen, error) => {
     state.voltage = isPortOpen ? state.voltage : 0
     state.current = isPortOpen ? state.current : 0
     state.isPortOpen = isPortOpen
@@ -377,13 +377,13 @@ domFormParams.addEventListener("submit", (event) => {
         domConnect.classList.remove("btn-inactive")
         domLoadData.classList.remove("btn-inactive")
     }
-    window.api.send("sweep", state)
+    window.api.send("current-voltage:sweep", state)
 })
 
 
 // Handle click event on base file path
 domFolderPath.addEventListener("click", (event) => {
-    window.api.send("path")
+    window.api.send("file:path")
 })
 
 // Handle click event on data table 
@@ -405,7 +405,7 @@ domTableBody.addEventListener("click", (event) => {
             row.classList.remove('active-row')
         })
         domTableRow.classList.add('active-row')
-        window.api.send('load', { folder, fileName })
+        window.api.send('file:load', { folder, fileName })
     }
 })
 
@@ -414,12 +414,12 @@ domLoadData.addEventListener('click', () => {
     if (!state.isRunning) {
         const filePathBase = domFolderPath.getAttribute('data')
         const fileName = domFileName.getAttribute('data')
-        window.api.send('open', { filePathBase, fileName })
+        window.api.send('file:open', { filePathBase, fileName })
     }
 })
 
 // On receiving path update file path
-window.api.receive("path", ({ error, folderPath }) => {
+window.api.receive("file:path", ({ error, folderPath }) => {
     if (error) {
         console.log(error)
     }
@@ -432,7 +432,7 @@ window.api.receive("path", ({ error, folderPath }) => {
 })
 
 // On receiving data act accordingly
-window.api.receive('data', (raw_data) => {
+window.api.receive('current-voltage:data', (raw_data) => {
     const text_data = raw_data.split(",")
     if (text_data[2] == 'READY') {
         state.deviceModel = text_data[0]
@@ -472,7 +472,7 @@ window.api.receive('data', (raw_data) => {
 })
 
 // On saving data query for list of files
-window.api.receive("saved", ({ folder, fileName, error }) => {
+window.api.receive("file:save", ({ folder, fileName, error }) => {
     if (fileName) {
         state.isWritingData = false
         updateDataTable(folder, fileName)
@@ -484,7 +484,7 @@ window.api.receive("saved", ({ folder, fileName, error }) => {
 })
 
 // On receiving list of files update dom
-window.api.receive("listFiles", ({ dataFiles, error }) => {
+window.api.receive("file:list", ({ dataFiles, error }) => {
     if (error) {
         console.log(error)
     }
@@ -495,7 +495,7 @@ window.api.receive("listFiles", ({ dataFiles, error }) => {
 })
 
 // On receiving data of the selected file
-window.api.receive("loaded", ({ error, mainDataText, mainDataObj, metaDataObj }) => {
+window.api.receive("file:load", ({ error, mainDataText, mainDataObj, metaDataObj }) => {
     if (error) {
         console.log(error)
     }
