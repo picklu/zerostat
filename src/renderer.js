@@ -26,11 +26,11 @@ const ADC_BIT = 12
 const OUTVOLTS = 2.2    // 0.55 to 2.75
 const OPVOLTS = 3.3     // operating voltage (V) of the microcontroller
 const REF_DAC = 2048    // Refrernce DAC value
-const FR = 12120        // feedback resistor in Ohm in the trans-impedance amplifier
+const fbResistor = 12120        // feedback resistor in Ohm in the trans-impedance amplifier
 const maxDAC = Math.pow(2, DAC_BIT)
 const maxADC = Math.pow(2, ADC_BIT)
 const voltRes = OUTVOLTS * 1000 / maxDAC // voltage resolution in mV
-const vToFR = OPVOLTS / FR // voltage to current conversion factor
+const VToCFactor = OPVOLTS / fbResistor // voltage to current conversion factor
 
 // global state object
 const state = {
@@ -152,7 +152,7 @@ const digitalToVoltage = (dv) => {
 
 // Convert ADC output for current to current
 const digitalToCurrent = (dc) => {
-    return +(((dc - REF_DAC * maxADC / maxDAC) * vToFR / maxADC) * 1e6).toFixed(5)
+    return +(((dc - REF_DAC * maxADC / maxDAC) * VToCFactor / maxADC) * 1e6).toFixed(5)
 }
 
 // Update current-voltage (xy domain for chart)
