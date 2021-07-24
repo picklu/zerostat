@@ -151,7 +151,13 @@ ipcMain.on("current-voltage:sweep", (event, state) => {
                 mode = -1
                 break
         }
-        log.info(`==> estartVolt => ${estartVolt}(${estart}), estopVolt => ${estopVolt}(${estop}), stepDAC => ${stepDAC}, dV => ${dV}, scanrate => ${scanrate}, delay => ${delay}, eqlTime => ${equilibrationTime}`)
+        log.info(`==> estartVolt => ${estartVolt}(${estart})
+                    estopVolt => ${estopVolt}(${estop}),
+                    stepDAC => ${stepDAC}, 
+                    dV => ${dV}, 
+                    scanrate => ${scanrate}, 
+                    delay => ${delay}, 
+                    eqlTime => ${equilibrationTime}`)
         port.write(`${delay},${halt},${mode},${ncycles},${state.refDAC},${estart},${estop},${stepDAC},${equilibrationTime}`)
     }
 })
