@@ -6,6 +6,7 @@ const Readline = require("@serialport/parser-readline")
 const { stat } = require("fs")
 const { send } = require("process")
 const spawn = require("child_process").spawn
+const log = require('electron-log')
 const menu = require('./menu')
 const helpers = require("./helpers")
 
@@ -79,7 +80,7 @@ ipcMain.on("ports", (event) => {
             .then(ports => {
                 senderWindow.send("ports", ports.map(port => port.path));
             })
-            .catch(error => console.log(error))
+            .catch(error => log.warn(error))
     }
 })
 
@@ -88,7 +89,7 @@ ipcMain.on("connection", (event, portPath) => {
     if (port && port.isOpen) {
         port.close()
         port = null
-        console.log("==> disconnecting ...")
+        log.info("==> disconnecting ...")
     } else if (senderWindow) {
         if (!port) {
             port = new SerialPort(portPath, { baudRate: 115200, autoOpen: false })
@@ -100,16 +101,16 @@ ipcMain.on("connection", (event, portPath) => {
                 if (error) {
                     port = null
                     parser = null
-                    console.log(error.message)
+                    log.warn(error.message)
                     senderWindow.send("connection", false, error.message)
                 }
                 else {
-                    console.log("==> connected")
+                    log.info("==> connected")
                     port.on("close", () => {
                         port = null
                         parser = null
                         senderWindow.send("connection", false, "")
-                        console.log("==> disconnected")
+                        log.info("==> disconnected")
                     })
 
                     parser.on("data", (data) => {
@@ -150,7 +151,7 @@ ipcMain.on("sweep", (event, state) => {
                 mode = -1
                 break
         }
-        console.log(`estartVolt => ${estartVolt}(${estart}), estopVolt => ${estopVolt}(${estop}), stepDAC => ${stepDAC}, dV => ${dV}, scanrate => ${scanrate}, delay => ${delay}, eqlTime => ${equilibrationTime}`)
+        log.info(`==> estartVolt => ${estartVolt}(${estart}), estopVolt => ${estopVolt}(${estop}), stepDAC => ${stepDAC}, dV => ${dV}, scanrate => ${scanrate}, delay => ${delay}, eqlTime => ${equilibrationTime}`)
         port.write(`${delay},${halt},${mode},${ncycles},${state.refDAC},${estart},${estop},${stepDAC},${equilibrationTime}`)
     }
 })
@@ -165,7 +166,7 @@ ipcMain.on("path", (event) => {
             helpers.updateDataFolders(folderPath)
             senderWindow.send("path", { folderPath })
         }).catch(error => {
-            console.log(error)
+            log.warn(error)
             senderWindow.send("path", { error })
         })
 })
@@ -177,13 +178,13 @@ ipcMain.on("save", (event, state) => {
     helpers.writeToCSV(state, folder, ({ folder, fileName, error }) => {
         if (fileName) {
             senderWindow.send("saved", { folder, fileName })
-            console.log('successfully saved')
+            log.info("==> successfully saved")
         }
         else if (error) {
             senderWindow.send("saved", { error })
-            console.log(error)
+            log.warn(error)
         } else {
-            console.log("Something went wrong!")
+            log.warn("Something went wrong!")
         }
     })
 })

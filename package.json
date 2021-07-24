@@ -47,6 +47,7 @@
   "dependencies": {
     "d3": "^6.7.0",
     "dotenv": "^9.0.2",
+    "electron-log": "^4.4.0",
     "fast-csv": "^4.3.6",
     "serialport": "^9.1.0"
   }
