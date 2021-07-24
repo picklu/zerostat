@@ -193,6 +193,7 @@ const createRowNode = (index, folder, fileName) => {
     const match = regX.exec(fileName)
     const [__, year, month, day, hour, minute, second] = match
     const date = new Date(year, month - 1, day, hour, minute, second)
+
     rowNode.setAttribute("class", "table__row")
     idxNode.setAttribute("class", "idx")
     fileDateNode.setAttribute("class", "file-date")
@@ -209,6 +210,7 @@ const createRowNode = (index, folder, fileName) => {
     rowNode.appendChild(idxNode)
     rowNode.appendChild(fileDateNode)
     rowNode.appendChild(fileNameNode)
+
     return rowNode
 }
 
@@ -243,27 +245,7 @@ const listAllFilesInTable = (dataFiles) => {
     folders.forEach((folder, index) => {
         let files = dataFiles[folder]
         files.forEach((file, idx) => {
-            const rowNode = document.createElement("div")
-            const idxNode = document.createElement("div")
-            const fileDateNode = document.createElement("div")
-            const fileNameNode = document.createElement("div")
-            const regX = /^(\d{4})(\d{2})(\d{2})_(\d{2})(\d{2})(\d{2})/
-            const match = regX.exec(file)
-            const [__, year, month, day, hour, minute, second] = match
-            const date = new Date(year, month - 1, day, hour, minute, second)
-
-            rowNode.setAttribute("class", "table__row")
-            idxNode.setAttribute("class", "idx")
-            fileDateNode.setAttribute("class", "file-date")
-            fileNameNode.setAttribute("class", "file-name")
-            fileDateNode.setAttribute("data", folder)
-            fileNameNode.setAttribute("data", file)
-            idxNode.appendChild(document.createTextNode(`${++count}`))
-            fileDateNode.appendChild(document.createTextNode(date.toLocaleString()))
-            fileNameNode.appendChild(document.createTextNode(file))
-            rowNode.appendChild(idxNode)
-            rowNode.appendChild(fileDateNode)
-            rowNode.appendChild(fileNameNode)
+            const rowNode = createRowNode(++count, folder, file)
             domTableBody.prepend(rowNode)
 
             if (count === totalFiles) {
