@@ -435,6 +435,7 @@ window.api.receive("file:path", ({ error, folderPath }) => {
     }
     else if (folderPath) {
         domFolderPath.value = folderPath
+        window.api.second("file:list")
     }
     else {
         console.log("No folder was selected!")
