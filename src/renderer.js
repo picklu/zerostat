@@ -216,12 +216,12 @@ const createRowNode = (index, folder, fileName) => {
 // Update table with new data file
 const updateDataTable = (folder, fileName) => {
     const childNodes = [...document.querySelectorAll(".table__body>.table__row")]
-    const idx = childNodes.length +
-        childNodes.forEach(node => {
-            if (node.classList.contains('active-row')) {
-                node.classList.remove('active-row')
-            }
-        })
+    const idx = childNodes.length + 1
+    childNodes.forEach(node => {
+        if (node.classList.contains('active-row')) {
+            node.classList.remove('active-row')
+        }
+    })
 
     const rowNode = createRowNode(idx, folder, fileName)
     rowNode.classList.add('active-row')
