@@ -203,7 +203,6 @@ ipcMain.on("file:list", (event) => {
     })
 })
 
-
 ipcMain.on("file:load", (event, { folder, fileName }) => {
     const senderWindow = event.sender
 

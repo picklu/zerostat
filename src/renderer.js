@@ -20,7 +20,7 @@ const domNCycles = document.getElementById("ncycles")
 const domEquilibrationTime = document.getElementById("equilibrationtime")
 const domVoltageLimitInputs = document.querySelectorAll(".voltage-limit")
 
-// spec of the microcontroller io and amplifier
+// Specification of the microcontroller io and amplifier
 const DAC_BIT = 12
 const ADC_BIT = 12
 const OUTVOLTS = 2.2    // 0.55 to 2.75
@@ -63,6 +63,7 @@ const state = {
 }
 
 // helper functions
+// Update/show status message
 const showStatusMessage = () => {
     let message = ""
     state.voltage = state.voltage ? state.voltage : 0
@@ -81,6 +82,7 @@ const showStatusMessage = () => {
     domStatusMessage.innerHTML = message
 }
 
+// Change option and dispatch change event
 const changeOption = (dom, value) => {
     const change = new Event('change')
     value = dom.className.includes('method') ? value.toLowerCase() : value.toString()
@@ -92,14 +94,14 @@ const changeOption = (dom, value) => {
     })
 }
 
-
+// Change input and dispatch change event
 const changeInput = (dom, value) => {
     const change = new Event('change')
     dom.value = value
     dom.dispatchEvent(change)
 }
 
-
+// Change options and inputs
 const updateParams = (params) => {
     const {
         methodType,
@@ -122,6 +124,7 @@ const updateParams = (params) => {
     changeInput(domEquilibrationTime, equilibrationTime)
 }
 
+// Update state of the connect and sweep buttons
 const updateUI = () => {
     domConnect.innerText = state.isPortOpen
         ? state.isReady
@@ -142,22 +145,17 @@ const updateUI = () => {
     domSweep.disabled = state.isReady && state.isPortOpen ? false : true
 }
 
-const isEqual = (a, b) => {
-    if (a.length !== b.length) { return false }
-    for (let i of a) {
-        if (!b.includes(i)) { return false }
-    }
-    return true
-}
-
+// Convert ADC output for voltage to voltage
 const digitalToVoltage = (dv) => {
     return +((REF_DAC - dv) * (OUTVOLTS / maxADC)).toFixed(5)
 }
 
+// Convert ADC output for current to current
 const digitalToCurrent = (dc) => {
     return +(((dc - REF_DAC * maxADC / maxDAC) * vToFR / maxADC) * 1e6).toFixed(5)
 }
 
+// Update current-voltage (xy domain for chart)
 const updateDomain = (event) => {
     event.preventDefault()
     event.stopPropagation()
@@ -184,6 +182,7 @@ const updateDomain = (event) => {
     if (!state.isRunning) { draw(state) }
 }
 
+// Create row node for data file
 const createRowNode = (index, folder, fileName) => {
     const rowNode = document.createElement("div")
     const idxNode = document.createElement("div")
@@ -214,7 +213,7 @@ const createRowNode = (index, folder, fileName) => {
     return rowNode
 }
 
-
+// Update table with new data file
 const updateDataTable = (folder, fileName) => {
     const childNodes = [...document.querySelectorAll(".table__body>.table__row")]
     const idx = childNodes.length +
@@ -230,6 +229,7 @@ const updateDataTable = (folder, fileName) => {
     window.api.send('file:load', { folder, fileName })
 }
 
+// Render table with all data files
 const listAllFilesInTable = (dataFiles) => {
     const childNodes = [...document.querySelectorAll(".table__body>.table__row")]
     for (let i = 0; i < childNodes.length; i++) {
@@ -258,7 +258,7 @@ const listAllFilesInTable = (dataFiles) => {
             }
         })
     })
-}// end of helper function
+}// end of helper functions
 
 
 // get ports once the dom content is loaded
@@ -289,19 +289,6 @@ window.addEventListener("DOMContentLoaded", () => {
     }, 50)
 })
 
-// populate options with ports
-window.api.receive("serial:ports", (ports) => {
-    const items = []
-    if (ports.length === 0) { ports.push("COMX") }
-    if (!isEqual(state.portList, ports)) {
-        state.portList = [...ports]
-        ports.forEach(port => {
-            items.push(`<option value="${port}">${port}</option>`)
-        });
-
-        domSerialPorts.innerHTML = items.join("")
-    }
-})
 
 // Update input values of the voltage limits  in two decimal points
 domVoltageLimitInputs.forEach(input => {
@@ -317,17 +304,6 @@ domConnect.addEventListener("click", (event) => {
         state.isReady = false
         window.api.send("serial:connection", port)
     }
-})
-
-// update ui on receiving connection status
-window.api.receive("serial:connection", (isPortOpen, error) => {
-    state.voltage = isPortOpen ? state.voltage : 0
-    state.current = isPortOpen ? state.current : 0
-    state.isPortOpen = isPortOpen
-    state.errorMessage = error
-    state.status = !error ? "disconnected" : "error"
-    showStatusMessage()
-    updateUI()
 })
 
 // Update input param fileds according to the selected method
@@ -418,6 +394,40 @@ domLoadData.addEventListener('click', () => {
     }
 })
 
+// Populate options with ports
+window.api.receive("serial:ports", (ports) => {
+
+    const isEqual = (a, b) => {
+        if (a.length !== b.length) { return false }
+        for (let i of a) {
+            if (!b.includes(i)) { return false }
+        }
+        return true
+    }
+
+    const items = []
+    if (ports.length === 0) { ports.push("COMX") }
+    if (!isEqual(state.portList, ports)) {
+        state.portList = [...ports]
+        ports.forEach(port => {
+            items.push(`<option value="${port}">${port}</option>`)
+        });
+
+        domSerialPorts.innerHTML = items.join("")
+    }
+})
+
+// update ui on receiving connection status
+window.api.receive("serial:connection", (isPortOpen, error) => {
+    state.voltage = isPortOpen ? state.voltage : 0
+    state.current = isPortOpen ? state.current : 0
+    state.isPortOpen = isPortOpen
+    state.errorMessage = error
+    state.status = !error ? "disconnected" : "error"
+    showStatusMessage()
+    updateUI()
+})
+
 // On receiving path update file path
 window.api.receive("file:path", ({ error, folderPath }) => {
     if (error) {
@@ -491,7 +501,6 @@ window.api.receive("file:list", ({ dataFiles, error }) => {
     else if (dataFiles) {
         listAllFilesInTable(dataFiles)
     }
-
 })
 
 // On receiving data of the selected file
@@ -531,8 +540,6 @@ window.api.receive("file:load", ({ error, mainDataText, mainDataObj, metaDataObj
         Time of Measurement: ${timeOfMeasurement}`
 
         updateParams(params)
-
-
         draw(state)
     }
     else {

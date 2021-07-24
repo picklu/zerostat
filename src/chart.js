@@ -23,6 +23,7 @@ const domain = {
 
 let chart = {}
 
+// redraw the plot on viewport change
 function redraw() {
     const width = domChartWindow.clientWidth
     const height = domChartWindow.clientHeight
@@ -108,6 +109,7 @@ function redraw() {
 
 }
 
+// function for rescanling on domain change
 function rescale() {
     chart.xScale.domain([domain.voltMin, domain.voltMax]) // rescale
     chart.yScale.domain([domain.currMin, domain.currMax]) // rescale
@@ -130,6 +132,7 @@ function rescale() {
         .call(chart.yAxis)
 }
 
+// function for drawing plot
 function draw(state) {
     const dt = []
     const cxy = {}
