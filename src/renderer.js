@@ -82,28 +82,27 @@ const showStatusMessage = () => {
 }
 
 const changeOption = (dom, value) => {
+    const change = new Event('change')
     value = dom.className.includes('method') ? value.toLowerCase() : value.toString()
     Array.from(dom.options).forEach((opt, idx) => {
         if (opt.value === value) {
             dom.options[idx].selected = true
-            dom.dispatchEvent(new Event('change'))
+            dom.dispatchEvent(change)
         }
     })
 }
 
 
 const changeInput = (dom, value) => {
+    const change = new Event('change')
     dom.value = value
-    dom.dispatchEvent(new Event('change'))
+    dom.dispatchEvent(change)
 }
 
 
 const updateParams = (params) => {
     const {
-        scanId,
         methodType,
-        deviceModel,
-        firmwareVersion,
         currMax,
         estart,
         estop,
@@ -185,16 +184,7 @@ const updateDomain = (event) => {
     if (!state.isRunning) { draw(state) }
 }
 
-
-const updateDataTable = (folder, fileName) => {
-    const childNodes = [...document.querySelectorAll(".table__body>.table__row")]
-    const idx = childNodes.length
-    childNodes.forEach(node => {
-        if (node.classList.contains('active-row')) {
-            node.classList.remove('active-row')
-        }
-    })
-
+const createRowNode = (index, folder, fileName) => {
     const rowNode = document.createElement("div")
     const idxNode = document.createElement("div")
     const fileDateNode = document.createElement("div")
@@ -213,12 +203,26 @@ const updateDataTable = (folder, fileName) => {
     fileNameNode.setAttribute("data", fileName)
     domFileName.setAttribute("data", fileName)
     domFileName.value = fileName
-    idxNode.appendChild(document.createTextNode(`${idx + 1}`))
+    idxNode.appendChild(document.createTextNode(`${index}`))
     fileDateNode.appendChild(document.createTextNode(date.toLocaleString()))
     fileNameNode.appendChild(document.createTextNode(fileName))
     rowNode.appendChild(idxNode)
     rowNode.appendChild(fileDateNode)
     rowNode.appendChild(fileNameNode)
+    return rowNode
+}
+
+
+const updateDataTable = (folder, fileName) => {
+    const childNodes = [...document.querySelectorAll(".table__body>.table__row")]
+    const idx = childNodes.length +
+        childNodes.forEach(node => {
+            if (node.classList.contains('active-row')) {
+                node.classList.remove('active-row')
+            }
+        })
+
+    const rowNode = createRowNode(idx, folder, fileName)
     rowNode.classList.add('active-row')
     domTableBody.prepend(rowNode)
     window.api.send('load', { folder, fileName })
@@ -272,9 +276,6 @@ const listAllFilesInTable = (dataFiles) => {
             }
         })
     })
-
-
-
 }// end of helper function
 
 
