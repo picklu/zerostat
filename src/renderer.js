@@ -435,7 +435,7 @@ window.api.receive("file:path", ({ error, folderPath }) => {
     }
     else if (folderPath) {
         domFolderPath.value = folderPath
-        window.api.second("file:list")
+        window.api.send("file:list")
     }
     else {
         console.log("No folder was selected!")
@@ -501,6 +501,7 @@ window.api.receive("file:list", ({ dataFiles, error }) => {
     }
     else if (dataFiles) {
         listAllFilesInTable(dataFiles)
+        console.log("Files have been listed in tables")
     }
 })
 
