@@ -14,8 +14,7 @@ const timeString = (time = null) => {
     const milliSeconds = time.getMilliseconds().toString().padStart(3, '0')
 
     return `${year}${month}${date}_${hours}${minutes}${seconds}${milliSeconds}`
-};
-
+}
 
 const helpers = {}
 helpers.data = {
@@ -25,7 +24,6 @@ helpers.data = {
 const dataFolderName = 'zerostat'
 const dataFoldersFileName = '.zerostat'
 const dataFileExt = '.zst'
-
 
 helpers.updateDataFolders = (dataFolderPath = '') => {
     const dataFoldersFilePath = path.join(os.homedir(), dataFoldersFileName)
@@ -62,8 +60,6 @@ helpers.updateDataFolders = (dataFolderPath = '') => {
     // Save the changes to the .zerostat file
     fs.writeFileSync(dataFoldersFilePath, JSON.stringify(helpers.data))
 }
-
-
 
 helpers.toTitleCase = (str) => {
     if (str.length > 1) {
