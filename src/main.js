@@ -48,7 +48,7 @@ const createWindow = exports.createWindow = () => {
         newWindow.show()
     })
 
-    newWindow.on('page-title-updated', event => event.preventDefault());
+    newWindow.on('page-title-updated', event => event.preventDefault())
 
     newWindow.on('closed', () => {
 
@@ -78,7 +78,7 @@ ipcMain.on('serial:ports', (event) => {
     if (senderWindow) {
         SerialPort.list()
             .then(ports => {
-                senderWindow.send('serial:ports', ports.map(port => port.path));
+                senderWindow.send('serial:ports', ports.map(port => port.path))
             })
             .catch(error => log.warn(error))
     }
@@ -200,11 +200,11 @@ ipcMain.on('file:list', (event) => {
 
     helpers.listDataDir(({ error, dataFiles }) => {
         if (error && error.path) {
-            senderWindow.send('file:list', { error });
+            senderWindow.send('file:list', { error })
         } else if (dataFiles) {
-            senderWindow.send('file:list', { dataFiles });
+            senderWindow.send('file:list', { dataFiles })
         } else {
-            senderWindow.send('file:list', { error: 'Something went wrong!' });
+            senderWindow.send('file:list', { error: 'Something went wrong!' })
         }
     })
 })
@@ -216,12 +216,12 @@ ipcMain.on('file:load', (event, { folder, fileName }) => {
         const filePath = path.join(folder, fileName)
         helpers.readFile(filePath, ({ error, data }) => {
             if (error) {
-                senderWindow.send('file:load', { error });
+                senderWindow.send('file:load', { error })
             } else if (data) {
                 helpers.updateDataFolders(folder)
-                senderWindow.send('file:load', helpers.extractData(data));
+                senderWindow.send('file:load', helpers.extractData(data))
             } else {
-                senderWindow.send('file:load', { error: 'Something went wrong!' });
+                senderWindow.send('file:load', { error: 'Something went wrong!' })
             }
         })
     }

@@ -148,7 +148,7 @@ helpers.listDataDir = (func) => {
 }
 
 helpers.writeToCSV = (() => {
-    let scanNum = 0;
+    let scanNum = 0
 
     return (dataStream, currentFolder, func) => {
         const {
@@ -156,13 +156,13 @@ helpers.writeToCSV = (() => {
             firmwareVersion,
             method: { type: methodType,
                 params: { maxcurrent, ncycles, estart, estop, estep, scanrate, equilibrationtime } },
-            data } = dataStream;
+            data } = dataStream
         const scanId = `${timeString()}_${(++scanNum).toString().padStart(3, '0')}`
         const fileName = `${scanId}_${methodType.toLowerCase()}${dataFileExt}`
         const filePath = path.join(currentFolder, fileName)
         const newData = data.map(({ x, y }) => {
             return [x, y]
-        });
+        })
 
         const header = [
             [`ScanId: ${scanId}`],
@@ -179,7 +179,7 @@ helpers.writeToCSV = (() => {
             [`Time of Measurement: ${(new Date()).toISOString()}`],
             ['======= start ======='],
             ['Voltage (V)', 'Current (uA)'],
-        ];
+        ]
 
         writeToPath(filePath, [...header, ...newData])
             .on('error', error => func({ error }))

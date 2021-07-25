@@ -57,19 +57,19 @@ function redraw() {
         .curve(d3.curveMonotoneX)
 
     // Axes
-    chart.xAxis = d3.axisBottom(chart.xScale).ticks(10);
-    chart.yAxis = d3.axisLeft(chart.yScale).ticks(8);
-    chart.xAxisGrid = d3.axisBottom(chart.xScale).tickSize(-innerHeight).tickFormat('').ticks(10);
-    chart.yAxisGrid = d3.axisLeft(chart.yScale).tickSize(-innerWidth).tickFormat('').ticks(8);
+    chart.xAxis = d3.axisBottom(chart.xScale).ticks(10)
+    chart.yAxis = d3.axisLeft(chart.yScale).ticks(8)
+    chart.xAxisGrid = d3.axisBottom(chart.xScale).tickSize(-innerHeight).tickFormat('').ticks(10)
+    chart.yAxisGrid = d3.axisLeft(chart.yScale).tickSize(-innerWidth).tickFormat('').ticks(8)
 
     // Create axes.
     chart.dom.append('g')
         .attr('class', 'x axis')
         .attr('transform', `translate(0, ${innerHeight})`)
-        .call(chart.xAxis);
+        .call(chart.xAxis)
     chart.dom.append('g')
         .attr('class', 'y axis')
-        .call(chart.yAxis);
+        .call(chart.yAxis)
 
     // x-axis title
     chart.dom.append('text')
@@ -96,7 +96,7 @@ function redraw() {
     chart.dom.append('g')
         .attr('class', 'x grid')
         .attr('transform', `translate(0, ${innerHeight})`)
-        .call(chart.xAxisGrid);
+        .call(chart.xAxisGrid)
     chart.dom.append('g')
         .attr('class', 'y grid')
         .call(chart.yAxisGrid)

@@ -323,7 +323,7 @@ domMethod.addEventListener('change', (event) => {
             domEStop.parentElement.firstElementChild.innerText = 'E Stop (V)'
             domNCycles.parentElement.classList.remove('active')
             domNCycles.parentElement.classList.add('inactive')
-            break;
+            break
     }
 })
 
@@ -411,7 +411,7 @@ window.api.receive('serial:ports', (ports) => {
         state.portList = [...ports]
         ports.forEach(port => {
             items.push(`<option value='${port}'>${port}</option>`)
-        });
+        })
 
         domSerialPorts.innerHTML = items.join('')
     }
