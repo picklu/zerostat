@@ -22,6 +22,7 @@ contextBridge.exposeInMainWorld(
             'current-voltage:data',
             'file:list',
             'file:load',
+            'file:open',
             'file:path',
             'file:save',
             'serial:connection',

@@ -359,7 +359,7 @@ domFormParams.addEventListener('submit', (event) => {
 
 // Handle click event on base file path
 domFolderPath.addEventListener('click', (event) => {
-    window.api.send('file:path')
+    window.api.send('file:path', isFolder = true)
 })
 
 // Handle click event on data table 
@@ -385,13 +385,19 @@ domTableBody.addEventListener('click', (event) => {
     }
 })
 
-// Handle click event on Open File
+// Handle click event on Open File button
 domLoadData.addEventListener('click', () => {
     if (!state.isRunning) {
         const filePathBase = domFolderPath.getAttribute('data')
         const fileName = domFileName.getAttribute('data')
         window.api.send('file:open', { filePathBase, fileName })
     }
+})
+
+
+// Handle click event on open file in the file menu
+window.api.receive('file:open', () => {
+    window.api.send('file:path', isFolder = false)
 })
 
 // Populate options with ports
@@ -429,11 +435,14 @@ window.api.receive('serial:connection', (isPortOpen, error) => {
 })
 
 // On receiving path update file path
-window.api.receive('file:path', ({ error, folderPath }) => {
+window.api.receive('file:path', ({ error, folderPath, fileName }) => {
     if (error) {
         console.log(error)
     }
-    else if (folderPath) {
+    else if (folderPath && fileName) {
+        domFolderPath.value = folderPath
+        updateDataTable(folderPath, fileName)
+    } else if (folderPath) {
         domFolderPath.value = folderPath
         window.api.send('file:list')
     }

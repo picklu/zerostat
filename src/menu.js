@@ -1,4 +1,4 @@
-const { app, Menu, shell } = require('electron')
+const { app, BrowserWindow, Menu, shell } = require('electron')
 const { toTitleCase } = require('./helpers')
 
 const template = [
@@ -26,7 +26,13 @@ if (process.platform === 'darwin' || process.platform === 'win32') {
                     { role: 'forceReload' },
                 ]
             },
-            { label: 'Open File' },
+            {
+                label: 'Open File',
+                click() {
+                    const window = BrowserWindow.getFocusedWindow()
+                    window.webContents.send('file:open')
+                }
+            },
             { type: 'separator' },
             { label: 'Load Method' },
             { label: 'Save As...' },

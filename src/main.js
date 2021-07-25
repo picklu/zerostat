@@ -162,19 +162,37 @@ ipcMain.on('current-voltage:sweep', (event, state) => {
     }
 })
 
-ipcMain.on('file:path', (event) => {
+ipcMain.on('file:path', (event, isFolder) => {
     const senderWindow = event.sender
 
-    dialog
-        .showOpenDialog(getFocusedWindow, { properties: ['openDirectory'] })
-        .then(result => {
-            const folderPath = result.filePaths[0]
-            helpers.updateDataFolders(folderPath)
-            senderWindow.send('file:path', { folderPath })
-        }).catch(error => {
-            log.warn(error)
-            senderWindow.send('file:path', { error })
-        })
+    if (isFolder) {
+        dialog
+            .showOpenDialog(getFocusedWindow, { properties: ['openDirectory'] })
+            .then(result => {
+                const folderPath = result.filePaths[0]
+                helpers.updateDataFolders(folderPath)
+                senderWindow.send('file:path', { folderPath })
+            }).catch(error => {
+                log.warn(error)
+                senderWindow.send('file:path', { error })
+            })
+    } else {
+        dialog
+            .showOpenDialog(getFocusedWindow,
+                { properties: ['openfile'] },
+                { filters: [{ extentions: ['zst'] }] }
+            )
+            .then(result => {
+                const filePath = result.filePaths[0]
+                const fileName = path.basename(filePath)
+                const folderPath = path.dirname(filePath)
+                helpers.updateDataFolders(folderPath)
+                senderWindow.send('file:path', { folderPath, fileName })
+            }).catch(error => {
+                log.warn(error)
+                senderWindow.send('file:path', { error })
+            })
+    }
 })
 
 ipcMain.on('file:save', (event, state) => {
