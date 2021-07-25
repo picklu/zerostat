@@ -35,7 +35,9 @@ helpers.updateDataFolders = (dataFolderPath = '') => {
     // helpers.data object
     if (fs.existsSync(dataFoldersFilePath)) {
         const dataFolders = fs.readFileSync(dataFoldersFilePath, 'utf-8')
-        helpers.data = JSON.parse(dataFolders)
+        if (dataFolders) {
+            helpers.data = JSON.parse(dataFolders)
+        }
     }
 
     // if data folder path is not provided then assign ..temp/zerostat as the path
