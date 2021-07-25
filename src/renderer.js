@@ -59,6 +59,7 @@ const state = {
     current: 0,
     portList: [],
     data: [],
+    dataFiles: {},
     overflow: false,
 }
 
@@ -182,6 +183,13 @@ const updateDomain = (event) => {
     if (!state.isRunning) { draw(state) }
 }
 
+// Remove all childe nodes 
+const removeAllChildNodes = (parent) => {
+    while (parent.firstChild) {
+        parent.removeChild(parent.firstChild);
+    }
+}
+
 // Create row node for data file
 const createRowNode = (index, folder, fileName) => {
     const rowNode = document.createElement('div')
@@ -198,11 +206,7 @@ const createRowNode = (index, folder, fileName) => {
     fileDateNode.setAttribute('class', 'file-date')
     fileNameNode.setAttribute('class', 'file-name')
     fileDateNode.setAttribute('data', folder)
-    domFolderPath.setAttribute('data', folder)
-    domFolderPath.value = folder
     fileNameNode.setAttribute('data', fileName)
-    domFileName.setAttribute('data', fileName)
-    domFileName.value = fileName
     idxNode.appendChild(document.createTextNode(`${index}`))
     fileDateNode.appendChild(document.createTextNode(date.toLocaleString()))
     fileNameNode.appendChild(document.createTextNode(fileName))
@@ -213,52 +217,68 @@ const createRowNode = (index, folder, fileName) => {
     return rowNode
 }
 
+// Load the folder/fileName data file
+const setActiveData = (folder, fileName) => {
+    const childNodes = [...document.querySelectorAll('.table__body>.table__row')]
+    if (childNodes.length) {
+        const topRowNode = childNodes[0]
+        topRowNode.classList.add('active-row')
+        domFolderPath.setAttribute('data', folder)
+        domFolderPath.value = folder
+        domFileName.setAttribute('data', fileName)
+        domFileName.value = fileName
+        window.api.send('file:load', { folder, fileName })
+    }
+}
+
+// Render table with all data files
+const listAllFilesInTable = (dataFiles, loadData = true) => {
+    const folders = Object.keys(dataFiles)
+    const totalFiles = Object.values(dataFiles).flat().length
+    let count = 0
+
+    folders.forEach((folder) => {
+        let files = dataFiles[folder]
+        files.forEach((file) => {
+            const rowNode = createRowNode(++count, folder, file)
+            domTableBody.prepend(rowNode)
+
+            if (loadData && count === totalFiles) {
+                setActiveData(folder, file)
+            }
+        })
+    })
+}
+
 // Update table with new data file
 const updateDataTable = (folder, fileName) => {
+
+    if (state.dataFiles[folder]) {
+        const fileIndex = state.dataFiles[folder].indexOf(fileName)
+        if (fileIndex != -1) {
+            delete state.dataFiles[folder][fileIndex]
+            removeAllChildNodes(domTableBody)
+            listAllFilesInTable(state.dataFiles, false)
+        }
+    } else {
+        state.dataFiles[folder] = []
+    }
+
+    // Remove class 'active-row' from the row
     const childNodes = [...document.querySelectorAll('.table__body>.table__row')]
-    const idx = childNodes.length + 1
     childNodes.forEach(node => {
         if (node.classList.contains('active-row')) {
             node.classList.remove('active-row')
         }
     })
 
-    const rowNode = createRowNode(idx, folder, fileName)
-    rowNode.classList.add('active-row')
+    const index = Object.values(state.dataFiles).flat().length + 1
+    const rowNode = createRowNode(index, folder, fileName)
     domTableBody.prepend(rowNode)
+    state.dataFiles[folder].unshift(fileName)
+    setActiveData(folder, fileName)
     window.api.send('file:load', { folder, fileName })
-}
-
-// Render table with all data files
-const listAllFilesInTable = (dataFiles) => {
-    const childNodes = [...document.querySelectorAll('.table__body>.table__row')]
-    for (let i = 0; i < childNodes.length; i++) {
-        if (domTableBody.hasChildNodes(childNodes[i])) {
-            domTableBody.removeChild(childNodes[i])
-        }
-    }
-
-    const folders = Object.keys(dataFiles)
-    const totalFiles = Object.values(dataFiles).flat().length
-    let count = 0
-
-    folders.forEach((folder, index) => {
-        let files = dataFiles[folder]
-        files.forEach((file, idx) => {
-            const rowNode = createRowNode(++count, folder, file)
-            domTableBody.prepend(rowNode)
-
-            if (count === totalFiles) {
-                rowNode.classList.add('active-row')
-                domFolderPath.setAttribute('data', folder)
-                domFolderPath.value = folder
-                domFileName.setAttribute('data', file)
-                domFileName.value = file
-                window.api.send('file:load', { folder, fileName: file })
-            }
-        })
-    })
-}// end of helper functions
+} // end of helper functions
 
 
 // get ports once the dom content is loaded
@@ -355,7 +375,6 @@ domFormParams.addEventListener('submit', (event) => {
     }
     window.api.send('current-voltage:sweep', state)
 })
-
 
 // Handle click event on base file path
 domFolderPath.addEventListener('click', (event) => {
@@ -509,6 +528,7 @@ window.api.receive('file:list', ({ dataFiles, error }) => {
         console.log(error)
     }
     else if (dataFiles) {
+        state.dataFiles = dataFiles
         listAllFilesInTable(dataFiles)
     }
 })
