@@ -4,8 +4,8 @@
  * d3js chart
  *
  **********************************************/
-const domChartWindow = document.getElementById("chart-window")
-const domChart = document.getElementById("chart")
+const domChartWindow = document.getElementById('chart-window')
+const domChart = document.getElementById('chart')
 
 const margin = {
     top: 15,
@@ -31,16 +31,16 @@ function redraw() {
     const innerHeight = height - margin.top - margin.bottom - margin.offset
 
     if (chart.dom) {
-        chart.dom.selectAll(".x").remove()
-        chart.dom.selectAll(".y").remove()
-        chart.dom.selectAll(".line").remove()
-        chart.dom.selectAll(".pointer").remove()
-        chart.dom.selectAll(".axis-title").remove()
+        chart.dom.selectAll('.x').remove()
+        chart.dom.selectAll('.y').remove()
+        chart.dom.selectAll('.line').remove()
+        chart.dom.selectAll('.pointer').remove()
+        chart.dom.selectAll('.axis-title').remove()
     }
 
     chart.dom = d3.select(domChart)
-        .append("g")
-        .attr("transform", `translate(${margin.left}, ${margin.top})`)
+        .append('g')
+        .attr('transform', `translate(${margin.left}, ${margin.top})`)
 
     //  Scale
     chart.xScale = d3.scaleLinear().domain([domain.voltMin, domain.voltMax]).range([0, innerWidth])
@@ -63,49 +63,49 @@ function redraw() {
     chart.yAxisGrid = d3.axisLeft(chart.yScale).tickSize(-innerWidth).tickFormat('').ticks(8);
 
     // Create axes.
-    chart.dom.append("g")
-        .attr("class", "x axis")
-        .attr("transform", `translate(0, ${innerHeight})`)
+    chart.dom.append('g')
+        .attr('class', 'x axis')
+        .attr('transform', `translate(0, ${innerHeight})`)
         .call(chart.xAxis);
-    chart.dom.append("g")
-        .attr("class", "y axis")
+    chart.dom.append('g')
+        .attr('class', 'y axis')
         .call(chart.yAxis);
 
     // x-axis title
-    chart.dom.append("text")
-        .attr("x", innerWidth / 2)
-        .attr("y", innerHeight + margin.top)
-        .attr("dy", "2em")
-        .attr("class", "axis-title")
-        .attr("text-anchor", "middle")
-        .style("stroke", "none")
-        .text("Voltage (V)")
+    chart.dom.append('text')
+        .attr('x', innerWidth / 2)
+        .attr('y', innerHeight + margin.top)
+        .attr('dy', '2em')
+        .attr('class', 'axis-title')
+        .attr('text-anchor', 'middle')
+        .style('stroke', 'none')
+        .text('Voltage (V)')
 
     // y-axis title
-    chart.dom.append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("x", 0 - (innerHeight / 2))
-        .attr("y", 0 - margin.right)
-        .attr("dy", "-2em")
-        .attr("class", "axis-title")
-        .attr("text-anchor", "middle")
-        .style("stroke", "none")
-        .text("Current (\xB5A)")
+    chart.dom.append('text')
+        .attr('transform', 'rotate(-90)')
+        .attr('x', 0 - (innerHeight / 2))
+        .attr('y', 0 - margin.right)
+        .attr('dy', '-2em')
+        .attr('class', 'axis-title')
+        .attr('text-anchor', 'middle')
+        .style('stroke', 'none')
+        .text('Current (\xB5A)')
 
     // Create grids.
-    chart.dom.append("g")
-        .attr("class", "x grid")
-        .attr("transform", `translate(0, ${innerHeight})`)
+    chart.dom.append('g')
+        .attr('class', 'x grid')
+        .attr('transform', `translate(0, ${innerHeight})`)
         .call(chart.xAxisGrid);
-    chart.dom.append("g")
-        .attr("class", "y grid")
+    chart.dom.append('g')
+        .attr('class', 'y grid')
         .call(chart.yAxisGrid)
 
     // path for the the plot
-    chart.path = chart.dom.append("path") // initialize path for main curve
-        .attr("class", "line")
+    chart.path = chart.dom.append('path') // initialize path for main curve
+        .attr('class', 'line')
 
-    chart.pointer = chart.dom.append("g") // initialize pointer for current data point
+    chart.pointer = chart.dom.append('g') // initialize pointer for current data point
 
 }
 
@@ -115,19 +115,19 @@ function rescale() {
     chart.yScale.domain([domain.currMin, domain.currMax]) // rescale
 
     // apply updated scale
-    chart.dom.selectAll(".x.grid")
+    chart.dom.selectAll('.x.grid')
         .transition().duration(500)
         .call(chart.xAxisGrid)
 
-    chart.dom.selectAll(".y.grid")
+    chart.dom.selectAll('.y.grid')
         .transition().duration(500)
         .call(chart.yAxisGrid)
 
-    chart.dom.selectAll(".x.axis")
+    chart.dom.selectAll('.x.axis')
         .transition().duration(500)
         .call(chart.xAxis)
 
-    chart.dom.selectAll(".y.axis")
+    chart.dom.selectAll('.y.axis')
         .transition().duration(500)
         .call(chart.yAxis)
 }
@@ -153,22 +153,22 @@ function draw(state) {
             : 0
         dt.push(cxy)
     }
-    chart.pointer.selectAll("circle.pointer").remove()
+    chart.pointer.selectAll('circle.pointer').remove()
         .data(dt).enter()
-        .append("circle")
-        .attr("class", "pointer")
-        .attr("cx", d => d.x)
-        .attr("cy", d => d.y)
-        .attr("r", 3)
+        .append('circle')
+        .attr('class', 'pointer')
+        .attr('cx', d => d.x)
+        .attr('cy', d => d.y)
+        .attr('r', 3)
 
     chart.path.datum(state.data)
-        .attr("class", "line")
-        .attr("d", chart.line)
+        .attr('class', 'line')
+        .attr('d', chart.line)
 }
 
 // Redraw based on the new size whenever the browser window is resized.
 redraw()
-window.addEventListener("resize", () => {
+window.addEventListener('resize', () => {
     redraw()
     draw(state)
 })

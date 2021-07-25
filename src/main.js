@@ -1,14 +1,14 @@
 require('dotenv').config()
-const path = require("path")
-const { app, BrowserWindow, dialog, getFocusedWindow, ipcMain, Menu, shell } = require("electron")
-const SerialPort = require("serialport")
-const Readline = require("@serialport/parser-readline")
-const { stat } = require("fs")
-const { send } = require("process")
-const spawn = require("child_process").spawn
+const path = require('path')
+const { app, BrowserWindow, dialog, getFocusedWindow, ipcMain, Menu, shell } = require('electron')
+const SerialPort = require('serialport')
+const Readline = require('@serialport/parser-readline')
+const { stat } = require('fs')
+const { send } = require('process')
+const spawn = require('child_process').spawn
 const log = require('electron-log')
 const menu = require('./menu')
-const helpers = require("./helpers")
+const helpers = require('./helpers')
 
 const windows = new Set()
 let port = null
@@ -31,26 +31,26 @@ const createWindow = exports.createWindow = () => {
         x, y,
         show: false,
         title: windowTitle,
-        icon: path.join(__dirname, "../app/assets/electrostat.png"),
+        icon: path.join(__dirname, '../app/assets/electrostat.png'),
         webPreferences: {
             enableRemoteModule: false,
             nodeIntegration: false,
             contextIsolation: true,
             worldSafeExecuteJavaScript: true,
-            preload: path.join(__dirname, "preload.js")
+            preload: path.join(__dirname, 'preload.js')
         }
     })
 
-    newWindow.loadFile("app/index.html")
+    newWindow.loadFile('app/index.html')
 
-    newWindow.once("ready-to-show", () => {
+    newWindow.once('ready-to-show', () => {
         newWindow.maximize()
         newWindow.show()
     })
 
-    newWindow.on("page-title-updated", event => event.preventDefault());
+    newWindow.on('page-title-updated', event => event.preventDefault());
 
-    newWindow.on("closed", () => {
+    newWindow.on('closed', () => {
 
         windows.delete(newWindow)
         newWindow = null
@@ -60,12 +60,12 @@ const createWindow = exports.createWindow = () => {
     return newWindow
 }
 
-app.on("ready", () => {
+app.on('ready', () => {
     createWindow()
 })
 
-app.on("window-all-closed", () => {
-    if (process.platform === "darwin") app.quit()
+app.on('window-all-closed', () => {
+    if (process.platform === 'darwin') app.quit()
 })
 
 Menu.setApplicationMenu(menu)
@@ -73,23 +73,23 @@ app.allowRendererProcessReuse = false
 
 
 // IPC events
-ipcMain.on("serial:ports", (event) => {
+ipcMain.on('serial:ports', (event) => {
     const senderWindow = event.sender
     if (senderWindow) {
         SerialPort.list()
             .then(ports => {
-                senderWindow.send("serial:ports", ports.map(port => port.path));
+                senderWindow.send('serial:ports', ports.map(port => port.path));
             })
             .catch(error => log.warn(error))
     }
 })
 
-ipcMain.on("serial:connection", (event, portPath) => {
+ipcMain.on('serial:connection', (event, portPath) => {
     const senderWindow = event.sender
     if (port && port.isOpen) {
         port.close()
         port = null
-        log.info("==> disconnecting ...")
+        log.info('==> disconnecting ...')
     } else if (senderWindow) {
         if (!port) {
             port = new SerialPort(portPath, { baudRate: 115200, autoOpen: false })
@@ -102,29 +102,29 @@ ipcMain.on("serial:connection", (event, portPath) => {
                     port = null
                     parser = null
                     log.warn(error.message)
-                    senderWindow.send("serial:connection", false, error.message)
+                    senderWindow.send('serial:connection', false, error.message)
                 }
                 else {
-                    log.info("==> connected")
-                    port.on("close", () => {
+                    log.info('==> connected')
+                    port.on('close', () => {
                         port = null
                         parser = null
-                        senderWindow.send("serial:connection", false, "")
-                        log.info("==> disconnected")
+                        senderWindow.send('serial:connection', false, '')
+                        log.info('==> disconnected')
                     })
 
-                    parser.on("data", (data) => {
-                        senderWindow.send("current-voltage:data", data)
+                    parser.on('data', (data) => {
+                        senderWindow.send('current-voltage:data', data)
                     })
 
-                    senderWindow.send("serial:connection", true, "")
+                    senderWindow.send('serial:connection', true, '')
                 }
             })
         }
     }
 })
 
-ipcMain.on("current-voltage:sweep", (event, state) => {
+ipcMain.on('current-voltage:sweep', (event, state) => {
     const halt = state.isRunning ? 0 : 1
     if (halt) {
         port.write(`0,${halt},0,0,${state.refDAC},0,0`)
@@ -141,10 +141,10 @@ ipcMain.on("current-voltage:sweep", (event, state) => {
         const equilibrationTime = state.method.params.equilibrationtime ? state.method.params.equilibrationtime : 0
         let mode
         switch (state.method.type) {
-            case "LSV":
+            case 'LSV':
                 mode = 0
                 break
-            case "CV":
+            case 'CV':
                 mode = 1
                 break
             default:
@@ -162,7 +162,7 @@ ipcMain.on("current-voltage:sweep", (event, state) => {
     }
 })
 
-ipcMain.on("file:path", (event) => {
+ipcMain.on('file:path', (event) => {
     const senderWindow = event.sender
 
     dialog
@@ -170,64 +170,64 @@ ipcMain.on("file:path", (event) => {
         .then(result => {
             const folderPath = result.filePaths[0]
             helpers.updateDataFolders(folderPath)
-            senderWindow.send("file:path", { folderPath })
+            senderWindow.send('file:path', { folderPath })
         }).catch(error => {
             log.warn(error)
-            senderWindow.send("file:path", { error })
+            senderWindow.send('file:path', { error })
         })
 })
 
-ipcMain.on("file:save", (event, state) => {
+ipcMain.on('file:save', (event, state) => {
     const senderWindow = event.sender
     const folder = helpers.data.currentFolder
 
     helpers.writeToCSV(state, folder, ({ folder, fileName, error }) => {
         if (fileName) {
-            senderWindow.send("file:save", { folder, fileName })
-            log.info("==> successfully saved")
+            senderWindow.send('file:save', { folder, fileName })
+            log.info('==> successfully saved')
         }
         else if (error) {
-            senderWindow.send("file:save", { error })
+            senderWindow.send('file:save', { error })
             log.warn(error)
         } else {
-            log.warn("Something went wrong!")
+            log.warn('Something went wrong!')
         }
     })
 })
 
-ipcMain.on("file:list", (event) => {
+ipcMain.on('file:list', (event) => {
     const senderWindow = event.sender
 
     helpers.listDataDir(({ error, dataFiles }) => {
         if (error && error.path) {
-            senderWindow.send("file:list", { error });
+            senderWindow.send('file:list', { error });
         } else if (dataFiles) {
-            senderWindow.send("file:list", { dataFiles });
+            senderWindow.send('file:list', { dataFiles });
         } else {
-            senderWindow.send("file:list", { error: "Something went wrong!" });
+            senderWindow.send('file:list', { error: 'Something went wrong!' });
         }
     })
 })
 
-ipcMain.on("file:load", (event, { folder, fileName }) => {
+ipcMain.on('file:load', (event, { folder, fileName }) => {
     const senderWindow = event.sender
 
     if (folder && fileName) {
         const filePath = path.join(folder, fileName)
         helpers.readFile(filePath, ({ error, data }) => {
             if (error) {
-                senderWindow.send("file:load", { error });
+                senderWindow.send('file:load', { error });
             } else if (data) {
                 helpers.updateDataFolders(folder)
-                senderWindow.send("file:load", helpers.extractData(data));
+                senderWindow.send('file:load', helpers.extractData(data));
             } else {
-                senderWindow.send("file:load", { error: "Something went wrong!" });
+                senderWindow.send('file:load', { error: 'Something went wrong!' });
             }
         })
     }
 })
 
-ipcMain.on("file:open", (event, { filePathBase, fileName }) => {
+ipcMain.on('file:open', (event, { filePathBase, fileName }) => {
     if (filePathBase && fileName) {
         const filePath = path.join(filePathBase, fileName)
 

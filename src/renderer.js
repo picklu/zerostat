@@ -1,24 +1,24 @@
-const domSerialPorts = document.getElementById("ports")
-const domConnect = document.getElementById("connect")
-const domMethod = document.getElementById("method")
-const domDOMAIN = document.querySelectorAll(".xydomain")
-const domFormParams = document.getElementById("params")
-const domSweep = document.getElementById("sweep")
-const domStatusMessage = document.querySelector(".status-message")
-const domFolderPath = document.querySelector(".folder-text")
-const domFileName = document.querySelector(".file-name")
-const domTableBody = document.querySelector(".table__body")
-const domMetaData = document.querySelector(".meta-data")
-const domMainData = document.querySelector(".main-data")
-const domLoadData = document.getElementById("load-data")
+const domSerialPorts = document.getElementById('ports')
+const domConnect = document.getElementById('connect')
+const domMethod = document.getElementById('method')
+const domDOMAIN = document.querySelectorAll('.xydomain')
+const domFormParams = document.getElementById('params')
+const domSweep = document.getElementById('sweep')
+const domStatusMessage = document.querySelector('.status-message')
+const domFolderPath = document.querySelector('.folder-text')
+const domFileName = document.querySelector('.file-name')
+const domTableBody = document.querySelector('.table__body')
+const domMetaData = document.querySelector('.meta-data')
+const domMainData = document.querySelector('.main-data')
+const domLoadData = document.getElementById('load-data')
 const domMaxCurrent = document.getElementById('maxcurrent')
-const domEStart = document.getElementById("estart")
-const domEStop = document.getElementById("estop")
-const domEStep = document.getElementById("estep")
-const domScanRate = document.getElementById("scanrate")
-const domNCycles = document.getElementById("ncycles")
-const domEquilibrationTime = document.getElementById("equilibrationtime")
-const domVoltageLimitInputs = document.querySelectorAll(".voltage-limit")
+const domEStart = document.getElementById('estart')
+const domEStop = document.getElementById('estop')
+const domEStep = document.getElementById('estep')
+const domScanRate = document.getElementById('scanrate')
+const domNCycles = document.getElementById('ncycles')
+const domEquilibrationTime = document.getElementById('equilibrationtime')
+const domVoltageLimitInputs = document.querySelectorAll('.voltage-limit')
 
 // Specification of the microcontroller io and amplifier
 const DAC_BIT = 12
@@ -34,8 +34,8 @@ const VToCFactor = OPVOLTS / fbResistor // voltage to current conversion factor
 
 // global state object
 const state = {
-    deviceModel: "",
-    firmwareVersion: "",
+    deviceModel: '',
+    firmwareVersion: '',
     maxDAC: maxDAC,
     refDAC: REF_DAC,
     outVolts: OUTVOLTS,
@@ -47,10 +47,10 @@ const state = {
     isEquilibrating: false,
     isDataReady: false,
     isWritingData: false,
-    errorMessage: "",
-    status: "not ready",
+    errorMessage: '',
+    status: 'not ready',
     method: {
-        type: "LSV",
+        type: 'LSV',
         params: {
             // will be populated on submit
         }
@@ -65,17 +65,17 @@ const state = {
 // helper functions
 // Update/show status message
 const showStatusMessage = () => {
-    let message = ""
+    let message = ''
     state.voltage = state.voltage ? state.voltage : 0
     state.current = state.current ? state.current : 0
-    if (state.errorMessage !== "") {
-        message = `<span class="error bold">ERROR ${state.errorMessage}</span>`
-        state.errorMessage = ""
+    if (state.errorMessage !== '') {
+        message = `<span class='error bold'>ERROR ${state.errorMessage}</span>`
+        state.errorMessage = ''
     } else if (state.isPortOpen && !state.isReady) {
-        message = "<b class=\"status\">Getting ready ...</b>"
+        message = '<b class=\'status\'>Getting ready ...</b>'
     } else {
         message = `
-            <b class="${state.overflow ? "status overflow" : "status"}">
+            <b class='${state.overflow ? 'status overflow' : 'status'}'>
                 ${state.status.toUpperCase()}:
             </b> Voltage: ${state.voltage.toFixed(4)} V & Current: ${state.current.toFixed(4)} \xB5A`
     }
@@ -128,20 +128,20 @@ const updateParams = (params) => {
 const updateUI = () => {
     domConnect.innerText = state.isPortOpen
         ? state.isReady
-            ? "Disconnect"
-            : "Cancel"
-        : "Connect"
+            ? 'Disconnect'
+            : 'Cancel'
+        : 'Connect'
     domSweep.innerText = state.isPortOpen
         ? state.isReady
-            ? state.isRunning ? "Stop" : "Start"
-            : "Connecting ..."
-        : "Disconnected"
+            ? state.isRunning ? 'Stop' : 'Start'
+            : 'Connecting ...'
+        : 'Disconnected'
 
-    domConnect.classList.add(state.isPortOpen ? "connected" : "disconnected")
-    domConnect.classList.remove(state.isPortOpen ? "disconnected" : "connected")
+    domConnect.classList.add(state.isPortOpen ? 'connected' : 'disconnected')
+    domConnect.classList.remove(state.isPortOpen ? 'disconnected' : 'connected')
 
-    domSweep.classList.add(state.isRunning ? "stop-sweep" : "start-sweep")
-    domSweep.classList.remove(state.isRunning ? "start-sweep" : "stop-sweep")
+    domSweep.classList.add(state.isRunning ? 'stop-sweep' : 'start-sweep')
+    domSweep.classList.remove(state.isRunning ? 'start-sweep' : 'stop-sweep')
     domSweep.disabled = state.isReady && state.isPortOpen ? false : true
 }
 
@@ -160,8 +160,8 @@ const updateDomain = (event) => {
     event.preventDefault()
     event.stopPropagation()
     domDOMAIN.forEach(input => {
-        const key = input.getAttribute("name")
-        if (input.parentElement.classList.contains("active")) {
+        const key = input.getAttribute('name')
+        if (input.parentElement.classList.contains('active')) {
             state.method.params[key] = +input.value
         }
         else {
@@ -184,24 +184,24 @@ const updateDomain = (event) => {
 
 // Create row node for data file
 const createRowNode = (index, folder, fileName) => {
-    const rowNode = document.createElement("div")
-    const idxNode = document.createElement("div")
-    const fileDateNode = document.createElement("div")
-    const fileNameNode = document.createElement("div")
+    const rowNode = document.createElement('div')
+    const idxNode = document.createElement('div')
+    const fileDateNode = document.createElement('div')
+    const fileNameNode = document.createElement('div')
     const regX = /^(\d{4})(\d{2})(\d{2})_(\d{2})(\d{2})(\d{2})/
     const match = regX.exec(fileName)
     const [__, year, month, day, hour, minute, second] = match
     const date = new Date(year, month - 1, day, hour, minute, second)
 
-    rowNode.setAttribute("class", "table__row")
-    idxNode.setAttribute("class", "idx")
-    fileDateNode.setAttribute("class", "file-date")
-    fileNameNode.setAttribute("class", "file-name")
-    fileDateNode.setAttribute("data", folder)
-    domFolderPath.setAttribute("data", folder)
+    rowNode.setAttribute('class', 'table__row')
+    idxNode.setAttribute('class', 'idx')
+    fileDateNode.setAttribute('class', 'file-date')
+    fileNameNode.setAttribute('class', 'file-name')
+    fileDateNode.setAttribute('data', folder)
+    domFolderPath.setAttribute('data', folder)
     domFolderPath.value = folder
-    fileNameNode.setAttribute("data", fileName)
-    domFileName.setAttribute("data", fileName)
+    fileNameNode.setAttribute('data', fileName)
+    domFileName.setAttribute('data', fileName)
     domFileName.value = fileName
     idxNode.appendChild(document.createTextNode(`${index}`))
     fileDateNode.appendChild(document.createTextNode(date.toLocaleString()))
@@ -215,7 +215,7 @@ const createRowNode = (index, folder, fileName) => {
 
 // Update table with new data file
 const updateDataTable = (folder, fileName) => {
-    const childNodes = [...document.querySelectorAll(".table__body>.table__row")]
+    const childNodes = [...document.querySelectorAll('.table__body>.table__row')]
     const idx = childNodes.length + 1
     childNodes.forEach(node => {
         if (node.classList.contains('active-row')) {
@@ -231,7 +231,7 @@ const updateDataTable = (folder, fileName) => {
 
 // Render table with all data files
 const listAllFilesInTable = (dataFiles) => {
-    const childNodes = [...document.querySelectorAll(".table__body>.table__row")]
+    const childNodes = [...document.querySelectorAll('.table__body>.table__row')]
     for (let i = 0; i < childNodes.length; i++) {
         if (domTableBody.hasChildNodes(childNodes[i])) {
             domTableBody.removeChild(childNodes[i])
@@ -250,9 +250,9 @@ const listAllFilesInTable = (dataFiles) => {
 
             if (count === totalFiles) {
                 rowNode.classList.add('active-row')
-                domFolderPath.setAttribute("data", folder)
+                domFolderPath.setAttribute('data', folder)
                 domFolderPath.value = folder
-                domFileName.setAttribute("data", file)
+                domFileName.setAttribute('data', file)
                 domFileName.value = file
                 window.api.send('file:load', { folder, fileName: file })
             }
@@ -262,14 +262,14 @@ const listAllFilesInTable = (dataFiles) => {
 
 
 // get ports once the dom content is loaded
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener('DOMContentLoaded', () => {
     showStatusMessage()
 
-    window.api.send("file:list")
+    window.api.send('file:list')
 
     setInterval(() => { // update port
         if (!state.isPortOpen) {
-            window.api.send("serial:ports")
+            window.api.send('serial:ports')
         }
     }, 2 * 1000)
 
@@ -281,9 +281,9 @@ window.addEventListener("DOMContentLoaded", () => {
             if (!state.isWritingData && !state.isRunning && state.isDataReady) {
                 state.isWritingData = true
                 state.isDataReady = false
-                window.api.send("file:save", state)
-                domConnect.classList.remove("btn-inactive")
-                domLoadData.classList.remove("btn-inactive")
+                window.api.send('file:save', state)
+                domConnect.classList.remove('btn-inactive')
+                domLoadData.classList.remove('btn-inactive')
             }
         }
     }, 50)
@@ -292,55 +292,55 @@ window.addEventListener("DOMContentLoaded", () => {
 
 // Update input values of the voltage limits  in two decimal points
 domVoltageLimitInputs.forEach(input => {
-    input.addEventListener("change", () => {
+    input.addEventListener('change', () => {
         input.value = (+input.value).toFixed(2)
     })
 })
 
 // call main process to open/close serial
-domConnect.addEventListener("click", (event) => {
+domConnect.addEventListener('click', (event) => {
     if (!state.isRunning) {
         const port = domSerialPorts.value
         state.isReady = false
-        window.api.send("serial:connection", port)
+        window.api.send('serial:connection', port)
     }
 })
 
 // Update input param fileds according to the selected method
-domMethod.addEventListener("change", (event) => {
+domMethod.addEventListener('change', (event) => {
     const methodType = domMethod.value.toUpperCase()
     state.method.params.ncycles = domNCycles.value
     state.method.type = methodType
     switch (methodType) {
-        case "CV":
-            domEStart.parentElement.firstElementChild.innerText = "Vertex1 (V)"
-            domEStop.parentElement.firstElementChild.innerText = "Vertex2 (V)"
-            domNCycles.parentElement.classList.remove("inactive")
-            domNCycles.parentElement.classList.add("active")
+        case 'CV':
+            domEStart.parentElement.firstElementChild.innerText = 'Vertex1 (V)'
+            domEStop.parentElement.firstElementChild.innerText = 'Vertex2 (V)'
+            domNCycles.parentElement.classList.remove('inactive')
+            domNCycles.parentElement.classList.add('active')
             break
-        case "LSV":
-            domEStart.parentElement.firstElementChild.innerText = "E Start (V)"
-            domEStop.parentElement.firstElementChild.innerText = "E Stop (V)"
-            domNCycles.parentElement.classList.remove("active")
-            domNCycles.parentElement.classList.add("inactive")
+        case 'LSV':
+            domEStart.parentElement.firstElementChild.innerText = 'E Start (V)'
+            domEStop.parentElement.firstElementChild.innerText = 'E Stop (V)'
+            domNCycles.parentElement.classList.remove('active')
+            domNCycles.parentElement.classList.add('inactive')
             break;
     }
 })
 
 // Add updateDomain as change event listener to all the form fields
 domDOMAIN.forEach(input => {
-    input.addEventListener("change", updateDomain)
+    input.addEventListener('change', updateDomain)
 })
 
 // call main process to start/stop potential sweep
-domFormParams.addEventListener("submit", (event) => {
+domFormParams.addEventListener('submit', (event) => {
     event.preventDefault()
     state.isRunning = !state.isRunning
 
     if (state.isRunning) {
 
-        domConnect.classList.add("btn-inactive")
-        domLoadData.classList.add("btn-inactive")
+        domConnect.classList.add('btn-inactive')
+        domLoadData.classList.add('btn-inactive')
         state.data = []
 
 
@@ -350,20 +350,20 @@ domFormParams.addEventListener("submit", (event) => {
             state.method.params[key] = key === 'method' ? value : Number(value)
         })
     } else {
-        domConnect.classList.remove("btn-inactive")
-        domLoadData.classList.remove("btn-inactive")
+        domConnect.classList.remove('btn-inactive')
+        domLoadData.classList.remove('btn-inactive')
     }
-    window.api.send("current-voltage:sweep", state)
+    window.api.send('current-voltage:sweep', state)
 })
 
 
 // Handle click event on base file path
-domFolderPath.addEventListener("click", (event) => {
-    window.api.send("file:path")
+domFolderPath.addEventListener('click', (event) => {
+    window.api.send('file:path')
 })
 
 // Handle click event on data table 
-domTableBody.addEventListener("click", (event) => {
+domTableBody.addEventListener('click', (event) => {
     const className = event.target.classList.value
     event.stopPropagation()
 
@@ -395,7 +395,7 @@ domLoadData.addEventListener('click', () => {
 })
 
 // Populate options with ports
-window.api.receive("serial:ports", (ports) => {
+window.api.receive('serial:ports', (ports) => {
 
     const isEqual = (a, b) => {
         if (a.length !== b.length) { return false }
@@ -406,51 +406,51 @@ window.api.receive("serial:ports", (ports) => {
     }
 
     const items = []
-    if (ports.length === 0) { ports.push("COMX") }
+    if (ports.length === 0) { ports.push('COMX') }
     if (!isEqual(state.portList, ports)) {
         state.portList = [...ports]
         ports.forEach(port => {
-            items.push(`<option value="${port}">${port}</option>`)
+            items.push(`<option value='${port}'>${port}</option>`)
         });
 
-        domSerialPorts.innerHTML = items.join("")
+        domSerialPorts.innerHTML = items.join('')
     }
 })
 
 // update ui on receiving connection status
-window.api.receive("serial:connection", (isPortOpen, error) => {
+window.api.receive('serial:connection', (isPortOpen, error) => {
     state.voltage = isPortOpen ? state.voltage : 0
     state.current = isPortOpen ? state.current : 0
     state.isPortOpen = isPortOpen
     state.errorMessage = error
-    state.status = !error ? "disconnected" : "error"
+    state.status = !error ? 'disconnected' : 'error'
     showStatusMessage()
     updateUI()
 })
 
 // On receiving path update file path
-window.api.receive("file:path", ({ error, folderPath }) => {
+window.api.receive('file:path', ({ error, folderPath }) => {
     if (error) {
         console.log(error)
     }
     else if (folderPath) {
         domFolderPath.value = folderPath
-        window.api.send("file:list")
+        window.api.send('file:list')
     }
     else {
-        console.log("No folder was selected!")
+        console.log('No folder was selected!')
     }
 })
 
 // On receiving data act accordingly
 window.api.receive('current-voltage:data', (raw_data) => {
-    const text_data = raw_data.split(",")
+    const text_data = raw_data.split(',')
     if (text_data[2] == 'READY') {
         state.deviceModel = text_data[0]
         state.firmwareVersion = text_data[1]
         state.isReady = true
         state.isRunning = false
-        state.status = "ready"
+        state.status = 'ready'
     }
     else {
         const data = text_data.map(d => Number(d))
@@ -462,7 +462,7 @@ window.api.receive('current-voltage:data', (raw_data) => {
         state.current = digitalToCurrent(ch3)
         state.overflow = state.current <= domain.currMin ||
             state.current >= domain.currMax
-        state.status = state.overflow ? "overflow" : "running"
+        state.status = state.overflow ? 'overflow' : 'running'
         if (state.isRunning) { // sweeping or equilibrating (ch1 = 1 or -1)
             if (state.isEquilibrating) {
                 state.status = `equilibrating [${eqltime}]`
@@ -475,7 +475,7 @@ window.api.receive('current-voltage:data', (raw_data) => {
             }
         }
         else { // ch1 must be 0 that is not running
-            state.status = "ready"
+            state.status = 'ready'
         }
     }
     updateUI()
@@ -483,30 +483,29 @@ window.api.receive('current-voltage:data', (raw_data) => {
 })
 
 // On saving data query for list of files
-window.api.receive("file:save", ({ folder, fileName, error }) => {
+window.api.receive('file:save', ({ folder, fileName, error }) => {
     if (fileName) {
         state.isWritingData = false
         updateDataTable(folder, fileName)
     } else if (error) {
         console.log(error)
     } else {
-        console.log("Something went wrong in saving file!")
+        console.log('Something went wrong in saving file!')
     }
 })
 
 // On receiving list of files update dom
-window.api.receive("file:list", ({ dataFiles, error }) => {
+window.api.receive('file:list', ({ dataFiles, error }) => {
     if (error) {
         console.log(error)
     }
     else if (dataFiles) {
         listAllFilesInTable(dataFiles)
-        console.log("Files have been listed in tables")
     }
 })
 
 // On receiving data of the selected file
-window.api.receive("file:load", ({ error, mainDataText, mainDataObj, metaDataObj }) => {
+window.api.receive('file:load', ({ error, mainDataText, mainDataObj, metaDataObj }) => {
     if (error) {
         console.log(error)
     }
@@ -545,6 +544,6 @@ window.api.receive("file:load", ({ error, mainDataText, mainDataObj, metaDataObj
         draw(state)
     }
     else {
-        console.log("Something went wrong!")
+        console.log('Something went wrong!')
     }
 })

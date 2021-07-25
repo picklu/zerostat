@@ -1,17 +1,17 @@
-const { contextBridge, ipcRenderer } = require("electron")
+const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld(
-    "api", {
+    'api', {
     send: (channel, data) => {
         let validChannels = [
-            "current-voltage:sweep",
-            "file:list",
-            "file:load",
-            "file:open",
-            "file:path",
-            "file:save",
-            "serial:connection",
-            "serial:ports"
+            'current-voltage:sweep',
+            'file:list',
+            'file:load',
+            'file:open',
+            'file:path',
+            'file:save',
+            'serial:connection',
+            'serial:ports'
         ]
         if (validChannels.includes(channel)) {
             ipcRenderer.send(channel, data)
@@ -19,13 +19,13 @@ contextBridge.exposeInMainWorld(
     },
     receive: (channel, func) => {
         let validChannels = [
-            "current-voltage:data",
-            "file:list",
-            "file:load",
-            "file:path",
-            "file:save",
-            "serial:connection",
-            "serial:ports"
+            'current-voltage:data',
+            'file:list',
+            'file:load',
+            'file:path',
+            'file:save',
+            'serial:connection',
+            'serial:ports'
         ]
         if (validChannels.includes(channel)) {
             ipcRenderer.on(channel, (event, ...args) => func(...args))

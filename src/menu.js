@@ -1,5 +1,5 @@
 const { app, Menu, shell } = require('electron')
-const { toTitleCase } = require("./helpers")
+const { toTitleCase } = require('./helpers')
 
 const template = [
     {
