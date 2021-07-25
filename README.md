@@ -1,6 +1,6 @@
 # ZEROSTAT
 
-## A GUI app for Arduino-based potentiostat
+## A GUI for Arduino-based potentiostat
 
 ![app](app/assets/app.png)
 
