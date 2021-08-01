@@ -139,7 +139,8 @@ ipcMain.on('current-voltage:sweep', (event, state) => {
         const estop = Math.round(state.refDAC - (state.maxDAC * estopVolt / state.outVolts))   // Analog to digital
         const ncycles = state.method.params.ncycles ? state.method.params.ncycles : 0
         const equilibrationTime = state.method.params.equilibrationtime ? state.method.params.equilibrationtime : 0
-        let mode
+        const highCurrent = state.method.params.maxcurrent === 150 ? 0 : 1
+        let mode = 0
         switch (state.method.type) {
             case 'LSV':
                 mode = 0
@@ -157,8 +158,9 @@ ipcMain.on('current-voltage:sweep', (event, state) => {
                     dV => ${dV}, 
                     scanrate => ${scanrate}, 
                     delay => ${delay}, 
-                    eqlTime => ${equilibrationTime}`)
-        port.write(`${delay},${halt},${mode},${ncycles},${state.refDAC},${estart},${estop},${stepDAC},${equilibrationTime}`)
+                    eqlTime => ${equilibrationTime}
+                    highCurrent => ${highCurrent}`)
+        port.write(`${delay},${halt},${mode},${ncycles},${state.refDAC},${estart},${estop},${stepDAC},${equilibrationTime},${highCurrent}`)
     }
 })
 
