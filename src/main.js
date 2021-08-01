@@ -139,7 +139,7 @@ ipcMain.on('current-voltage:sweep', (event, state) => {
         const estop = Math.round(state.refDAC - (state.maxDAC * estopVolt / state.outVolts))   // Analog to digital
         const ncycles = state.method.params.ncycles ? state.method.params.ncycles : 0
         const equilibrationTime = state.method.params.equilibrationtime ? state.method.params.equilibrationtime : 0
-        const highCurrent = state.method.params.maxcurrent === 150 ? 0 : 1
+        const highCurrent = state.method.params.maxcurrent === 125 ? 0 : 1
         let mode = 0
         switch (state.method.type) {
             case 'LSV':

@@ -373,7 +373,7 @@ domFormParams.addEventListener('submit', (event) => {
         })
 
         // if maxCurrent is 300 uA then change the feedback resistor accordingly
-        if (state.method.params.maxcurrent === 150) {
+        if (state.method.params.maxcurrent === 125) {
             state.fbResistor = FB_RESISTOR
         }
         else {
