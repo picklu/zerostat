@@ -473,7 +473,6 @@ window.api.receive('file:path', ({ error, folderPath, fileName }) => {
         updateDataTable(folderPath, fileName)
     } else if (folderPath) {
         domFolderPath.value = folderPath
-        window.api.send('file:list')
     }
     else {
         console.log('No folder was selected!')
