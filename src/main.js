@@ -1,6 +1,6 @@
 require('dotenv').config()
 const path = require('path')
-const { app, BrowserWindow, dialog, getFocusedWindow, ipcMain, Menu, shell } = require('electron')
+const { app, BrowserWindow, dialog, getFocusedWindow, ipcMain, Menu, screen, shell } = require('electron')
 const SerialPort = require('serialport')
 const Readline = require('@serialport/parser-readline')
 const { stat } = require('fs')
@@ -20,6 +20,8 @@ helpers.updateDataFolders()
 const createWindow = exports.createWindow = () => {
     let x, y
     const windowTitle = `${helpers.toTitleCase(app.getName())} | V-${app.getVersion()}`
+    const display = screen.getPrimaryDisplay()
+    const dimensions = display.workAreaSize
     const currentWindow = BrowserWindow.getFocusedWindow()
     if (currentWindow) {
         const [currentWindowX, currentWindowY] = currentWindow.getPosition()
@@ -29,6 +31,8 @@ const createWindow = exports.createWindow = () => {
 
     let newWindow = new BrowserWindow({
         x, y,
+        width: parseInt(dimensions.width * 0.8),
+        height: parseInt(dimensions.height * 0.8),
         show: false,
         title: windowTitle,
         icon: path.join(__dirname, '../app/assets/electrostat.png'),
@@ -44,7 +48,6 @@ const createWindow = exports.createWindow = () => {
     newWindow.loadFile('app/index.html')
 
     newWindow.once('ready-to-show', () => {
-        newWindow.maximize()
         newWindow.show()
     })
 
