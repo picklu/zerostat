@@ -151,6 +151,14 @@ table {
   justify-self: end;
 }
 
+.loading {
+  color: #6b6767;
+  font-size: 3em;
+  font-weight: 700;
+  margin-top: 40vh;
+  text-align: center;
+}
+
 .main {
   font-size: 2em;
   background-color: #b9bbbb;

@@ -3,30 +3,30 @@ const path = require('path')
 const { app, BrowserWindow, dialog, getFocusedWindow, ipcMain, Menu, screen, shell } = require('electron')
 const SerialPort = require('serialport')
 const Readline = require('@serialport/parser-readline')
-const { stat } = require('fs')
-const { send } = require('process')
 const spawn = require('child_process').spawn
 const log = require('electron-log')
-const menu = require('./menu')
 const helpers = require('./helpers')
+const menu = require('./menu')
 
 const windows = new Set()
+let loaded = false
 let port = null
 let parser = null
 
 helpers.updateDataFolders()
 
 
-const createWindow = exports.createWindow = () => {
+const createWindow = (loading = false) => {
     let x, y
     const windowTitle = `${helpers.toTitleCase(app.getName())} | V-${app.getVersion()}`
+    const webContent = loading ? 'app/loading.html' : 'app/index.html'
     const display = screen.getPrimaryDisplay()
     const dimensions = display.workAreaSize
     const currentWindow = BrowserWindow.getFocusedWindow()
     if (currentWindow) {
         const [currentWindowX, currentWindowY] = currentWindow.getPosition()
-        x = currentWindowX + 10
-        y = currentWindowY + 10
+        x = loaded ? currentWindowX + 10 : currentWindowX
+        y = loaded ? currentWindowY + 10 : currentWindowY
     }
 
     let newWindow = new BrowserWindow({
@@ -45,13 +45,13 @@ const createWindow = exports.createWindow = () => {
         }
     })
 
-    newWindow.loadFile('app/index.html')
+    newWindow.loadFile(webContent)
+
+    newWindow.on('page-title-updated', event => event.preventDefault())
 
     newWindow.once('ready-to-show', () => {
         newWindow.show()
     })
-
-    newWindow.on('page-title-updated', event => event.preventDefault())
 
     newWindow.on('closed', () => {
 
@@ -64,7 +64,22 @@ const createWindow = exports.createWindow = () => {
 }
 
 app.on('ready', () => {
-    createWindow()
+    let mainWindow = null
+    if (loaded) {
+        mainWindow = createWindow()
+    } else {
+        const loadingWindow = createWindow(true)
+        loadingWindow.once('show', () => {
+            mainWindow = createWindow()
+            mainWindow.webContents.once('dom-ready', () => {
+                loadingWindow.hide()
+                loadingWindow.close()
+                loaded = true
+            })
+        })
+
+        loadingWindow.show()
+    }
 })
 
 app.on('window-all-closed', () => {

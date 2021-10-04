@@ -99,3 +99,11 @@
     grid-column: 2/4;
     justify-self: end;
 }
+
+.loading {
+    color: $grey-primary;
+    font-size: 3em;
+    font-weight: 700;
+    margin-top: 40vh;
+    text-align: center;
+}
