@@ -8,6 +8,8 @@
 
 ![hardware 2](app/assets/hardware_2.jpg)
 
+[![Contact me on Codementor](https://www.codementor.io/m-badges/picklu/contact-me.svg)](https://www.codementor.io/@picklu?refer=badge)
+
 ## Quick Start & Build
 
 ---
