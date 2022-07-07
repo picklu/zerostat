@@ -1,5 +1,7 @@
 [![Contact me on Codementor](https://www.codementor.io/m-badges/picklu/im-a-cm-b.svg)](https://www.codementor.io/@picklu?refer=badge)
 [![Contact me on Codementor](https://www.codementor.io/m-badges/picklu/contact-me.svg)](https://www.codementor.io/@picklu?refer=badge)
+[![Contact me on Codementor](https://www.codementor.io/m-badges/picklu/book-session.svg)](https://www.codementor.io/@picklu?refer=badge)
+[![Contact me on Codementor](https://www.codementor.io/m-badges/picklu/get-help.svg)](https://www.codementor.io/@picklu?refer=badge)
 
 # ZEROSTAT
 
